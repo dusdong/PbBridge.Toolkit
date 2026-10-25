@@ -1,0 +1,4 @@
+interface:
+  display_name: "PbBridge PBL Drift Remediation"
+  short_description: "解释 .pbl 漂移、LFS filter mismatch 与修复计划"
+  default_prompt: "Use $pbbridge-pbl-drift-remediation to classify PbBridge .pbl drift and recommend evidence-backed remediation steps."

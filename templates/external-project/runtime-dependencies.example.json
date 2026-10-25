@@ -1,0 +1,16 @@
+{
+  "schemaName": "pbbridge-runtime-dependency-manifest",
+  "schemaVersion": 1,
+  "target": "app.pbt",
+  "artifactRoot": "bin",
+  "dependencies": [
+    {
+      "id": "example-plugin",
+      "source": "vendor/example-plugin.dll",
+      "destination": "plugin/example-plugin.dll",
+      "required": true,
+      "architecture": "x86",
+      "hashPolicy": "exact"
+    }
+  ]
+}

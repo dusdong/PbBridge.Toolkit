@@ -1,0 +1,11 @@
+{
+  "schemaName": "pbbridge-project-config",
+  "schemaVersion": 7,
+  "productVersion": "7.5.3",
+  "workspaces": [
+    {
+      "id": "<workspace-id>",
+      "configurationPath": ".pbbridge/workspaces/<workspace-id>/workspace.json"
+    }
+  ]
+}

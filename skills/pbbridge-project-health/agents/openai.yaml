@@ -1,0 +1,4 @@
+version: 1
+display_name: "PbBridge Project Health"
+short_description: "聚合外部项目健康、发布前和下一步证据"
+default_prompt: "Use $pbbridge-project-health to inspect PbBridge project health evidence and recommend the next safe workflow step."

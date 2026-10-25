@@ -1,0 +1,13 @@
+{
+  "schemaName": "pbbridge-template-migration-policy",
+  "schemaVersion": 1,
+  "productVersion": "7.5.3",
+  "files": [
+    {
+      "path": "scripts/move-pb-build-output.ps1",
+      "ownership": "project-custom",
+      "action": "preserve",
+      "reason": "示例：项目自定义 PowerBuilder 构建输出布局；请按项目事实修改或删除本条目。"
+    }
+  ]
+}

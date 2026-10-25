@@ -1,0 +1,4 @@
+interface:
+  display_name: "PbBridge Submodule Update"
+  short_description: "更新 toolkit 与 PB 子模块后的同步流程"
+  default_prompt: "Use $pbbridge-submodule-update to update a PbBridge toolkit or PB library submodule and refresh the project baseline safely."

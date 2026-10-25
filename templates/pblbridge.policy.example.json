@@ -1,0 +1,32 @@
+{
+  "manifestVersion": "1.0",
+  "workspacePath": "G:/YourPowerBuilderProject/app.pbw",
+  "createdAt": "2026-10-24T19:19:53.0372009+08:00",
+  "autonomousWriteback": {
+    "version": "1.0",
+    "projectId": "YourPowerBuilderProject",
+    "enabled": false,
+    "supportMatrix": {
+      "supportLevel": 1,
+      "supportedPlatforms": [ "Win32NT" ],
+      "supportedArchitectures": [ "X86" ],
+      "supportedAdapters": [ "pbspy" ]
+    },
+    "allowedWorkspaceRoots": [ "G:/YourPowerBuilderProject" ],
+    "allowedLibraries": [],
+    "allowedObjectTypes": [ "application", "function", "structure", "window", "datawindow", "menu", "query", "userobject", "pipeline", "project" ],
+    "maxRiskLevel": 1,
+    "allowSignatureChanges": false,
+    "allowDeleteActions": false,
+    "allowCrossLibraryChanges": false,
+    "allowForceApplyOnConflicts": false,
+    "requireExecutionToken": true,
+    "executionTokenReference": {
+      "sourceType": 0,
+      "sourceValue": "PBBRIDGE_AUTONOMOUS_TOKEN"
+    },
+    "certificationStatus": 0,
+    "maxVerifyErrorCount": 0,
+    "maxVerifyWarningCount": 0
+  }
+}

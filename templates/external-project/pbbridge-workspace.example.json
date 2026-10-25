@@ -1,0 +1,21 @@
+{
+  "schemaName": "pbbridge-workspace-config",
+  "schemaVersion": 7,
+  "productVersion": "7.5.3",
+  "id": "<workspace-id>",
+  "pbwPath": "<repo-relative-pbw-path>",
+  "stateRoot": ".pbbridge/workspaces/<workspace-id>/state",
+  "manifestPath": ".pbbridge/workspaces/<workspace-id>/artifacts/pbbridge/manifest.json",
+  "artifactRoot": ".pbbridge/workspaces/<workspace-id>/artifacts",
+  "resultRoot": ".pbbridge/workspaces/<workspace-id>/results",
+  "cacheRoot": ".pbbridge/workspaces/<workspace-id>/cache",
+  "policyPath": ".pbbridge/workspaces/<workspace-id>/policy.json",
+  "lockRoot": ".pbbridge/workspaces/<workspace-id>/locks",
+  "recoveryRoot": ".pbbridge/workspaces/<workspace-id>/recovery",
+  "sourceLayout": "beside-pbl-src",
+  "scanScope": "workspace-targets",
+  "includeLibraries": [],
+  "excludeLibraries": [],
+  "verifyPolicyMode": "Disabled",
+  "resultRetentionDays": 30
+}

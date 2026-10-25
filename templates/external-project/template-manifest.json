@@ -1,0 +1,234 @@
+{
+  "schemaName": "pbbridge-external-project-template",
+  "templateVersion": "7.5.3",
+  "provenanceRegistry": "managed-provenance.json",
+  "managedFiles": [
+    { "templatePath": "AGENTS.md", "targetPath": "AGENTS.md", "mergeMode": "manual-if-customized" },
+    { "templatePath": ".gitignore", "targetPath": ".gitignore", "mergeMode": "manual-merge" },
+    { "templatePath": ".gitattributes", "targetPath": ".gitattributes", "mergeMode": "manual-merge" },
+    { "templatePath": "PbBridge.Wrapper.psm1", "targetPath": "scripts/PbBridge.Wrapper.psm1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "PbBridge.ReleaseIdentity.psm1", "targetPath": "scripts/PbBridge.ReleaseIdentity.psm1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-runtime-check.ps1", "targetPath": "scripts/pbbridge-runtime-check.ps1", "mergeMode": "overwrite-if-template-managed", "assetGroup": "runtime-bootstrap" },
+    { "templatePath": "pbbridge-template-migrate.ps1", "targetPath": "scripts/pbbridge-template-migrate.ps1", "mergeMode": "overwrite-if-template-managed", "assetGroup": "migration-bootstrap" },
+    { "templatePath": "PbBridge.TemplateMigration.psm1", "targetPath": "scripts/PbBridge.TemplateMigration.psm1", "mergeMode": "overwrite-if-template-managed", "assetGroup": "migration-bootstrap" },
+    { "templatePath": "pbbridge-bootstrap.ps1", "targetPath": "scripts/pbbridge-bootstrap.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-toolkit-update.ps1", "targetPath": "scripts/pbbridge-toolkit-update.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-readonly-sync.ps1", "targetPath": "scripts/pbbridge-readonly-sync.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-import-sr.ps1", "targetPath": "scripts/pbbridge-import-sr.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-import-plan.ps1", "targetPath": "scripts/pbbridge-import-plan.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-import-object.ps1", "targetPath": "scripts/pbbridge-import-object.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-import-objects.ps1", "targetPath": "scripts/pbbridge-import-objects.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-import-source.ps1", "targetPath": "scripts/pbbridge-import-source.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-writeback-object.ps1", "targetPath": "scripts/pbbridge-writeback-object.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-writeback-close-loop.ps1", "targetPath": "scripts/pbbridge-writeback-close-loop.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-delivery-close-loop.ps1", "targetPath": "scripts/pbbridge-delivery-close-loop.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-delivery-continue.ps1", "targetPath": "scripts/pbbridge-delivery-continue.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-toolkit-upgrade-check.ps1", "targetPath": "scripts/pbbridge-toolkit-upgrade-check.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-performance-benchmark.ps1", "targetPath": "scripts/pbbridge-performance-benchmark.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-import-package.ps1", "targetPath": "scripts/pbbridge-import-package.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-source-accepted.ps1", "targetPath": "scripts/pbbridge-source-accepted.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-orca-candidate-smoke.ps1", "targetPath": "scripts/pbbridge-orca-candidate-smoke.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-check-shared-library-writeback.ps1", "targetPath": "scripts/pbbridge-check-shared-library-writeback.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-shared-library-evidence.ps1", "targetPath": "scripts/pbbridge-shared-library-evidence.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-project-health.ps1", "targetPath": "scripts/pbbridge-project-health.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-pbl-drift-remediation.ps1", "targetPath": "scripts/pbbridge-pbl-drift-remediation.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-pbl-change-intake.ps1", "targetPath": "scripts/pbbridge-pbl-change-intake.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-pbl-binary-baseline.ps1", "targetPath": "scripts/pbbridge-pbl-binary-baseline.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-release-check.ps1", "targetPath": "scripts/pbbridge-release-check.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-precommit-summary.ps1", "targetPath": "scripts/pbbridge-precommit-summary.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "pbbridge-init-shared-libraries.ps1", "targetPath": "scripts/pbbridge-init-shared-libraries.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "move-pb-build-output.ps1", "targetPath": "scripts/move-pb-build-output.ps1", "mergeMode": "overwrite-if-template-managed" }
+  ],
+  "configurationTemplates": [
+    { "templatePath": "pbbridge-project.example.json", "targetPath": ".pbbridge/project.json", "scope": "repo" },
+    { "templatePath": "pbbridge-workspace.example.json", "targetPath": ".pbbridge/workspaces/<workspace-id>/workspace.json", "scope": "workspace" },
+    { "templatePath": "runtime-dependencies.example.json", "targetPath": ".pbbridge/runtime-dependencies.json", "scope": "repo", "installMode": "copy-if-explicitly-reviewed" },
+    { "templatePath": "migration-policy.example.json", "targetPath": ".pbbridge/migration-policy.json", "scope": "repo-policy", "installMode": "copy-if-explicitly-reviewed", "upgradeClassification": "project-migration-policy" }
+  ],
+  "localStateRoots": [
+    ".pbbridge/delivery-v8-sessions/",
+    ".pbbridge/local/",
+    ".pbbridge/cache/",
+    ".pbbridge/diagnostics/",
+    ".pbbridge/staging/",
+    ".pbbridge/recovery/",
+    ".pbbridge/temp-evidence/",
+    ".pbbridge/evidence-supersession/",
+    ".pbbridge/workspaces/*/results/",
+    ".pbbridge/workspaces/*/cache/",
+    ".pbbridge/workspaces/*/recovery/"
+  ],
+  "localIgnoredRoots": [
+    ".pbbridge/workspaces",
+    ".pbbridge/cache",
+    ".pbbridge/diagnostics-bundle",
+    ".pbbridge/diagnostics-bundles",
+    ".pbbridge/readonly-sync.json",
+    ".pbbridge/project-model.json",
+    ".pbbridge/project-health.json",
+    ".pbbridge/release-check.json",
+    ".pbbridge/pbl-change-intake.json",
+    ".pbbridge/precommit-summary.json",
+    ".pbbridge/shared-library-writeback-check.json",
+    ".pbbridge/project-adoption-check.json",
+    ".pbbridge/project-drift-check.json",
+    ".pbbridge/writeback-readiness-check.json",
+    ".pbbridge/diagnostics-summary.json",
+    ".pbbridge/diagnostics-bundle.json",
+    ".pbbridge/diagnostics-bundle-verify.json",
+    ".pbbridge/toolkit-preflight.json",
+    ".pbbridge/toolkit-update-check.json",
+    ".pbbridge/shared-libraries.init.json",
+    ".pbbridge/local",
+    ".pbbridge/secrets"
+  ],
+  "recommendedEntrypoints": [
+    {
+      "entrypointKind": "cli",
+      "path": "",
+      "command": "pbbridge object find",
+      "message": "Codex 单对象定位快路径；优先用于查找对象、确认 PBL 归属和读取 cacheStatus/totalElapsedMs。"
+    },
+    {
+      "entrypointKind": "cli",
+      "path": "",
+      "command": "pbbridge object export",
+      "message": "Codex 单对象导出快路径；优先用于从 PBL 重建一个 .sr*，默认不写回 PBL。"
+    },
+    {
+      "entrypointKind": "cli",
+      "path": "",
+      "command": "pbbridge object repair",
+      "message": "Codex 单对象修复快路径；优先用于修复缺失源码投影，默认不删除、不覆盖、不写回 PBL。"
+    },
+    {
+      "entrypointKind": "cli",
+      "path": "",
+      "command": "pbbridge object diff --semantic",
+      "message": "Codex 单对象语义 diff 快路径；优先用于 DataWindow 或单对象对比，避免全量 diff。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-runtime-check.ps1",
+      "command": "pwsh scripts/pbbridge-runtime-check.ps1",
+      "message": "独立、零写入的运行时诊断入口；旧宿主只运行此脚本以获得 PWSH_7_REQUIRED。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-bootstrap.ps1",
+      "command": "pbbridge toolkit bootstrap",
+      "message": "初始化外部项目 Toolkit 指针与受管模板。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-toolkit-update.ps1",
+      "command": "pbbridge toolkit update",
+      "message": "更新外部项目内的 Toolkit runtime 与模板。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-readonly-sync.ps1",
+      "command": "pbbridge workspace readonly-sync",
+      "message": "刷新只读源码投影与 manifest。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-pbl-change-intake.ps1",
+      "command": "pbbridge pbl change-intake",
+      "message": "接入 PowerBuilder IDE 直接修改 PBL 后的只读刷新链路。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-project-health.ps1",
+      "command": "pbbridge project health",
+      "message": "运行项目健康检查。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-release-check.ps1",
+      "command": "pbbridge release check",
+      "message": "运行发布前只读门禁。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-precommit-summary.ps1",
+      "command": "pbbridge git precommit-summary",
+      "message": "生成提交前摘要。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-performance-benchmark.ps1",
+      "command": "pbbridge performance benchmark",
+      "message": "只读运行真实效率 benchmark，区分 CLI 与 wrapper 开销。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-delivery-close-loop.ps1",
+      "command": "pbbridge delivery close-loop",
+      "message": "V8 纯预检入口；只生成冲突和写回门禁证据，不执行 PBL 写回。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-delivery-continue.ps1",
+      "command": "pbbridge delivery continue",
+      "message": "V8 从有效预检继续 Apply；恢复原请求并受 ShouldProcess、事实新鲜度和冲突门禁约束。"
+    }
+  ],
+  "expertEntrypoints": [
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-import-sr.ps1",
+      "command": "pbbridge import sr",
+      "message": "专家级源码导入包装层；轻量单对象重建优先使用 pbbridge object export/repair。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-import-plan.ps1",
+      "command": "pbbridge import plan",
+      "message": "生成或审阅导入计划。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-import-object.ps1",
+      "command": "pbbridge import object",
+      "message": "对象级导入专家入口。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-import-objects.ps1",
+      "command": "pbbridge import objects",
+      "message": "批量对象导入专家入口。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-import-source.ps1",
+      "command": "pbbridge import source",
+      "message": "源码级导入专家入口。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-writeback-object.ps1",
+      "command": "pbbridge writeback object",
+      "message": "写回 PBL 的专家入口，必须显式表达 destructive/writeback 意图。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-writeback-close-loop.ps1",
+      "command": "pbbridge writeback close-loop",
+      "message": "写回闭环专家入口。"
+    },
+    {
+      "entrypointKind": "wrapper",
+      "path": "scripts/pbbridge-import-package.ps1",
+      "command": "pbbridge import-package",
+      "message": "高风险对象导入包专家入口。"
+    }
+  ],
+  "deprecatedEntrypoints": [
+    {
+      "path": "scripts/pblbridge-import-sr.ps1",
+      "replacement": "scripts/pbbridge-import-sr.ps1",
+      "message": "旧 pblbridge-* 入口已废弃，请改用 pbbridge-* 模板脚本。"
+    }
+  ]
+}

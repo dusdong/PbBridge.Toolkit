@@ -1,0 +1,2 @@
+* -text
+runtime/ide/win-x64/SharpIDE.exe filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,4 @@
+interface:
+  display_name: "PbBridge Build Output Move"
+  short_description: "整理 PowerBuilder 编译产物到 bin"
+  default_prompt: "Use $pbbridge-build-output-move to preview and move PowerBuilder .pbd and .exe build outputs into bin safely."

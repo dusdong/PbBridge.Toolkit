@@ -1,0 +1,4 @@
+interface:
+  display_name: "PbBridge PBL Binary Baseline"
+  short_description: "登记经评审的 .pbl 二进制基线证据"
+  default_prompt: "Use $pbbridge-pbl-binary-baseline to create or update reviewed PbBridge .pbl binary baseline evidence."

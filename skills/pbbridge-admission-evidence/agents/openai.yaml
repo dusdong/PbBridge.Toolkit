@@ -1,0 +1,4 @@
+interface:
+  display_name: "PbBridge Admission Evidence"
+  short_description: "采集和解释 PBSpy x86 支持矩阵候选证据"
+  default_prompt: "Use $pbbridge-admission-evidence to collect, validate, and explain PBSpy x86 admission evidence without upgrading formal support."

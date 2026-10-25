@@ -1,0 +1,4 @@
+interface:
+  display_name: "PbBridge PBL Change Intake"
+  short_description: "把 PB IDE 直接修改的 .pbl 反导出为 .sr* 并刷新证据链"
+  default_prompt: "Use $pbbridge-pbl-change-intake when a PowerBuilder IDE .pbl edit must be re-exported to .sr*. Prefer the default full intake when remediation, readonly sync, and release-check evidence are all needed; use projection-only only when the user explicitly wants a targeted refresh of matched PBL projection files."

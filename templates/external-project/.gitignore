@@ -1,0 +1,38 @@
+# PBBridge 本机工作区、导出基线、审计和临时结果
+.pbbridge/delivery-v8-sessions/
+.pbbridge/workspaces/*/results/
+.pbbridge/workspaces/*/cache/
+.pbbridge/workspaces/*/recovery/
+.pbbridge/cache/
+.pbbridge/diagnostics/
+.pbbridge/staging/
+.pbbridge/recovery/
+.pbbridge/temp-evidence/
+.pbbridge/diagnostics-bundle/
+.pbbridge/diagnostics-bundles/
+.pbbridge/readonly-sync.json
+.pbbridge/project-model.json
+.pbbridge/project-health.json
+.pbbridge/release-check.json
+.pbbridge/pbl-change-intake.json
+.pbbridge/precommit-summary.json
+.pbbridge/shared-library-writeback-check.json
+.pbbridge/project-adoption-check.json
+.pbbridge/project-drift-check.json
+.pbbridge/writeback-readiness-check.json
+.pbbridge/diagnostics-summary.json
+.pbbridge/diagnostics-bundle.json
+.pbbridge/diagnostics-bundle-verify.json
+.pbbridge/toolkit-preflight.json
+.pbbridge/shared-libraries.init.json
+
+# 本机 token、机器私有配置或临时覆盖文件
+.pbbridge/local/
+.pbbridge/evidence-supersession/
+.pbbridge/secrets/
+
+# 保留建议：
+# - .pbbridge/PbBridge.Toolkit 作为 submodule 指针提交
+# - .pbbridge/policies/*.json 可提交，前提是不含 token、个人路径或机器私有信息
+# - .pbbridge/migration-policy.json 是可提交的长期文件归属策略；单次决策和事务证据仍留在 .pbbridge/local/migrations/
+# - AGENTS.md 与 scripts/pbbridge-*.ps1 应提交

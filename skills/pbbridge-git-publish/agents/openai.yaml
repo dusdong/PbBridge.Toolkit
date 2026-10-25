@@ -1,0 +1,4 @@
+interface:
+  display_name: "PbBridge Git Publish"
+  short_description: "提交并推送 PbBridge 主仓库或子模块变更"
+  default_prompt: "Use $pbbridge-git-publish to review, commit, and push PbBridge project or submodule changes safely."

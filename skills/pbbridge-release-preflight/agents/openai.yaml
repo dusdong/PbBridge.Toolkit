@@ -1,0 +1,4 @@
+interface:
+  display_name: "PbBridge Release Preflight"
+  short_description: "发布前聚合 verify、Git 与 PBL 漂移证据"
+  default_prompt: "Use $pbbridge-release-preflight to decide whether a PbBridge project is ready for release."

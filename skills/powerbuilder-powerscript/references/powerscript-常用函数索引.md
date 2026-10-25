@@ -1,0 +1,209 @@
+# 附录：常用函数索引
+
+来源：基线 Markdown（后续可改为以权威 PDF 为准）。
+
+共 801 个函数标题（按字母排序）：
+
+- `_Is_A`
+- `_Narrow`
+- `About events`
+- `About functions and events`
+- `About objects`
+- `About structures`
+- `Abs`
+- `ACos`
+- `Activate`
+- `AddCategory`
+- `AddColumn`
+- `AddData`
+- `AddItem`
+- `AddLargePicture`
+- `AddPicture`
+- `AddSeries`
+- `AddSmallPicture`
+- `AddStatePicture`
+- `AddToLibraryList`
+- `Arrange`
+- `ArrangeSheets`
+- `Asc`
+- `AscA`
+- `ASin`
+- `Assignment`
+- `Assignment for objects and structures`
+- `ATan`
+- `Beep`
+- `BeginDownload`
+- `BeginDrag`
+- `BeginLabelEdit`
+- `BeginLogScan`
+- `BeginRightDrag`
+- `BeginSync`
+- `BeginTransaction`
+- `BeginUpload`
+- `Blob`
+- `BlobEdit`
+- `BlobMid`
+- `BuildModel`
+- `Byte`
+- `CALL`
+- `Calling functions and events in an object’s ancestor`
+- `Cancel`
+- `CancelSync`
+- `CanUndo`
+- `CategoryCount`
+- `CategoryName`
+- `Ceiling`
+- `ChangeDirectory`
+- `ChangeMenu`
+- `Char`
+- `CharA`
+- `Check`
+- `CHOOSE CASE`
+- `ChooseColor`
+- `ClassList`
+- `ClassName`
+- `Clear`
+- `ClearAll`
+- `ClearBoldDates`
+- `Clicked`
+- `Clipboard`
+- `Close`
+- `CLOSE Cursor`
+- `CLOSE Procedure`
+- `CloseChannel`
+- `CloseQuery`
+- `CloseTab`
+- `CloseUp`
+- `CloseUserObject`
+- `CloseWithReturn`
+- `CollapseItem`
+- `ColumnClick`
+- `CommandParm`
+- `Comments`
+- `COMMIT`
+- `CommitTransaction`
+- `Conditional compilation`
+- `CONNECT`
+- `ConnectMobiLink`
+- `ConnectToNewObject`
+- `ConnectToNewRemoteObject`
+- `ConnectToObject`
+- `ConnectToRemoteObject`
+- `ConnectToServer`
+- `Constructor`
+- `CONTINUE`
+- `Copy`
+- `CopyRTF`
+- `Cos`
+- `Cpu`
+- `CREATE`
+- `CreateDirectory`
+- `CreateInstance`
+- `CreatePage`
+- `Cut`
+- `DataChange`
+- `DataCount`
+- `DataSource`
+- `Datatype of PowerBuilder expressions`
+- `Date`
+- `DateChanged`
+- `DateSelected`
+- `DateTime`
+- `Day`
+- `DayName`
+- `DayNumber`
+- `DaysAfter`
+- `DBError`
+- `DBHandle`
+- `DBNotification`
+- `Deactivate`
+- `DebugBreak`
+- `Dec`
+- `DECLARE Cursor`
+- `DECLARE Procedure`
+- `Declaring arrays`
+- `Declaring constants`
+- `Declaring DBMS stored procedures as remote** **procedure calls`
+- `Declaring external functions`
+- `Declaring variables`
+- `DELETE`
+- `DELETE Where Current of Cursor`
+- `DeleteAllItems`
+- `DeleteCategory`
+- `DeleteColumn`
+- `DeleteColumns`
+- `DeleteData`
+- `DeleteItem`
+- `DeleteItems`
+- `DeleteLargePicture`
+- `DeleteLargePictures`
+- `DeletePicture`
+- `DeletePictures`
+- `DeleteSeries`
+- `DeleteSmallPicture`
+- `DeleteSmallPictures`
+- `DeleteStatePicture`
+- `DeleteStatePictures`
+- `DESTROY`
+- `DestroyModel`
+- `Destructor`
+- `DirectoryExists`
+- `DirList`
+- `DirSelect`
+- `Disable`
+- `DisableCommit`
+- `DISCONNECT`
+- `DisconnectMobiLink`
+- `DisconnectObject`
+- `DisconnectServer`
+- `DisplayMessage`
+- `DO...LOOP`
+- `Double`
+- `DoubleClicked`
+- `DoVerb`
+- `Drag`
+- `DragDrop`
+- `DragEnter`
+- `DraggedObject`
+- `DragLeave`
+- `DragWithin`
+- `Draw`
+- `DropDown`
+- `Dynamic SQL Format 1`
+- `Dynamic SQL Format 2`
+- `Dynamic SQL Format 3`
+- `Dynamic SQL Format 4`
+- `EditLabel`
+- `Enable`
+- `EnableCommit`
+- `EndDownload`
+- `EndLabelEdit`
+- `EndLogScan`
+- `EndSync`
+- `EndUpload`
+- `EntryList`
+- `Enumerated datatypes`
+- `Error`
+- `ErrorMessage`
+- `ExecRemote`
+- `EXECUTE`
+- `EXIT`
+- `Exp`
+- `ExpandAll`
+- `ExpandItem`
+- `ExternalException`
+- `Fact`
+- `FETCH`
+- `FileClose`
+- `FileCopy`
+- `FileDelete`
+- `FileEncoding`
+- `FileExists`
+- `FileLength`
+- `FileLength64`
+- `FileMessage`
+- `FileMove`
+- `FileOpen`
+
+
+（为避免文件过长，当前仅列出前 200 项；后续将提供分组/分页或筛选策略。）

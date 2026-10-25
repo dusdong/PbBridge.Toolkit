@@ -1,0 +1,4 @@
+interface:
+  display_name: "PbBridge Verify Triage"
+  short_description: "分类处理 verify、baseline 与 waiver 问题"
+  default_prompt: "Use $pbbridge-verify-triage to classify PbBridge verify issues and recommend fix, waiver, or baseline actions."

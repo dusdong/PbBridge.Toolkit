@@ -1,0 +1,13 @@
+{
+  "schemaName": "pbbridge-source-hygiene-policy",
+  "acceptedFindings": [
+    {
+      "id": "pb9-lf-sr",
+      "pathGlob": "**/*.sr*",
+      "fileType": "powerscript-source",
+      "lineEnding": "lf",
+      "originalRiskLevel": "warning",
+      "reason": "团队已确认本项目 PB9 .sr* 事实源使用 LF 行尾，发布前不作为风险处理。"
+    }
+  ]
+}

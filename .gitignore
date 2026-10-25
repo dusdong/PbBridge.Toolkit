@@ -1,0 +1,11 @@
+artifacts/
+publish/
+tmp/
+temp/
+*.bundle
+*.zip
+*.7z
+*.rar
+*.nupkg
+*.pdb
+*.snupkg
