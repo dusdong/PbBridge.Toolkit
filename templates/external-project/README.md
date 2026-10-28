@@ -1,6 +1,6 @@
 # 外部项目模板
 
-模板版本为 `7.5.3`。`pbbridge-delivery-close-loop.ps1` 是 V8 纯预检入口，`pbbridge-delivery-continue.ps1` 是受 `ShouldProcess` 保护的写回入口。
+模板版本为 `7.6.0`。`pbbridge-delivery-close-loop.ps1` 是 V8 纯预检入口，`pbbridge-delivery-continue.ps1` 是受 `ShouldProcess` 保护的写回入口。
 
 当前业务运行时为 PowerShell 7.4+。先运行 `./scripts/pbbridge-runtime-check.ps1` 获取结构化准入结果，随后统一使用 `pwsh` 执行 wrapper；Windows PowerShell 5.1 不再是业务运行时。
 
@@ -35,7 +35,7 @@ pbbridge delivery summary --repo-root . --workspace canyin --session <id> --comp
 
 多对象写回通过重复 `--depends-on <dependent>=<dependency>` 声明可信边；工具也会提取请求内可唯一定位的继承和直接静态调用。动态调用只作为 advisory，不改变写回顺序。任一对象导入或反向复核失败后，后续 importer 不再调用。
 
-`hygiene fix` 在 7.5.3 只支持 `--what-if`，`delivery cleanup` 也只提供可再生候选预览；二者都不写 `.gitignore`、不删除证据。
+`hygiene fix` 在 7.6.0 只支持 `--what-if`，`delivery cleanup` 也只提供可再生候选预览；二者都不写 `.gitignore`、不删除证据。
 ## 发行身份与升级恢复
 
 运行包内 `PbBridge.Cli.exe version --identity --repo-root .` 查看实际五元身份及 `产品版本 / build <CLI hash 前12位> / toolkit <实际 commit>`。身份缺失时查看 `identityReasonCodes`，不要以短标识授权 Apply。实际 Toolkit HEAD 和父仓 gitlink 差异会同时展示。

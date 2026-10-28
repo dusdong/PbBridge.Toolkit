@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.5.3
+# PbBridge-TemplateVersion: 7.6.0
 <#
 .SYNOPSIS
 检查或更新外部项目使用的 Toolkit 快照。

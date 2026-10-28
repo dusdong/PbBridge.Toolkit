@@ -2,6 +2,89 @@
 #requires -Version 7.4
 Set-StrictMode -Version Latest
 
+function Assert-PbReleasePlainPath {
+    # Check existing ancestors and descendants before any candidate write or executable load.
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$Path, [switch]$Recurse, [Collections.Generic.HashSet[string]]$CheckedPaths)
+    if (-not [IO.Path]::IsPathFullyQualified($Path)) { throw 'CANDIDATE_ABSOLUTE_PATH_REQUIRED' }
+    $full = [IO.Path]::GetFullPath($Path)
+    $current = $full
+    while ($current) {
+        if ($null -ne $CheckedPaths -and $CheckedPaths.Contains($current)) { break }
+        if ((Test-Path -LiteralPath $current) -and
+            ((Get-Item -LiteralPath $current -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) { throw 'CANDIDATE_REPARSE_PATH' }
+        $null = if ($null -ne $CheckedPaths) { $CheckedPaths.Add($current) }
+        $parent = Split-Path -Parent $current
+        if ($parent -eq $current) { break }; $current = $parent
+    }
+    if ($Recurse -and (Test-Path -LiteralPath $full -PathType Container)) {
+        foreach ($item in Get-ChildItem -LiteralPath $full -Force -Recurse) {
+            if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'CANDIDATE_REPARSE_PATH' }
+        }
+    }
+    if ($full -eq [IO.Path]::GetPathRoot($full)) { throw 'CANDIDATE_PATH_CANNOT_BE_DRIVE_ROOT' }
+    return $full.TrimEnd('\','/')
+}
+
+function Assert-PbReleaseInputInventory {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$Root, [Parameter(Mandatory)][string]$InventoryPath,
+        [Parameter(Mandatory)][string]$InventorySha256, [Parameter(Mandatory)][string]$ProductVersion,
+        [switch]$ExactFiles)
+    $rootPath = Assert-PbReleasePlainPath -Path $Root -Recurse:$ExactFiles
+    $null = Assert-PbReleasePlainPath $InventoryPath
+    if ($InventorySha256 -cnotmatch '^[0-9a-f]{64}$' -or
+        (Get-FileHash -LiteralPath $InventoryPath -Algorithm SHA256).Hash.ToLowerInvariant() -cne $InventorySha256) { throw 'CANDIDATE_INVENTORY_DRIFTED' }
+    $inventory = Get-Content -LiteralPath $InventoryPath -Raw -Encoding utf8 | ConvertFrom-Json -Depth 50
+    if ([string]$inventory.productVersion -cne $ProductVersion -or @($inventory.files).Count -eq 0) { throw 'CANDIDATE_INVENTORY_INVALID' }
+    $seen = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    $checkedPaths = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($entry in $inventory.files) {
+        $relative = [string]$entry.path
+        if (-not $relative -or [IO.Path]::IsPathRooted($relative) -or $relative -match '(^|/)\.\.?(/|$)|[\\:*?\x00-\x1f]' -or -not $seen.Add($relative)) { throw 'CANDIDATE_INVENTORY_PATH_INVALID' }
+        $path = Join-Path $rootPath $relative
+        $null = Assert-PbReleasePlainPath -Path $path -CheckedPaths $checkedPaths
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf) -or [string]$entry.sha256 -cnotmatch '^[0-9a-f]{64}$' -or
+            (Get-Item -LiteralPath $path).Length -ne [long]$entry.length -or
+            (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -cne [string]$entry.sha256) { throw "CANDIDATE_INPUT_DRIFTED:$relative" }
+    }
+    if ($ExactFiles) {
+        $files = @(Get-ChildItem -LiteralPath $rootPath -File -Recurse -Force)
+        if ($files.Count -ne $seen.Count) { throw 'CANDIDATE_INPUT_INVENTORY_NOT_CLOSED' }
+        foreach ($file in $files) {
+            if (-not $seen.Contains([IO.Path]::GetRelativePath($rootPath,$file.FullName).Replace('\','/'))) { throw 'CANDIDATE_INPUT_INVENTORY_NOT_CLOSED' }
+        }
+    }
+    return $inventory
+}
+
+function Get-PbCandidateRuntimeBinaryFact {
+    # Pure binary inspection: no assembly load into the runtime and no application launch.
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$RuntimeRoot,[Parameter(Mandatory)][string]$ExpectedProductVersion)
+    $facts=[Collections.Generic.List[object]]::new()
+    foreach ($pair in @(@('cli/win-x86/PbBridge.Cli.exe',332),@('ide/win-x64/SharpIDE.exe',34404),@('pbspy/win-x86/PBSpy.dll',332))) {
+        $path=Join-Path $RuntimeRoot $pair[0]
+        $stream=[IO.File]::OpenRead($path);$reader=[IO.BinaryReader]::new($stream)
+        try {
+            if ($stream.Length -lt 64 -or $reader.ReadUInt16() -ne 23117) { throw 'CANDIDATE_PE_HEADER_INVALID' }
+            $stream.Position=60;$offset=$reader.ReadInt32()
+            if ($offset -lt 64 -or $offset -gt $stream.Length-6) { throw 'CANDIDATE_PE_HEADER_INVALID' }
+            $stream.Position=$offset
+            if ($reader.ReadUInt32() -ne 17744 -or $reader.ReadUInt16() -ne $pair[1]) { throw "CANDIDATE_PE_MACHINE_INVALID:$($pair[0])" }
+        } finally {$reader.Dispose();$stream.Dispose()}
+        $facts.Add([pscustomobject]@{path=$pair[0];machine=$pair[1];sha256=(Get-FileHash -LiteralPath $path).Hash.ToLowerInvariant();productVersion=[Diagnostics.FileVersionInfo]::GetVersionInfo($path).ProductVersion})
+    }
+    foreach ($name in @('PbBridge.Core','PbBridge.Adapter.PB9','PbBridge.Delivery','PbBridge.SharpIDE.Extension','PbBridge.SharpIDE.Host')) {
+        $relative='ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/'+$name+'.dll'
+        $path=Join-Path $RuntimeRoot $relative
+        $version=[Reflection.AssemblyName]::GetAssemblyName($path).Version.ToString()
+        if ($version -cne ($ExpectedProductVersion+'.0')) { throw "CANDIDATE_ASSEMBLY_VERSION_MISMATCH:$name" }
+        $facts.Add([pscustomobject]@{path=$relative;assemblyVersion=$version;sha256=(Get-FileHash -LiteralPath $path).Hash.ToLowerInvariant()})
+    }
+    return $facts.ToArray()
+}
+
 function Get-PbReleaseFileIdentity {
     <# .SYNOPSIS Returns the actual bytes identity of a file without modifying it. #>
     [CmdletBinding()]
@@ -99,12 +182,17 @@ function Assert-PbPublishedRecordIdentity {
 function Get-PbPublishedReleaseFact {
     <# .SYNOPSIS Resolves one published product from immutable record plus independently frozen publication evidence. #>
     [CmdletBinding()]
-    param([Parameter(Mandatory)][string]$RecordPath,[string]$PublicationReceiptPath,[string]$ExpectedProductVersion)
+    param([Parameter(Mandatory)][string]$RecordPath,[string]$PublicationReceiptPath,[string]$ExpectedProductVersion,
+        [ValidateSet('CompleteQualification','HistoricalRecovery')][string]$Purpose='CompleteQualification',[string]$ArtifactRoot)
     $record=Get-Content -LiteralPath $RecordPath -Raw -Encoding utf8|ConvertFrom-Json -Depth 100
     Assert-PbPublishedRecordIdentity -Record $record
     $version=[string]$record.productVersion;$candidate=$record.candidate
     if ($ExpectedProductVersion -and $version -cne $ExpectedProductVersion) { throw 'RELEASE_PUBLISHED_IDENTITY_INVALID' }
     $receiptReference=$null;$proofReference=$null
+    if ($Purpose -ceq 'HistoricalRecovery') {
+        if ($version -cne '7.5.3' -or -not $PublicationReceiptPath -or -not $ArtifactRoot) { throw 'SCOPED_PUBLICATION_PURPOSE_INVALID' }
+        return Get-PbScoped753PublicationFact -RecordPath $RecordPath -PublicationReceiptPath $PublicationReceiptPath -ArtifactRoot $ArtifactRoot -Record $record
+    }
     if ($PublicationReceiptPath) {
         $receipt=Get-Content -LiteralPath $PublicationReceiptPath -Raw -Encoding utf8|ConvertFrom-Json -Depth 100
         if ([string]$receipt.schemaName -cne 'pbbridge-release-publication-receipt' -or [int]$receipt.schemaVersion -ne 1 -or
@@ -200,12 +288,13 @@ function Get-PbReleaseRecoveryPreview {
     #>
     [CmdletBinding()]
     param([Parameter(Mandatory)][string]$RecordPath,[Parameter(Mandatory)][string]$ArtifactRoot,
-        [Parameter(Mandatory)][string]$ExtractionRoot,[string]$PublicationReceiptPath)
+        [Parameter(Mandatory)][string]$ExtractionRoot,[string]$PublicationReceiptPath,
+        [ValidateSet('CompleteQualification','HistoricalRecovery')][string]$Purpose='CompleteQualification')
     $identity=$null;$archive=$null
     try {
         $record=Get-Content -LiteralPath $RecordPath -Raw -Encoding utf8|ConvertFrom-Json
         if([string]$record.schemaName -cne 'pbbridge-replacement-release-record' -or [int]$record.recordVersion -ne 3){throw 'recovery-record-unsupported'}
-        $published=Get-PbPublishedReleaseFact -RecordPath $RecordPath -PublicationReceiptPath $PublicationReceiptPath
+        $published=Get-PbPublishedReleaseFact -RecordPath $RecordPath -PublicationReceiptPath $PublicationReceiptPath -Purpose $Purpose -ArtifactRoot $ArtifactRoot
         $candidate=$published.candidate
         $identity=[ordered]@{productVersion=[string]$candidate.buildIdentity.productVersion;cliSha256=[string]$candidate.buildIdentity.cliSha256;
             toolkitCommit=[string]$candidate.toolkit.commit;runtimeContractSha256=[string]$candidate.buildIdentity.runtimeContractSha256;manifestSha256=[string]$candidate.buildIdentity.manifestSha256}
@@ -220,6 +309,9 @@ function Get-PbReleaseRecoveryPreview {
         if(-not $archive.StartsWith($archiveRoot+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)){throw 'recovery-artifact-path-invalid'}
         $archiveVerification=Resolve-PbReleaseRecoveryArchiveReference -Published $published -Entry $entry -Archive $archive -PublicationReceiptPath $PublicationReceiptPath
         $extraction=[IO.Path]::GetFullPath($ExtractionRoot)
+        if ($Purpose -ceq 'HistoricalRecovery') {
+                $null=Assert-PbReleasePlainPath $ExtractionRoot
+        }
         if(Test-Path -LiteralPath $extraction){throw 'recovery-isolation-path-occupied'}
         # Validate all zip entries before extracting; do not permit zip-slip or links.
         $zip=[IO.Compression.ZipFile]::OpenRead($archive)
@@ -238,17 +330,205 @@ function Get-PbReleaseRecoveryPreview {
         foreach($pair in @(@('manifest.json','manifestSha256'),@('checks/toolkit-runtime-contract.json','runtimeContractSha256'),@('runtime/cli/win-x86/PbBridge.Cli.exe','cliSha256'))){
             if((Get-PbReleaseFileIdentity (Join-Path $toolkit $pair[0])).sha256 -cne $identity[$pair[1]]){throw "recovery-identity-mismatch:$($pair[1])"}
         }
+        $recoveredChecksums=0
+        if ($Purpose -ceq 'HistoricalRecovery') {
+            $seen=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+            foreach ($line in Get-Content -LiteralPath (Join-Path $toolkit 'checks/SHA256SUMS.txt') -Encoding utf8) {
+                if (-not $line) { continue }
+                if ($line -cnotmatch '^([0-9a-f]{64})  (.+)$') { throw 'recovery-checksum-invalid' }
+                $hash=$Matches[1];$relative=$Matches[2]
+                if ([IO.Path]::IsPathRooted($relative) -or $relative -match '(^|/)\.\.?(/|$)|[\\:*?\x00-\x1f]' -or $relative -ceq 'checks/SHA256SUMS.txt' -or -not $seen.Add($relative)) { throw 'recovery-checksum-path-invalid' }
+                if ((Get-PbReleaseFileIdentity (Join-Path $toolkit $relative)).sha256 -cne $hash) { throw "recovery-checksum-mismatch:$relative" }
+            }
+            foreach ($required in @('manifest.json','checks/toolkit-runtime-contract.json','runtime/cli/win-x86/PbBridge.Cli.exe')) {
+                if (-not $seen.Contains($required)) { throw 'recovery-checksum-identity-missing' }
+            }
+            $recoveredChecksums=$seen.Count
+        }
         $cli=Join-Path $toolkit 'runtime/cli/win-x86/PbBridge.Cli.exe'
         $versionOutput=& $cli version
         if($LASTEXITCODE -ne 0 -or [string](($versionOutput -join "`n"|ConvertFrom-Json).version) -cne $identity.productVersion){throw 'recovery-entrypoint-failed'}
         $doctorOutput=& $cli doctor
         if($LASTEXITCODE -ne 0){throw 'recovery-doctor-failed'}
         [pscustomobject]@{status='verified';reasonCode=$null;identity=$identity;artifact=$archiveVerification.artifact;artifactLengthSource=$archiveVerification.lengthSource;extractedToolkit=$toolkit;
-            entrypoint=$cli;doctorOutput=($doctorOutput -join "`n");recoveryScope='toolkit-only';requiresCurrentFacts=$true;businessRestored=$false}
+            publicationScope=if($Purpose -ceq 'HistoricalRecovery'){$published.publicationScope}else{'complete-publication-contract'};fullQualification=if($Purpose -ceq 'HistoricalRecovery'){'not-completed'}else{'not-evaluated-by-recovery'};authorizationTransferable=$false;
+            entrypoint=$cli;doctorOutput=($doctorOutput -join "`n");recoveryScope='toolkit-only';checksumsVerified=$recoveredChecksums;requiresCurrentFacts=$true;businessRestored=$false}
     } catch {
         [pscustomobject]@{status='unavailable';reasonCode=$_.Exception.Message;identity=$identity;artifactPath=$archive;
             recoveryScope='toolkit-only';requiresCurrentFacts=$true;businessRestored=$false}
     }
 }
 
-Export-ModuleMember -Function Get-PbReleaseFileIdentity,Write-PbReleaseFrozenFile,Assert-PbReleaseFrozenReference,New-PbReleasePublicationReceipt,Get-PbPublishedReleaseFact,Get-PbReleaseRecoveryPreview,Get-PbToolkitSnapshotIdentity
+
+function Get-PbCandidatePreservedInput {
+    <# .SYNOPSIS Validates explicit retained bytes before candidate generation. #>
+    [CmdletBinding()]
+    param([string]$Root,[string]$InventoryPath,[string]$InventorySha256,
+        [Parameter(Mandatory)][string]$OutputRoot,[Parameter(Mandatory)][string]$ProductVersion)
+    if (-not $Root -and -not $InventoryPath -and -not $InventorySha256) { return $null }
+    if (-not $Root -or -not $InventoryPath -or -not $InventorySha256) { throw 'CANDIDATE_PRESERVED_PARAMETERS_INCOMPLETE' }
+    $inputRoot=Assert-PbReleasePlainPath -Path $Root -Recurse
+    $output=Assert-PbReleasePlainPath -Path $OutputRoot
+    if ($inputRoot -eq $output -or $inputRoot.StartsWith($output+'\',[StringComparison]::OrdinalIgnoreCase) -or
+        $output.StartsWith($inputRoot+'\',[StringComparison]::OrdinalIgnoreCase)) { throw 'CANDIDATE_PRESERVED_OUTPUT_OVERLAP' }
+    $inventory=Assert-PbReleaseInputInventory -Root $inputRoot -InventoryPath $InventoryPath -InventorySha256 $InventorySha256 -ProductVersion $ProductVersion -ExactFiles
+    foreach ($entry in $inventory.files) {
+        # Management data, current metadata, and symbols never become retained distribution inputs.
+        if ([string]$entry.path -cnotmatch '^(runtime|docs|skills|syntax)/' -or
+            [string]$entry.path -match '(^|/)\.git(?:/|$)|\.pdb$') { throw 'CANDIDATE_PRESERVED_PATH_FORBIDDEN' }
+    }
+    return $inventory
+}
+
+function Assert-PbToolkitSnapshotFiles {
+    <# .SYNOPSIS Matches the complete candidate against every actual Git blob, without filters or writes. #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$ToolkitPath,[Parameter(Mandatory)][string]$RepositoryPath,
+        [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{40}$')][string]$Commit,[Parameter(Mandatory)][object[]]$Files)
+    $null=Assert-PbReleasePlainPath -Path $RepositoryPath
+    $head=@(& git -C $RepositoryPath rev-parse HEAD 2>$null) -join ''
+    if ($LASTEXITCODE -ne 0 -or $head.Trim() -cne $Commit) { throw 'CANDIDATE_SNAPSHOT_HEAD_MISMATCH' }
+    $tree=@(& git -c core.quotepath=false -C $RepositoryPath ls-tree --full-tree -r -z $Commit 2>$null) -join "`n"
+    if ($LASTEXITCODE -ne 0) { throw 'CANDIDATE_SNAPSHOT_UNAVAILABLE' }
+    $entries=[Collections.Generic.Dictionary[string,string]]::new([StringComparer]::Ordinal)
+    foreach ($entry in $tree.Split([char]0,[StringSplitOptions]::RemoveEmptyEntries)) {
+        if ($entry -cnotmatch '^(100644|100755) blob ([0-9a-f]{40})\t(.+)$' -or $entries.ContainsKey($Matches[3])) { throw 'CANDIDATE_SNAPSHOT_TREE_INVALID' }
+        $entries.Add($Matches[3],$Matches[2])
+    }
+    if ($entries.Count -ne $Files.Count) { throw 'CANDIDATE_SNAPSHOT_FILE_SET_MISMATCH' }
+    foreach ($file in $Files) {
+        if (-not $entries.ContainsKey([string]$file.path)) { throw 'CANDIDATE_SNAPSHOT_FILE_SET_MISMATCH' }
+        $path=Join-Path $ToolkitPath $file.path
+        $stream=[IO.File]::OpenRead($path)
+        $hash=[Security.Cryptography.IncrementalHash]::CreateHash([Security.Cryptography.HashAlgorithmName]::SHA1)
+        try {
+            $hash.AppendData([Text.Encoding]::ASCII.GetBytes("blob $($stream.Length)"+[char]0))
+            $buffer=[byte[]]::new(131072)
+            while (($count=$stream.Read($buffer,0,$buffer.Length)) -gt 0) { $hash.AppendData($buffer,0,$count) }
+            $oid=[Convert]::ToHexString($hash.GetHashAndReset()).ToLowerInvariant()
+            if ($oid -cne $entries[[string]$file.path]) { throw "CANDIDATE_SNAPSHOT_BLOB_MISMATCH:$($file.path)" }
+        } finally { $hash.Dispose();$stream.Dispose() }
+    }
+}
+
+function Get-PbLocalToolkitCandidateIdentity {
+    <# .SYNOPSIS Verifies actual isolated content without inventing a Toolkit commit or release qualification. #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$ToolkitPath,[Parameter(Mandatory)][string]$ExpectedProductVersion,
+        [string]$Commit,[string]$SnapshotRepositoryPath)
+    if ([bool]$Commit -ne [bool]$SnapshotRepositoryPath -or ($Commit -and $Commit -cnotmatch '^[0-9a-f]{40}$')) { throw 'CANDIDATE_SNAPSHOT_PARAMETERS_INVALID' }
+    $root = Assert-PbReleasePlainPath -Path $ToolkitPath -Recurse
+    if ((Test-Path -LiteralPath (Join-Path $root '.git')) -and (-not $Commit -or [IO.Path]::GetFullPath($SnapshotRepositoryPath) -cne $root)) { throw 'CANDIDATE_GIT_METADATA_UNEXPECTED' }
+    $manifestPath = Join-Path $root 'manifest.json'
+    $contractPath = Join-Path $root 'checks/toolkit-runtime-contract.json'
+    $manifestText = Get-Content -LiteralPath $manifestPath -Raw -Encoding utf8
+    $contractText = Get-Content -LiteralPath $contractPath -Raw -Encoding utf8
+    $manifest = $manifestText | ConvertFrom-Json
+    $contract = $contractText | ConvertFrom-Json
+    if ($manifestText -match '"(?:manifestSha256|toolkitCommit)"\s*:' -or $contractText -match '"(?:runtimeContractSha256|toolkitCommit)"\s*:') { throw 'CANDIDATE_IDENTITY_SELF_REFERENCE' }
+    foreach ($actual in @($manifest.productVersion,$manifest.toolkitVersion,$contract.toolkitVersion,$contract.cliDoctorContractVersion,
+        (Get-Content -LiteralPath (Join-Path $root 'VERSION') -Raw -Encoding utf8).Trim())) {
+        if ([string]$actual -cne $ExpectedProductVersion) { throw 'CANDIDATE_VERSION_MISMATCH' }
+    }
+    if (-not $manifest.candidatePreparation -or -not $manifest.developmentOnly -or $manifest.sourceAdoption -cne 'pending' -or
+        $manifest.qualification -cne 'candidate-preparation-source-adoption-and-independent-qualification-pending' -or
+        -not $contract.candidatePreparation -or $contract.sourceAdoption -cne 'pending') { throw 'CANDIDATE_SCOPE_INVALID' }
+    $files = @(Get-ChildItem -LiteralPath $root -Force | Where-Object Name -CNE '.git' | ForEach-Object {
+        if ($_.PSIsContainer) { Get-ChildItem -LiteralPath $_.FullName -File -Force -Recurse } else { $_ }
+    } | ForEach-Object {
+        [pscustomobject]@{path=[IO.Path]::GetRelativePath($root,$_.FullName).Replace('\','/');length=$_.Length;sha256=(Get-FileHash -LiteralPath $_.FullName).Hash.ToLowerInvariant()}
+    })
+    $paths=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($file in $files) { if (-not $paths.Add($file.path)) { throw 'CANDIDATE_FILE_CASE_COLLISION' } }
+    $seen = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($line in Get-Content -LiteralPath (Join-Path $root 'checks/SHA256SUMS.txt') -Encoding utf8) {
+        if (-not $line) { continue }
+        if ($line -cnotmatch '^([0-9a-f]{64})  (.+)$') { throw 'CANDIDATE_CHECKSUM_INVALID' }
+        $hash=$Matches[1];$relative=$Matches[2]
+        if ($relative -match '(^|/)\.\.?(/|$)|[\\:*?\x00-\x1f]' -or [IO.Path]::IsPathRooted($relative)) { throw 'CANDIDATE_CHECKSUM_PATH_INVALID' }
+        if ($relative -ceq 'checks/SHA256SUMS.txt' -or -not $seen.Add($relative)) { throw 'CANDIDATE_CHECKSUM_SELF_REFERENCE_OR_DUPLICATE' }
+        $entry = @($files | Where-Object path -CEQ $relative)
+        if ($entry.Count -ne 1 -or $entry[0].sha256 -cne $hash) { throw "CANDIDATE_CHECKSUM_MISMATCH:$relative" }
+    }
+    foreach ($file in $files) {
+        if ($file.path -ne 'checks/SHA256SUMS.txt' -and -not $seen.Contains($file.path)) { throw "CANDIDATE_CHECKSUM_COVERAGE_MISSING:$($file.path)" }
+    }
+    if ($contract.PSObject.Properties['runtimeInventory']) {
+        $inventoryRelative=[string]$contract.runtimeInventory.path
+        if ($inventoryRelative -cne 'checks/runtime-inventory.json') { throw 'CANDIDATE_RUNTIME_INVENTORY_LOCATION_INVALID' }
+        $inventory=Assert-PbReleaseInputInventory -Root $root -InventoryPath (Join-Path $root $inventoryRelative) -InventorySha256 $contract.runtimeInventory.sha256 -ProductVersion $ExpectedProductVersion
+        $runtimeFiles=@($files | Where-Object path -CLike 'runtime/*')
+        if (@($inventory.files).Count -ne $runtimeFiles.Count -or @($inventory.files | Where-Object path -CNotLike 'runtime/*').Count) { throw 'CANDIDATE_RUNTIME_INVENTORY_NOT_CLOSED' }
+        $runtimeSet=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+        foreach ($entry in $inventory.files) { $null=$runtimeSet.Add([string]$entry.path) }
+        foreach ($file in $runtimeFiles) { if (-not $runtimeSet.Contains($file.path)) { throw 'CANDIDATE_RUNTIME_INVENTORY_NOT_CLOSED' } }
+    }
+    $snapshot=$null
+    if ($Commit) {
+        Assert-PbToolkitSnapshotFiles -ToolkitPath $root -RepositoryPath $SnapshotRepositoryPath -Commit $Commit -Files $files
+        $snapshot=Get-PbToolkitSnapshotIdentity -ToolkitPath $SnapshotRepositoryPath -Commit $Commit
+        foreach ($pair in @(@('manifest.json','manifestSha256'),@('checks/toolkit-runtime-contract.json','runtimeContractSha256'),@('runtime/cli/win-x86/PbBridge.Cli.exe','cliSha256'))) {
+            if ((Get-PbReleaseFileIdentity (Join-Path $root $pair[0])).sha256 -cne [string]$snapshot.identity.($pair[1])) { throw 'CANDIDATE_SNAPSHOT_IDENTITY_MISMATCH' }
+        }
+    }
+    $binaries = @(Get-PbCandidateRuntimeBinaryFact -RuntimeRoot (Join-Path $root 'runtime') -ExpectedProductVersion $ExpectedProductVersion)
+    $cli = Join-Path $root 'runtime/cli/win-x86/PbBridge.Cli.exe'
+    $version = & $cli version
+    if ($LASTEXITCODE -ne 0 -or [string](($version -join "`n" | ConvertFrom-Json).version) -cne $ExpectedProductVersion) { throw 'CANDIDATE_ENTRYPOINT_VERSION_MISMATCH' }
+    [pscustomobject]@{identity=[pscustomobject]@{productVersion=$ExpectedProductVersion;toolkitCommit=$(if ($snapshot) { $Commit } else { $null });
+        cliSha256=(Get-PbReleaseFileIdentity $cli).sha256;manifestSha256=(Get-PbReleaseFileIdentity $manifestPath).sha256;
+        runtimeContractSha256=(Get-PbReleaseFileIdentity $contractPath).sha256};files=$files;checksums=$seen.Count;binaries=$binaries;
+        missingIdentityFields=$(if ($snapshot) { @() } else { @('toolkitCommit') });
+        qualification=$(if ($snapshot) { 'local-committed-source-and-toolkit-candidate-validation/7.6.0' } else { 'local-content-only' });publishable=$false}
+}
+
+function Get-PbScoped753PublicationFact {
+    # This historical exception is anchored to the immutable completion bytes, not arbitrary status=published JSON.
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$RecordPath,[Parameter(Mandatory)][string]$PublicationReceiptPath,
+        [Parameter(Mandatory)][string]$ArtifactRoot,[Parameter(Mandatory)][object]$Record)
+    $null = Assert-PbReleasePlainPath $RecordPath
+    $null = Assert-PbReleasePlainPath $PublicationReceiptPath
+    $receiptReference=Get-PbReleaseFileIdentity $PublicationReceiptPath
+    if ($receiptReference.sha256 -cne '89ebd7e86b001c012d7dd8d60ede7780901a3e3970f033a8614313bd03226f7e') { throw 'SCOPED_PUBLICATION_COMPLETION_UNRECOGNIZED' }
+    $receipt=Get-Content -LiteralPath $PublicationReceiptPath -Raw -Encoding utf8 | ConvertFrom-Json -Depth 100
+    $referenceRoot=Split-Path -Parent ([IO.Path]::GetFullPath($PublicationReceiptPath))
+    foreach ($pair in @(@('decisionDocument','7.5.3-owner-authorized-scoped-release.json'),@('previousPartialReceipt','7.5.3-publication-receipt.json'))) {
+        $reference=$receipt.($pair[0])
+        if ([string]$reference.path -cne ('docs/releases/'+$pair[1])) { throw 'SCOPED_PUBLICATION_CHAIN_PATH_INVALID' }
+        $path=Join-Path $referenceRoot $pair[1]
+        $null=Assert-PbReleasePlainPath $path
+        if ((Get-PbReleaseFileIdentity $path).sha256 -cne [string]$reference.sha256) { throw 'SCOPED_PUBLICATION_CHAIN_DRIFTED' }
+    }
+    $decision=Get-Content -LiteralPath (Join-Path $referenceRoot '7.5.3-owner-authorized-scoped-release.json') -Raw -Encoding utf8 | ConvertFrom-Json -Depth 100
+    $partial=Get-Content -LiteralPath (Join-Path $referenceRoot '7.5.3-publication-receipt.json') -Raw -Encoding utf8 | ConvertFrom-Json -Depth 100
+    if ($receipt.schemaName -cne 'pbbridge-owner-scoped-publication-completion' -or $decision.schemaName -cne 'pbbridge-owner-authorized-scoped-release' -or
+        $partial.schemaName -cne 'pbbridge-owner-scoped-publication-receipt' -or $receipt.productVersion -cne '7.5.3' -or $Record.productVersion -cne '7.5.3' -or
+        $decision.productVersion -cne '7.5.3' -or $partial.productVersion -cne '7.5.3' -or -not $decision.oneReleaseOnly -or
+        $receipt.publicationDecision -cne 'owner-authorized-scoped-release' -or $decision.publicationDecision -cne $receipt.publicationDecision -or
+        $receipt.status -cne 'published' -or -not $receipt.allPublicationStepsCompleted -or
+        $receipt.originalFullQualification.status -cne 'not-completed' -or $receipt.originalQualificationReclassifiedAsPass -or $receipt.formalManifestFinalizationClaimed) { throw 'SCOPED_PUBLICATION_SCOPE_INVALID' }
+    foreach ($field in @('productVersion','cliSha256','manifestSha256','runtimeContractSha256','toolkitCommit')) {
+        $expected=if($field -ceq 'toolkitCommit'){[string]$Record.candidate.toolkit.commit}else{[string]$Record.candidate.buildIdentity.$field}
+        if ([string]$receipt.identity.$field -cne $expected -or [string]$decision.identity.$field -cne $expected -or [string]$partial.identity.$field -cne $expected) { throw "SCOPED_PUBLICATION_IDENTITY_MISMATCH:$field" }
+    }
+    $archives=@($receipt.distribution.archives | Where-Object name -CEQ 'PbBridge.Toolkit-7.5.3.zip')
+    $approved=@($decision.assets | Where-Object name -CEQ 'PbBridge.Toolkit-7.5.3.zip')
+    if ($archives.Count -ne 1 -or $approved.Count -ne 1 -or $archives[0].sha256 -cne $approved[0].sha256 -or $archives[0].length -ne $approved[0].length) { throw 'SCOPED_PUBLICATION_ARTIFACT_MISMATCH' }
+    $artifactDirectory=Assert-PbReleasePlainPath $ArtifactRoot
+    $archive=Join-Path $artifactDirectory $archives[0].name
+    $null=Assert-PbReleasePlainPath $archive
+    $artifact=Assert-PbReleaseFrozenReference $archive $archives[0]
+    # A projection describes the actual published ZIP; the earlier pre-tag record/ZIP remain unchanged.
+    $candidate=$Record.candidate | ConvertTo-Json -Depth 100 | ConvertFrom-Json -Depth 100
+    $candidate.repository.commit=[string]$receipt.releaseSourceCommit
+    $candidate.repository.tagStatus='verified'
+    $candidate.repository.tagObject=[string]$receipt.tagObject
+    $candidate.repository.peeledCommit=[string]$receipt.tagPeeledCommit
+    $candidate.releaseArtifacts=@([pscustomobject]@{path=$archives[0].name;sha256=$artifact.sha256;length=$artifact.length})
+    [pscustomobject]@{record=$Record;candidate=$candidate;recordReference=(Get-PbReleaseFileIdentity $RecordPath);receiptReference=$receiptReference;
+        publicationEvidenceReference=$null;published=$true;publicationScope='owner-authorized-scoped-release/7.5.3';
+        fullQualification='not-completed';formalManifestFinalization=$false;authorizationTransferable=$false;artifact=$artifact}
+}
+
+Export-ModuleMember -Function Assert-PbToolkitSnapshotFiles,Get-PbCandidatePreservedInput,Assert-PbReleasePlainPath,Assert-PbReleaseInputInventory,Get-PbCandidateRuntimeBinaryFact,Get-PbLocalToolkitCandidateIdentity,Get-PbReleaseFileIdentity,Write-PbReleaseFrozenFile,Assert-PbReleaseFrozenReference,New-PbReleasePublicationReceipt,Get-PbPublishedReleaseFact,Get-PbReleaseRecoveryPreview,Get-PbToolkitSnapshotIdentity

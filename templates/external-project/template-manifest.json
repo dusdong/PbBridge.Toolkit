@@ -1,6 +1,6 @@
 {
   "schemaName": "pbbridge-external-project-template",
-  "templateVersion": "7.5.3",
+  "templateVersion": "7.6.0",
   "provenanceRegistry": "managed-provenance.json",
   "managedFiles": [
     { "templatePath": "AGENTS.md", "targetPath": "AGENTS.md", "mergeMode": "manual-if-customized" },

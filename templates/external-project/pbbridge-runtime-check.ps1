@@ -1,4 +1,4 @@
-﻿# PbBridge-TemplateVersion: 7.5.3
+﻿# PbBridge-TemplateVersion: 7.6.0
 param()
 
 $minimumVersion = [version]'7.4.0'

@@ -2,7 +2,7 @@
 #requires -Version 7.4
 
 <#
-# PbBridge-TemplateVersion: 7.5.3
+# PbBridge-TemplateVersion: 7.6.0
 .SYNOPSIS
 移动 PowerBuilder 编译产物到仓库根目录 bin。
 

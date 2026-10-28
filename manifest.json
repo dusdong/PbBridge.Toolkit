@@ -1,14 +1,24 @@
 {
-  "toolkitVersion": "7.5.3",
-  "productVersion": "7.5.3",
-  "externalProjectTemplateVersion": "7.5.3",
-  "generatedAt": "2026-10-24T19:19:53.0372009+08:00",
+  "toolkitVersion": "7.6.0",
+  "productVersion": "7.6.0",
+  "developmentOnly": true,
+  "candidatePreparation": true,
+  "sourceAdoption": "pending",
+  "qualification": "candidate-preparation-source-adoption-and-independent-qualification-pending",
+  "omittedRuntimes": null,
+  "externalProjectTemplateVersion": "7.6.0",
+  "generatedAt": "2026-10-27T08:13:20.1018856+08:00",
+  "runtimeInput": {
+    "root": "C:\\Users\\Administrator\\AppData\\Local\\CodexRuns\\PB760-P06-20261026\\candidates\\candidate-v02\\toolkit\\runtime",
+    "inventorySha256": "26979f1d7bc5155f3bc8d0ed8fa5c839806430f95f896538cff0e202e2446a5a",
+    "rebuilt": false
+  },
   "runtime": {
     "cli": [
       {
         "platform": "win-x86",
         "executable": "runtime/cli/win-x86/PbBridge.Cli.exe",
-        "source": "artifacts/publish/cli/7.5.3/win-x86-self-contained",
+        "source": "C:\\Users\\Administrator\\AppData\\Local\\CodexRuns\\PB760-P06-20261026\\candidates\\candidate-v02\\toolkit\\runtime\\cli\\win-x86",
         "purpose": "PowerBuilder .pbl/.sr* 导出、校验、报告、差异与导入协作入口；不承担 PB IDE 编译"
       }
     ],
@@ -16,7 +26,7 @@
       {
         "platform": "win-x64",
         "executable": "runtime/ide/win-x64/SharpIDE.exe",
-        "source": "Reference/SharpIDE/artifacts/publish-godot/win-x64",
+        "source": "C:\\Users\\Administrator\\AppData\\Local\\CodexRuns\\PB760-P06-20261026\\candidates\\candidate-v02\\toolkit\\runtime\\ide\\win-x64",
         "purpose": "SharpIDE 宿主与 PBW 浏览入口"
       }
     ],
@@ -25,13 +35,13 @@
         "platform": "win-x86",
         "dll": "runtime/pbspy/win-x86/PBSpy.dll",
         "pb9Runtime": "runtime/pbspy/win-x86/PBSDK/PB090",
-        "source": "reference-pbl/PBSpyORCA/PBSpyORCA",
+        "source": "C:\\Users\\Administrator\\AppData\\Local\\CodexRuns\\PB760-P06-20261026\\candidates\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86",
         "purpose": "PB9 PBL 写回路径的 PBSpy 与 PBSDK 运行时；供 CLI 按 toolkit 相对路径自动探测"
       }
     ]
   },
   "runtimeContract": {
-    "cliDoctorContractVersion": "7.5.3",
+    "cliDoctorContractVersion": "7.6.0",
     "orcaCandidateDoctorRequired": true,
     "requiredDoctorFields": [
       "adapterFamily",
@@ -54,7 +64,7 @@
   "documents": [
     "CODEX-START.md",
     "docs/README.md",
-    "docs/7.5.3发布说明.md",
+    "docs/7.6.0发布说明.md",
     "docs/getting-started/README.md",
     "docs/getting-started/V8交付证据闭环使用手册.md",
     "docs/getting-started/V8迁移说明.md",

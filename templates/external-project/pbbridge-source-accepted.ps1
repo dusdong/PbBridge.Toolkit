@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.5.3
+# PbBridge-TemplateVersion: 7.6.0
 param(
     [Alias('ProjectRoot')]
     [string]$RepoRoot = "",

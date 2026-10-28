@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.5.3
+# PbBridge-TemplateVersion: 7.6.0
 <#
 .SYNOPSIS
 Runs the expert/debug V4 writeback close-loop wrapper.

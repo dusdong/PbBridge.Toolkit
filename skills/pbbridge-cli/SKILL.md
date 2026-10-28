@@ -1,6 +1,6 @@
 ---
 name: pbbridge-cli
-description: 使用 PbBridge.Toolkit 7.5.3 CLI 处理 PowerBuilder 源码、V8 delivery、产物与验收证据。
+description: 使用 PbBridge.Toolkit 7.6.0 CLI 处理 PowerBuilder 源码、V8 delivery、产物与验收证据。
 ---
 
 # PbBridge CLI

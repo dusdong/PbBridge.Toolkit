@@ -1,12 +1,12 @@
 # Toolkit 问题反馈模板
 
-当前 Toolkit 公共版本为 `7.5.3`。请复制本模板并填写；提交前应脱敏，不要附业务源码、数据库口令、许可证、客户数据或完整敏感 PBL。
+当前 Toolkit 公共版本为 `7.6.0`。请复制本模板并填写；提交前应脱敏，不要附业务源码、数据库口令、许可证、客户数据或完整敏感 PBL。
 
 ## 1. 构建身份
 
 ```json
 {
-  "productVersion": "7.5.3",
+  "productVersion": "7.6.0",
   "cliSha256": "",
   "toolkitCommit": "",
   "actualToolkitHead": "",

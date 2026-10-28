@@ -39,19 +39,19 @@
 先预览，不移动文件：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\move-pb-build-output.ps1 -WhatIf
+pwsh -NoProfile -File .\scripts\move-pb-build-output.ps1 -WhatIf
 ```
 
 确认预览结果后再正式移动：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\move-pb-build-output.ps1
+pwsh -NoProfile -File .\scripts\move-pb-build-output.ps1
 ```
 
 默认会覆盖 `bin/` 中已有的同名编译产物。需要审计结果时，可输出结构化结果：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\move-pb-build-output.ps1 -PassThru
+pwsh -NoProfile -File .\scripts\move-pb-build-output.ps1 -PassThru
 ```
 
 ## 4. Git 管理建议

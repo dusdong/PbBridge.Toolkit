@@ -27,7 +27,7 @@ PowerScript 资料的最终使用目标是：
 如果任务是代码审查，再读取：
 
 1. `syntax/powerscript-review-checklist.md`
-2. `docs/AI协作完整性审查模板.md`
+2. `docs/workflows/AI协作完整性审查模板.md`
 
 如果任务是迁移，再读取：
 
@@ -54,16 +54,22 @@ PowerScript 资料的最终使用目标是：
 Codex 只应修改导出的 `.sr*` 文本，不直接修改 `.pbl`。修改完成后应运行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-import-sr.ps1
+pwsh -NoProfile -File .\scripts\pbbridge-delivery-close-loop.ps1 `
+  -RepoRoot . -Workspace default `
+  -Object "app.pbl:window:w_example=src/app/window/w_example.srw" `
+  -ResultJsonPath .pbbridge/workspaces/default/results/preflight.json
 ```
 
-该命令默认执行 DryRun。用户确认后才允许：
+预检不写入 PBL。核对当前输入、对象范围和写回授权后，使用新的当前预检继续：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-import-sr.ps1 -Apply
+pbbridge delivery continue --from .pbbridge/workspaces/default/results/preflight.json `
+  --apply --result .pbbridge/workspaces/default/results/apply.json
 ```
 
 Apply 后仍由 PowerBuilder IDE 负责编译、调试和运行验收。
+
+原生错误先核对保留的输入和 `mappingStatus`，未映射坐标不猜原行。需要规范化时，使用 `pbbridge object normalize-preview`，审阅后独立采用，再重新生成当前预检；预览不自动采用、不刷新基线。历史 `delivery history` 报告只读，不能继续执行。DataWindow 的源定义、内存填充用法及数据库适用性分别核验。
 
 ## 5. 审查重点
 

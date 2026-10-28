@@ -4,7 +4,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$script:ProductVersion = '7.5.3'
+$script:ProductVersion = '7.6.0'
 $script:NormalizationProfile = 'powershell-text-v1'
 $script:SupportedSourceProductVersions = @(
     '7.0.0'
@@ -26,6 +26,7 @@ $script:SupportedSourceProductVersions = @(
     '7.5.0'
     '7.5.1'
     '7.5.2'
+    '7.5.3'
     $script:ProductVersion
 ) | Select-Object -Unique
 $script:ApprovedMigrationBootstrapPatchHashes = @{
