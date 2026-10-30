@@ -388,8 +388,14 @@ function Assert-PbToolkitSnapshotFiles {
     $null=Assert-PbReleasePlainPath -Path $RepositoryPath
     $head=@(& git -C $RepositoryPath rev-parse HEAD 2>$null) -join ''
     if ($LASTEXITCODE -ne 0 -or $head.Trim() -cne $Commit) { throw 'CANDIDATE_SNAPSHOT_HEAD_MISMATCH' }
-    $tree=@(& git -c core.quotepath=false -C $RepositoryPath ls-tree --full-tree -r -z $Commit 2>$null) -join "`n"
-    if ($LASTEXITCODE -ne 0) { throw 'CANDIDATE_SNAPSHOT_UNAVAILABLE' }
+    # ls-tree -z names are UTF-8 bytes. Console encoding varies when this entry
+    # is called with redirected output; never decode Git paths through it.
+    $previousConsoleEncoding=[Console]::OutputEncoding
+    try {
+        [Console]::OutputEncoding=[Text.UTF8Encoding]::new($false)
+        $tree=@(& git -c core.quotepath=false -C $RepositoryPath ls-tree --full-tree -r -z $Commit 2>$null) -join "`n"
+        if ($LASTEXITCODE -ne 0) { throw 'CANDIDATE_SNAPSHOT_UNAVAILABLE' }
+    } finally { [Console]::OutputEncoding=$previousConsoleEncoding }
     $entries=[Collections.Generic.Dictionary[string,string]]::new([StringComparer]::Ordinal)
     foreach ($entry in $tree.Split([char]0,[StringSplitOptions]::RemoveEmptyEntries)) {
         if ($entry -cnotmatch '^(100644|100755) blob ([0-9a-f]{40})\t(.+)$' -or $entries.ContainsKey($Matches[3])) { throw 'CANDIDATE_SNAPSHOT_TREE_INVALID' }

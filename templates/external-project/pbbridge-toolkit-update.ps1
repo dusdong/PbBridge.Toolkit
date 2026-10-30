@@ -8,7 +8,7 @@
 .DESCRIPTION
 普通快进沿用受控更新；无共同祖先时必须选择刚 fetch 的远端分支头、通过契约校验并显式确认，才允许 detached HEAD 切换。
 .PARAMETER TargetCommit
-历史断代升级的目标提交，必须为 40 位提交并精确等于本次 fetch 的 Remote/Branch HEAD。
+目标提交，必须为本次 fetch 的官方 main 本身或祖先的 40 位 SHA；不得回退或丢弃本地分叉。
 .PARAMETER AcknowledgeHistoryDiscontinuity
 显式确认无共同祖先的历史断代切换；该开关不会放宽本地分叉保护。
 #>
@@ -18,9 +18,9 @@ param(
     [string]$RepoRoot = "",
     [string]$ToolkitRoot = "",
     [ValidateNotNullOrEmpty()]
-    [string]$Remote = "origin",
+    [string]$Remote = "github",
     [ValidateNotNullOrEmpty()]
-    [string]$Branch = "master",
+    [string]$Branch = "main",
     [string]$ResultPath = "",
     [string]$TargetCommit = "",
     [string]$ReleaseRecordPath = "",
@@ -68,6 +68,101 @@ function Invoke-ToolkitGit {
         stdout = $stdout
         stderr = $stderr
     }
+}
+
+function Test-ToolkitOfficialUrl {
+    param([string]$Url)
+    return $Url -cmatch '\A(?:https://github\.com/dusdong/PbBridge\.Toolkit(?:\.git)?|git@github\.com:dusdong/PbBridge\.Toolkit(?:\.git)?|ssh://git@github\.com/dusdong/PbBridge\.Toolkit(?:\.git)?)\z'
+}
+
+function Test-ToolkitParentSource {
+    param([string]$Root)
+    # A standalone clone has no selected gitlink/configuration to migrate.
+    $parent = Invoke-ToolkitGit -WorkingDirectory (Split-Path -Parent $Root) -Arguments @('rev-parse','--show-toplevel')
+    if ($parent.exitCode -ne 0) { return }
+    $parentRoot = [IO.Path]::GetFullPath($parent.stdout)
+    $relative = [IO.Path]::GetRelativePath($parentRoot,$Root).Replace('\','/')
+    $gitlink = Invoke-ToolkitGit -WorkingDirectory $parentRoot -Arguments @('ls-files','--stage','--',$relative)
+    if ($gitlink.exitCode -ne 0) { throw 'toolkit-parent-index-unavailable' }
+    $paths = Invoke-ToolkitGit -WorkingDirectory $parentRoot -Arguments @('config','--file','.gitmodules','--get-regexp','^submodule\..*\.path$')
+    if ($paths.exitCode -notin @(0,1)) { throw 'toolkit-parent-gitmodules-invalid' }
+    $selected = @()
+    foreach ($line in ($paths.stdout -split '\r?\n')) {
+        if ($line -match '^(submodule\..+)\.path (.+)$') {
+            $key=$Matches[1]; $path=$Matches[2]
+            if ([IO.Path]::GetFullPath((Join-Path $parentRoot $path)).Equals([IO.Path]::GetFullPath($Root),[StringComparison]::OrdinalIgnoreCase)) { $selected += $key }
+        }
+    }
+    if ($selected.Count -eq 0 -and $gitlink.stdout -notmatch '^160000 ') { return }
+    if ($selected.Count -ne 1) { throw 'toolkit-parent-submodule-identity-ambiguous' }
+    $key=$selected[0]+'.url'
+    $declared = Invoke-ToolkitGit -WorkingDirectory $parentRoot -Arguments @('config','--file','.gitmodules','--get-all',$key)
+    $local = Invoke-ToolkitGit -WorkingDirectory $parentRoot -Arguments @('config','--local','--get-all',$key)
+    if ($declared.exitCode -ne 0 -or $local.exitCode -ne 0 -or
+        -not (Test-ToolkitOfficialUrl $declared.stdout) -or -not (Test-ToolkitOfficialUrl $local.stdout)) {
+        throw 'toolkit-parent-submodule-source-not-official-or-ambiguous'
+    }
+}
+
+function Get-ToolkitDownloadEnvironment {
+    param([string]$Root)
+    $url = Invoke-ToolkitGit -WorkingDirectory $Root -Arguments @('remote','get-url','--all',$Remote)
+    if ($Branch -cne 'main' -or $url.exitCode -ne 0 -or
+        -not (Test-ToolkitOfficialUrl $url.stdout)) {
+        throw 'toolkit-source-not-official-main'
+    }
+    if (Test-Path -LiteralPath (Join-Path $Root '.lfsconfig')) { throw 'toolkit-lfsconfig-unsupported' }
+    $environment = Invoke-ToolkitGit -WorkingDirectory $Root -Arguments @('-c',"remote.lfsdefault=$Remote",'lfs','env')
+    if ($environment.exitCode -ne 0) { throw 'toolkit-lfs-environment-unavailable' }
+    $endpoints = @($environment.stdout -split '\r?\n' | Where-Object { $_ -match '^Endpoint(?: \(.+\))?=' })
+    $selected = @($endpoints | Where-Object { $_ -match ('^Endpoint(?: \(' + [regex]::Escape($Remote) + '\))?=') })
+    if ($selected.Count -eq 0 -or @($selected | Where-Object { $_ -cnotmatch '^Endpoint(?: \(.+\))?=https://github\.com/dusdong/PbBridge\.Toolkit(?:\.git)?/info/lfs(?: \(auth=\w+\))?$' }).Count) {
+        throw 'toolkit-lfs-download-source-not-official'
+    }
+    $media = [regex]::Match($environment.stdout,'(?m)^LocalMediaDir=(.+)\r?$').Groups[1].Value.Trim()
+    if (-not $media -or -not [IO.Path]::IsPathRooted($media)) { throw 'toolkit-lfs-cache-unavailable' }
+    return [pscustomobject]@{url=$url.stdout;media=$media}
+}
+
+function Save-ToolkitTargetLfs {
+    param([string]$Root,[string]$Commit)
+    $environment=Get-ToolkitDownloadEnvironment -Root $Root
+    $listing=Invoke-ToolkitGit -WorkingDirectory $Root -Arguments @('lfs','ls-files','--json',$Commit)
+    if ($listing.exitCode -ne 0) { throw 'toolkit-lfs-list-failed' }
+    # Git LFS reports files=null for a target without LFS objects.
+    $files=@(($listing.stdout | ConvertFrom-Json).files | Where-Object { $null -ne $_ })
+    $checksums=Read-ToolkitCommitText -ToolkitRoot $Root -Commit $Commit -Path 'checks/SHA256SUMS.txt'
+    $missingBytes=[long]0
+    foreach ($file in $files) {
+        if ($file.oid_type -cne 'sha256' -or $file.oid -cnotmatch '^[0-9a-f]{64}$' -or $file.size -lt 0) { throw 'toolkit-lfs-pointer-invalid' }
+        $entry= '(?m)^'+[regex]::Escape($file.oid)+'  '+[regex]::Escape($file.name)+'\r?$'
+        if ($checksums -cnotmatch $entry) { throw 'toolkit-lfs-checksum-manifest-mismatch' }
+        $path=Join-Path $environment.media ($file.oid.Substring(0,2)+'/'+$file.oid.Substring(2,2)+'/'+$file.oid)
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { $missingBytes += [long]$file.size }
+    }
+    # Clear include/exclude filters so every object of the bound target is fetched.
+    $fetch=Invoke-ToolkitGit -WorkingDirectory $Root -Arguments @('-c',"remote.lfsdefault=$Remote",'lfs','fetch','--include=','--exclude=',$Remote,$Commit)
+    if ($fetch.exitCode -ne 0) { throw "toolkit-lfs-prefetch-failed (missingBytes=$missingBytes); installation retained" }
+    foreach ($file in $files) {
+        $path=Join-Path $environment.media ($file.oid.Substring(0,2)+'/'+$file.oid.Substring(2,2)+'/'+$file.oid)
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf) -or (Get-Item -LiteralPath $path).Length -ne [long]$file.size -or
+            (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -cne $file.oid) { throw 'toolkit-lfs-cache-integrity-failed; installation retained' }
+    }
+    return [pscustomobject]@{objectCount=$files.Count;missingBytes=$missingBytes;cache=$environment.media;source='local-cache-and-explicit-fetch; independent GitHub download not proven'}
+}
+
+function Test-ToolkitInstalledContent {
+    param([string]$Root,[string]$Commit)
+    $contract=Test-ToolkitTargetContract -ToolkitRoot $Root -Commit $Commit
+    if (-not $contract.valid) { throw $contract.summaryText }
+    foreach ($line in ((Read-ToolkitCommitText -ToolkitRoot $Root -Commit $Commit -Path 'checks/SHA256SUMS.txt') -split '\r?\n')) {
+        if ($line -cnotmatch '^([0-9a-f]{64})  (.+)$') { throw 'toolkit-checksum-invalid' }
+        $hash=$Matches[1];$relative=$Matches[2]
+        if ([IO.Path]::IsPathRooted($relative) -or $relative -match '(^|/)\.\.?(/|$)|[\\:*?\x00-\x1f]') { throw 'toolkit-checksum-path-invalid' }
+        $path=Join-Path $Root $relative
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf) -or (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -cne $hash) { throw "toolkit-installed-checksum-mismatch:$relative" }
+    }
+    if ((Read-ToolkitVersion -ToolkitRoot $Root) -cne $contract.version) { throw 'toolkit-installed-version-mismatch' }
 }
 
 function Read-ToolkitVersion {
@@ -223,6 +318,7 @@ function New-ToolkitUpdateResult {
         localVersion = $LocalVersion
         remoteVersion = $RemoteVersion
         targetValidation = $TargetValidation
+        lfsPrefetch = $lfsPrefetch
         previousBuild = $previousBuild
         targetBuild = $targetBuild
         recovery = $recovery
@@ -271,6 +367,7 @@ $historyRelation = $null
 $remoteUrl = $null
 $verifiedTargetCommit = $null
 $targetValidation = $null
+$lfsPrefetch = $null
 $recoveryCommand = $null
 $status = "blocked"
 $previousBuild = $null
@@ -296,6 +393,9 @@ try {
                 $previousCommit = $localCommit
             }
             $localVersion = Read-ToolkitVersion -ToolkitRoot $toolkitRootFull
+            Test-ToolkitParentSource -Root $toolkitRootFull
+            $downloadEnvironment = Get-ToolkitDownloadEnvironment -Root $toolkitRootFull
+            $remoteUrl = $downloadEnvironment.url
             $fetchRefSpec = "+refs/heads/" + $Branch + ":refs/remotes/" + $Remote + "/" + $Branch
             $fetch = Invoke-ToolkitGit -WorkingDirectory $toolkitRootFull -Arguments @("fetch", $Remote, $fetchRefSpec, "--prune")
             if ($fetch.exitCode -ne 0) {
@@ -315,6 +415,15 @@ try {
                 }
                 else {
                     $remoteCommit = $remoteHead.stdout
+                    if ($TargetCommit) {
+                        if ($TargetCommit -notmatch '^[0-9a-fA-F]{40}$') { throw 'toolkit-target-commit-invalid' }
+                        $ancestor=Invoke-ToolkitGit -WorkingDirectory $toolkitRootFull -Arguments @('merge-base','--is-ancestor',$TargetCommit,$remoteCommit)
+                        if ($ancestor.exitCode -ne 0) { throw 'toolkit-target-not-fetched-main-ancestor' }
+                        $remoteCommit=$TargetCommit.ToLowerInvariant()
+                    }
+                    $verifiedTargetCommit=$remoteCommit
+                    $targetValidation=Test-ToolkitTargetContract -ToolkitRoot $toolkitRootFull -Commit $remoteCommit
+                    if (-not $targetValidation.valid) { throw $targetValidation.summaryText }
                     $remoteVersionResult = Invoke-ToolkitGit -WorkingDirectory $toolkitRootFull -Arguments @("show", ($remoteCommit + ":VERSION"))
                     if ($remoteVersionResult.exitCode -eq 0) {
                         $remoteVersion = $remoteVersionResult.stdout
@@ -368,12 +477,14 @@ try {
                             $nextActions += "运行 scripts/pbbridge-toolkit-update.ps1 -Apply 更新 Toolkit submodule 工作树。"
                         }
                         elseif ($PSCmdlet.ShouldProcess($toolkitRootFull, "Checkout Toolkit snapshot $remoteCommit")) {
-                            $checkout = Invoke-ToolkitGit -WorkingDirectory $toolkitRootFull -Arguments @("checkout", "-B", $Branch, $remoteRef)
+                            $lfsPrefetch=Save-ToolkitTargetLfs -Root $toolkitRootFull -Commit $remoteCommit
+                            $checkout = Invoke-ToolkitGit -WorkingDirectory $toolkitRootFull -Arguments @("checkout", "--detach", $remoteCommit)
                             if ($checkout.exitCode -ne 0) {
                                 $issues += New-ToolkitUpdateIssue -Code "toolkit-checkout-failed" -Severity "error" -Message "更新 Toolkit 快照失败：$($checkout.text)"
                                 $nextActions += "手工进入 Toolkit submodule 检查 git checkout 失败原因。"
                             }
                             else {
+                                Test-ToolkitInstalledContent -Root $toolkitRootFull -Commit $remoteCommit
                                 $localCommit = $remoteCommit
                                 $localVersion = Read-ToolkitVersion -ToolkitRoot $toolkitRootFull
                                 $status = "updated"
@@ -420,12 +531,14 @@ try {
                                     $nextActions += "审查 targetValidation 和 recoveryCommand 后再显式确认。"
                                 }
                                 elseif ($PSCmdlet.ShouldProcess($toolkitRootFull, "Detach Toolkit HEAD at verified remote snapshot $remoteCommit")) {
+                                    $lfsPrefetch=Save-ToolkitTargetLfs -Root $toolkitRootFull -Commit $remoteCommit
                                     $checkout = Invoke-ToolkitGit -WorkingDirectory $toolkitRootFull -Arguments @("checkout", "--detach", $remoteCommit)
                                     if ($checkout.exitCode -ne 0) {
                                         $issues += New-ToolkitUpdateIssue -Code "toolkit-checkout-failed" -Severity "error" -Message "历史断代切换失败：$($checkout.text)"
                                         $nextActions += "保持原分支不动，按 recoveryCommand 返回 previousCommit。"
                                     }
                                     else {
+                                        Test-ToolkitInstalledContent -Root $toolkitRootFull -Commit $remoteCommit
                                         $localCommit = $remoteCommit
                                         $localVersion = Read-ToolkitVersion -ToolkitRoot $toolkitRootFull
                                         $status = "history-switched"

@@ -5927,8 +5927,16 @@
       "targetPath": "scripts/PbBridge.ReleaseIdentity.psm1",
       "templateVersion": "7.6.0",
       "kind": "powershell-module",
-      "rawSha256": "01b658cf2f961fb5761169da68972ebe2169273a2d3bbf4e01dbadb678745072",
-      "normalizedTextSha256": "80323aba1d879744f76f14ea65b0f52ab4b700ada6dacd7ebe5e700d4f2e7222",
+      "rawSha256": "9aa8289c5dfc2bdfd99e4acfef2db255ef0f71ec31a87558a3415ad7313a4b3d",
+      "normalizedTextSha256": "ee4b98241ccfbb5a8b9a6b6e1910c06c83948ae5b613fe7d2e2d4911ca1fa6f3",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-toolkit-update.ps1",
+      "templateVersion": "7.6.0",
+      "kind": "powershell-wrapper",
+      "rawSha256": "b0138f9f731fe78ef6617f09731e7c5928392f72809bf65b3c4dde0ebc982d3f",
+      "normalizedTextSha256": "08fbe47f23828102ba54ec5093eeaf909d6c2d2b25f8116b5e5d30bb4a79a20f",
       "normalizationProfile": "powershell-text-v1"
     }
   ]

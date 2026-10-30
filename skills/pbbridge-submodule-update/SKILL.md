@@ -25,7 +25,7 @@ description: 当用户需要更新 PbBridge.Toolkit、pb-libs、pb-langchao 或�
 
 ## Toolkit 最新快照检查
 
-`PbBridge.Toolkit` 子仓按最新版二进制快照维护，远端历史和 tag 不作为外部项目的更新信号。判断 Toolkit 是否有更新时，只比较本地 submodule `HEAD` 与远端 `origin/master`：
+`PbBridge.Toolkit` 子仓从官方 GitHub main 连续历史分发，保留既有历史和版本 tag。判断 Toolkit 是否有更新时，只比较本地 submodule `HEAD` 与远端 `github/main`：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-toolkit-update.ps1
@@ -37,7 +37,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-toolkit-update.ps1
 powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-toolkit-update.ps1 -Apply
 ```
 
-`-Apply` 只在 Toolkit submodule 工作区干净时 checkout `refs/remotes/origin/master`；完成后必须回父项目提交 `.pbbridge/PbBridge.Toolkit` submodule 指针。不要通过 Gitee 提交列表、旧 tag 或历史提交数量判断 Toolkit 是否最新。
+`-Apply` 在工作区干净、原始 ZIP 恢复核验通过、目标 LFS OID/size/hash 与 checksum 验证完成后，checkout 绑定的精确目标 SHA，并后验实际字节；完成后必须回父项目提交 `.pbbridge/PbBridge.Toolkit` submodule 指针。显式 remote 别名须指向同一官方仓库。TargetCommit 可选 fetched main 或祖先，但拒绝回退/本地分叉；无共同祖先保留显式确认。WhatIf 不预取/切换。缓存匹配不证明独立 GitHub 下载。
 
 ## 共享库回灌流程
 

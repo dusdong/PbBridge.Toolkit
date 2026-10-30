@@ -54,3 +54,5 @@ pbbridge schema show pbbridge-v8-delivery
 pbbridge schema explain pbbridge-v8-delivery
 pbbridge contract validate .pbbridge/workspaces/canyin/results/delivery-v8/preflight.json
 ```
+
+Toolkit 更新默认 github/main；显式同官方仓库别名可用。TargetCommit 固定 fetched main 或祖先，拒绝回退；先验证原始 ZIP 恢复，再预取并核验 LFS 缓存，checkout 精确 SHA 后验证 checksums。缓存成功不证明独立下载，WhatIf 不切换。

@@ -7,10 +7,10 @@
   "qualification": "candidate-preparation-source-adoption-and-independent-qualification-pending",
   "omittedRuntimes": null,
   "externalProjectTemplateVersion": "7.6.0",
-  "generatedAt": "2026-10-27T08:13:20.1018856+08:00",
+  "generatedAt": "2026-10-30T10:05:49.3584503+08:00",
   "runtimeInput": {
-    "root": "C:\\Users\\Administrator\\AppData\\Local\\CodexRuns\\PB760-P06-20261026\\candidates\\candidate-v02\\toolkit\\runtime",
-    "inventorySha256": "26979f1d7bc5155f3bc8d0ed8fa5c839806430f95f896538cff0e202e2446a5a",
+    "root": "F:/CodexRuns/PB-GH-01-20261030/candidates/candidate-v05/Toolkit/runtime",
+    "inventorySha256": "07408021e1820e44d65c45ecd6814ff6e2df0396d63e61ae3e7874adc719a63c",
     "rebuilt": false
   },
   "runtime": {
@@ -18,7 +18,7 @@
       {
         "platform": "win-x86",
         "executable": "runtime/cli/win-x86/PbBridge.Cli.exe",
-        "source": "C:\\Users\\Administrator\\AppData\\Local\\CodexRuns\\PB760-P06-20261026\\candidates\\candidate-v02\\toolkit\\runtime\\cli\\win-x86",
+        "source": "F:\\CodexRuns\\PB-GH-01-20261030\\candidates\\candidate-v05\\Toolkit\\runtime\\cli\\win-x86",
         "purpose": "PowerBuilder .pbl/.sr* 导出、校验、报告、差异与导入协作入口；不承担 PB IDE 编译"
       }
     ],
@@ -26,7 +26,7 @@
       {
         "platform": "win-x64",
         "executable": "runtime/ide/win-x64/SharpIDE.exe",
-        "source": "C:\\Users\\Administrator\\AppData\\Local\\CodexRuns\\PB760-P06-20261026\\candidates\\candidate-v02\\toolkit\\runtime\\ide\\win-x64",
+        "source": "F:\\CodexRuns\\PB-GH-01-20261030\\candidates\\candidate-v05\\Toolkit\\runtime\\ide\\win-x64",
         "purpose": "SharpIDE 宿主与 PBW 浏览入口"
       }
     ],
@@ -35,7 +35,7 @@
         "platform": "win-x86",
         "dll": "runtime/pbspy/win-x86/PBSpy.dll",
         "pb9Runtime": "runtime/pbspy/win-x86/PBSDK/PB090",
-        "source": "C:\\Users\\Administrator\\AppData\\Local\\CodexRuns\\PB760-P06-20261026\\candidates\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86",
+        "source": "F:\\CodexRuns\\PB-GH-01-20261030\\candidates\\candidate-v05\\Toolkit\\runtime\\pbspy\\win-x86",
         "purpose": "PB9 PBL 写回路径的 PBSpy 与 PBSDK 运行时；供 CLI 按 toolkit 相对路径自动探测"
       }
     ]
