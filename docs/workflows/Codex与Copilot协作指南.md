@@ -1,10 +1,12 @@
 > 本文档由 `PbBridge.Toolkit` 从父仓库手册同步生成。
 > 当前 toolkit 固定提供 `CLI win-x86 + IDE win-x64` 的 Windows 运行时组合；正式写回支持矩阵仍以父仓库事实源为准。
+> 公开副本中的现场项目路径已替换为示例 `C:\Samples\PowerBuilder\DemoERP`；历史原始资料由父仓保留，本页不表示本版资格通过。
+
 # Codex 与 GitHub Copilot 协作指南
 
 本文档回答两个问题：
 
-1. **面对一个真实的 PowerBuilder 项目，例如 `G:\Langchao\国润铜业`，应该如何借助 `PbBridge.Cli` 与 Codex / GitHub Copilot 配合使用？**
+1. **面对一个真实的 PowerBuilder 项目，例如 `C:\Samples\PowerBuilder\DemoERP`，应该如何借助 `PbBridge.Cli` 与 Codex / GitHub Copilot 配合使用？**
 2. **站在 Codex / GitHub Copilot 的使用视角，本系统的功能现在是否齐全？**
 
 先说结论：
@@ -45,7 +47,7 @@ Regenerate、Full Build、Painter、调试与业务运行验收由用户完成�
 
 如果你的目标是：
 
-- 项目目录在 `G:\Langchao\国润铜业`
+- 项目目录在 `C:\Samples\PowerBuilder\DemoERP`
 - 项目本身是 PowerBuilder 开发
 - 你想让 Codex 参与理解、修改、整理和生成代码相关产物
 
@@ -77,7 +79,7 @@ Regenerate、Full Build、Painter、调试与业务运行验收由用户完成�
 
 这是当前最稳妥、也最符合本仓库实际成熟度的使用方式。
 
-### 3.1 对 `G:\Langchao\国润铜业` 这类项目的具体理解
+### 3.1 对 `C:\Samples\PowerBuilder\DemoERP` 这类项目的具体理解
 
 如果你面对的是一个传统 PowerBuilder 项目，建议按下面的口径向使用者说明：
 
@@ -89,7 +91,7 @@ Regenerate、Full Build、Painter、调试与业务运行验收由用户完成�
 
 下面这句话适合直接放在说明文案、skill 或协作手册里：
 
-> 对于 `G:\Langchao\国润铜业` 这类 PowerBuilder 项目，Codex 不能直接可靠读取 `.pbl` 内部对象；正确做法是先通过 `PbBridge.Cli` 将 `.pbw/.pbl` 导出为 `.sr*` 文本和结构化清单，再让 Codex 在导出工作区上执行理解、改写、校验辅助和文档生成任务。
+> 对于 `C:\Samples\PowerBuilder\DemoERP` 这类 PowerBuilder 项目，Codex 不能直接可靠读取 `.pbl` 内部对象；正确做法是先通过 `PbBridge.Cli` 将 `.pbw/.pbl` 导出为 `.sr*` 文本和结构化清单，再让 Codex 在导出工作区上执行理解、改写、校验辅助和文档生成任务。
 
 ## 4. Copilot 与 Codex 分别适合做什么
 
@@ -320,7 +322,7 @@ Regenerate、Full Build、Painter、调试与业务运行验收由用户完成�
 
 如果你要写成更贴近最终使用者的目标描述，也可以这样写：
 
-> 对于 `G:\Langchao\国润铜业` 这类 PowerBuilder 项目，Codex 无法直接稳定读取 `.pbl` 代码资产；应先借助 `PbBridge.Cli` 导出为 `.sr*` 文本和结构化清单，再让 Codex 在文本工作区上完成理解、编码建议、批量修改与校验辅助。
+> 对于 `C:\Samples\PowerBuilder\DemoERP` 这类 PowerBuilder 项目，Codex 无法直接稳定读取 `.pbl` 代码资产；应先借助 `PbBridge.Cli` 导出为 `.sr*` 文本和结构化清单，再让 Codex 在文本工作区上完成理解、编码建议、批量修改与校验辅助。
 
 ### 不推荐写法
 
