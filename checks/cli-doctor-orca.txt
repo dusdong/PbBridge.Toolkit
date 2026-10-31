@@ -1,122 +1,55 @@
 {
-  "runtimeVersion": ".NET 10.0.14",
-  "osPlatform": "Microsoft Windows 10.0.19045",
-  "processArchitecture": "X86",
-  "adapters": [
+  "status": "passed",
+  "adapterFamily": "pbspy-orca",
+  "pbVersion": 90,
+  "runtimeSource": "PBSpy.dll + PBSDK ORCA compatibility API",
+  "encodingMode": "PB9 ANSI / GBK source byte count",
+  "x86Status": "x86-compatible",
+  "importSupportStatus": "candidate",
+  "nativeDependencies": [
     {
-      "name": "orca",
+      "name": "PBSpy.dll",
+      "isRequired": true,
       "isAvailable": true,
-      "runtime": {
-        "platform": "Microsoft Windows 10.0.19045",
-        "processArchitecture": "X86",
-        "environmentVariables": [
-          {
-            "name": "PBSPY_HOME",
-            "value": null
-          },
-          {
-            "name": "PB_HOME",
-            "value": null
-          }
-        ],
-        "candidateDirectories": [
-          "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86",
-          "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090",
-          "C:\\Program Files (x86)\\Sybase\\Shared\\PowerBuilder",
-          "C:\\Program Files\\Sybase\\Shared\\PowerBuilder"
-        ],
-        "nativeDependencies": [
-          {
-            "name": "PBSpy.dll",
-            "isRequired": true,
-            "isAvailable": true,
-            "resolvedPath": "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSpy.dll",
-            "candidatePaths": [
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSpy.dll",
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\PBSpy.dll",
-              "C:\\Program Files (x86)\\Sybase\\Shared\\PowerBuilder\\PBSpy.dll",
-              "C:\\Program Files\\Sybase\\Shared\\PowerBuilder\\PBSpy.dll"
-            ],
-            "loadSource": "candidate-path"
-          },
-          {
-            "name": "pbvm90.dll",
-            "isRequired": true,
-            "isAvailable": true,
-            "resolvedPath": "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\pbvm90.dll",
-            "candidatePaths": [
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\pbvm90.dll",
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\pbvm90.dll",
-              "C:\\Program Files (x86)\\Sybase\\Shared\\PowerBuilder\\pbvm90.dll",
-              "C:\\Program Files\\Sybase\\Shared\\PowerBuilder\\pbvm90.dll"
-            ],
-            "loadSource": "candidate-path"
-          },
-          {
-            "name": "pbcmp90.dll",
-            "isRequired": true,
-            "isAvailable": true,
-            "resolvedPath": "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\pbcmp90.dll",
-            "candidatePaths": [
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\pbcmp90.dll",
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\pbcmp90.dll",
-              "C:\\Program Files (x86)\\Sybase\\Shared\\PowerBuilder\\pbcmp90.dll",
-              "C:\\Program Files\\Sybase\\Shared\\PowerBuilder\\pbcmp90.dll"
-            ],
-            "loadSource": "candidate-path"
-          },
-          {
-            "name": "pbdwe90.dll",
-            "isRequired": true,
-            "isAvailable": true,
-            "resolvedPath": "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\pbdwe90.dll",
-            "candidatePaths": [
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\pbdwe90.dll",
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\pbdwe90.dll",
-              "C:\\Program Files (x86)\\Sybase\\Shared\\PowerBuilder\\pbdwe90.dll",
-              "C:\\Program Files\\Sybase\\Shared\\PowerBuilder\\pbdwe90.dll"
-            ],
-            "loadSource": "candidate-path"
-          },
-          {
-            "name": "pbcgr90.dll",
-            "isRequired": true,
-            "isAvailable": true,
-            "resolvedPath": "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\pbcgr90.dll",
-            "candidatePaths": [
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\pbcgr90.dll",
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\pbcgr90.dll",
-              "C:\\Program Files (x86)\\Sybase\\Shared\\PowerBuilder\\pbcgr90.dll",
-              "C:\\Program Files\\Sybase\\Shared\\PowerBuilder\\pbcgr90.dll"
-            ],
-            "loadSource": "candidate-path"
-          },
-          {
-            "name": "libjcc.dll",
-            "isRequired": true,
-            "isAvailable": true,
-            "resolvedPath": "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\libjcc.dll",
-            "candidatePaths": [
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\libjcc.dll",
-              "F:\\CodexRuns\\PB761-P09-20261031\\candidate-v02\\toolkit\\runtime\\pbspy\\win-x86\\PBSDK\\PB090\\libjcc.dll",
-              "C:\\Program Files (x86)\\Sybase\\Shared\\PowerBuilder\\libjcc.dll",
-              "C:\\Program Files\\Sybase\\Shared\\PowerBuilder\\libjcc.dll"
-            ],
-            "loadSource": "candidate-path"
-          }
-        ],
-        "adapterFamily": "pbspy-orca",
-        "pbVersion": 90,
-        "runtimeSource": "PBSpy.dll \u002B PBSDK ORCA compatibility API",
-        "encodingMode": "PB9 ANSI / GBK source byte count",
-        "x86Status": "x86-compatible",
-        "importSupportStatus": "candidate"
-      }
+      "loadSource": "candidate-path",
+      "toolkitRelativePath": "runtime/pbspy/win-x86/PBSpy.dll"
     },
     {
-      "name": "binary",
+      "name": "pbvm90.dll",
+      "isRequired": true,
       "isAvailable": true,
-      "runtime": null
+      "loadSource": "candidate-path",
+      "toolkitRelativePath": "runtime/pbspy/win-x86/PBSDK/PB090/pbvm90.dll"
+    },
+    {
+      "name": "pbcmp90.dll",
+      "isRequired": true,
+      "isAvailable": true,
+      "loadSource": "candidate-path",
+      "toolkitRelativePath": "runtime/pbspy/win-x86/PBSDK/PB090/pbcmp90.dll"
+    },
+    {
+      "name": "pbdwe90.dll",
+      "isRequired": true,
+      "isAvailable": true,
+      "loadSource": "candidate-path",
+      "toolkitRelativePath": "runtime/pbspy/win-x86/PBSDK/PB090/pbdwe90.dll"
+    },
+    {
+      "name": "pbcgr90.dll",
+      "isRequired": true,
+      "isAvailable": true,
+      "loadSource": "candidate-path",
+      "toolkitRelativePath": "runtime/pbspy/win-x86/PBSDK/PB090/pbcgr90.dll"
+    },
+    {
+      "name": "libjcc.dll",
+      "isRequired": true,
+      "isAvailable": true,
+      "loadSource": "candidate-path",
+      "toolkitRelativePath": "runtime/pbspy/win-x86/PBSDK/PB090/libjcc.dll"
     }
-  ]
+  ],
+  "evidenceScope": "portable-toolkit-runtime-summary",
+  "rawEvidenceSha256": "e87a039219a931878923fbca61a95050115c305ad10c902d92dede66904a7b8c"
 }

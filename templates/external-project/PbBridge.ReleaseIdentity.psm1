@@ -512,7 +512,7 @@ function Get-PbLocalToolkitCandidateIdentity {
         cliSha256=(Get-PbReleaseFileIdentity $cli).sha256;manifestSha256=(Get-PbReleaseFileIdentity $manifestPath).sha256;
         runtimeContractSha256=(Get-PbReleaseFileIdentity $contractPath).sha256};files=$files;checksums=$seen.Count;binaries=$binaries;
         missingIdentityFields=$(if ($snapshot) { @() } else { @('toolkitCommit') });
-        qualification=$(if ($snapshot) { 'local-committed-source-and-toolkit-candidate-validation/7.6.0' } else { 'local-content-only' });publishable=$false}
+        qualification=$(if ($snapshot) { "local-committed-source-and-toolkit-candidate-validation/$ExpectedProductVersion" } else { 'local-content-only' });publishable=$false}
 }
 
 function Get-PbScoped753PublicationFact {

@@ -5951,8 +5951,8 @@
       "targetPath": "scripts/PbBridge.ReleaseIdentity.psm1",
       "templateVersion": "7.6.1",
       "kind": "powershell-module",
-      "rawSha256": "95cd6a6d4314c227f362916eabd7e1ed979ad652817c0ef506b3be6727359c30",
-      "normalizedTextSha256": "81096cc8693eb1c99a2ce94a796e90fb596dcbea8685950ab89b4964cd9b4600",
+      "rawSha256": "1aecec489323c72c8ab805f234e2b52beb448feb2b00c95d663f76097a9fd22d",
+      "normalizedTextSha256": "44ad757a68fa2fdf1e54fbb7074f9340cf92a233ba7b4c3523164e0c44a9f5de",
       "normalizationProfile": "powershell-text-v1"
     },
     {

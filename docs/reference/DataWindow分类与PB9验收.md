@@ -7,7 +7,7 @@
 PB9 IDE构建：验收通过（所有者确认）；物业业务实际验收：验收通过（所有者确认）。两项以owner-attested记录，不再索要用户已豁免的路径/日志或session关联；其他11项自动化通过，包含P12实际数据库原件重核。3.4完成、任务12/12，formalAuthorization=false、publishable=false。本包没有重跑数据库或取得新的原生日志；详情及交接见[当前发布入口](93-7.6.0发布说明.md)。下文P12/P04仍为历史实测范围。
 ## 历史PB760-P12：新PB9数据库实证（2026-10-27）
 
-P04原件已由所有者清理，其历史缺失保持。P12在新独占schema执行PB9 x86/ODBC17实测：21项原断言及3项新增负向断言通过，参数化Retrieve返回id=2/label=p12-two，坏Create和坏列Retrieve均返回-1并保留原错误。新原件为`F:\CodexRuns\PB760-P12-20261027\native\run-04\native-results.txt`（CP936）；PBVM90来自不变候选，PBODB90来自已安装PB9 9.0.3.8836，32位驱动实际加载Hash另存。schema按对象ID、时间、token、元数据及内容核验清理；真实SQL反例证明错误ID/内容变化拒绝清理。
+P04原件已由所有者清理，其历史缺失保持。P12在新独占schema执行PB9 x86/ODBC17实测：21项原断言及3项新增负向断言通过，参数化Retrieve返回id=2/label=p12-two，坏Create和坏列Retrieve均返回-1并保留原错误。新原件为`PB760-P12-20261027/native/run-04/native-results.txt`（CP936）；PBVM90来自不变候选，PBODB90来自已安装PB9 9.0.3.8836，32位驱动实际加载Hash另存。schema按对象ID、时间、token、元数据及内容核验清理；真实SQL反例证明错误ID/内容变化拒绝清理。
 
 新显式任务参数保留P04默认入口，详见[生产发布说明](11-生产发布说明.md)及[P12交接](../../.pbbridge/local/task-packages/PB760-P12-native-business-20261027/handoff/candidate-v01-handoff.md)。当前消费者11/13项通过，IDE与owner仍未验，3.4不勾选；71项组件测试不代替现场业务验收。下文旧包描述只保留历史覆盖。
 
