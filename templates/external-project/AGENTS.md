@@ -1,4 +1,4 @@
-<!-- PbBridge-TemplateVersion: 7.6.0 -->
+<!-- PbBridge-TemplateVersion: 7.6.1 -->
 # 项目协作规则
 
 1. 先读取本文件中的项目私有约束，再读取 `.pbbridge/PbBridge.Toolkit/CODEX-START.md`。

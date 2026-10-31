@@ -1,6 +1,6 @@
 # CODEX-START.md
 
-这是 PbBridge.Toolkit `7.6.0` 的 Codex 启动入口。当前 `.sr*` 交付只使用 V8 delivery；非当前 Delivery/session 输入必须在写入前拒绝，不能继续 Apply、生成当前 handoff 或加入 V8 session。
+这是 PbBridge.Toolkit `7.6.1` 的 Codex 启动入口。当前 `.sr*` 交付只使用 V8 delivery；非当前 Delivery/session 输入必须在写入前拒绝，不能继续 Apply、生成当前 handoff 或加入 V8 session。
 
 历史查询使用当前 CLI：`pbbridge delivery history --session-file <path> [--result <new-independent-json>]`，仅支持已知 7.5.2/7.5.3 V8 session。默认 stdout，显式报告只能新建于既存独立任务目录。独立报告的当前状态未评估，附件未复查，不可继续执行或进入当前 evidence；不刷新、恢复或改写原件。
 
@@ -20,7 +20,7 @@
 ## 启动检查
 
 1. 读取外部项目根目录 `AGENTS.md` 和本文件。
-2. 核对 Toolkit VERSION、manifest、runtime contract 与 template manifest 均为 `7.6.0`。
+2. 核对 Toolkit VERSION、manifest、runtime contract 与 template manifest 均为 `7.6.1`。
 3. 运行 `.pbbridge/PbBridge.Toolkit/runtime/cli/win-x86/PbBridge.Cli.exe doctor`。
 4. 显式选择 workspace，运行 `pbbridge toolkit preflight --project-root . --workspace <id>`。
 

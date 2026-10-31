@@ -1,7 +1,7 @@
 {
   "schemaName": "pbbridge-template-migration-policy",
   "schemaVersion": 1,
-  "productVersion": "7.6.0",
+  "productVersion": "7.6.1",
   "files": [
     {
       "path": "scripts/move-pb-build-output.ps1",

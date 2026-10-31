@@ -4,7 +4,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$script:ProductVersion = '7.6.0'
+$script:ProductVersion = '7.6.1'
 $script:NormalizationProfile = 'powershell-text-v1'
 $script:SupportedSourceProductVersions = @(
     '7.0.0'

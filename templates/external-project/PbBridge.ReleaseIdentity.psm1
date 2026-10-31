@@ -245,7 +245,10 @@ function Get-PbToolkitSnapshotIdentity {
     foreach($actual in @($manifest.productVersion,$manifest.toolkitVersion,$runtime.toolkitVersion,$runtime.cliDoctorContractVersion)){
         if([string]$actual -cne $version){throw 'SNAPSHOT_VERSION_MISMATCH'}
     }
-    $identity=[ordered]@{productVersion=$version;cliSha256=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($cliBytes)).ToLowerInvariant();
+    $cliHash=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($cliBytes)).ToLowerInvariant()
+    $pointer=[Text.Encoding]::UTF8.GetString($cliBytes)
+    if ($pointer -cmatch '\Aversion https://git-lfs.github.com/spec/v1\noid sha256:([0-9a-f]{64})\nsize ([0-9]+)\n?\z') { $cliHash=$Matches[1] }
+    $identity=[ordered]@{productVersion=$version;cliSha256=$cliHash;
         toolkitCommit=$Commit;manifestSha256=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($manifestBytes)).ToLowerInvariant();
         runtimeContractSha256=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($runtimeBytes)).ToLowerInvariant()}
     $checksums=[Text.Encoding]::UTF8.GetString((Read-SnapshotBlob 'checks/SHA256SUMS.txt'))
@@ -384,7 +387,8 @@ function Assert-PbToolkitSnapshotFiles {
     <# .SYNOPSIS Matches the complete candidate against every actual Git blob, without filters or writes. #>
     [CmdletBinding()]
     param([Parameter(Mandatory)][string]$ToolkitPath,[Parameter(Mandatory)][string]$RepositoryPath,
-        [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{40}$')][string]$Commit,[Parameter(Mandatory)][object[]]$Files)
+        [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{40}$')][string]$Commit,[Parameter(Mandatory)][object[]]$Files,
+        [switch]$RestoredLfs)
     $null=Assert-PbReleasePlainPath -Path $RepositoryPath
     $head=@(& git -C $RepositoryPath rev-parse HEAD 2>$null) -join ''
     if ($LASTEXITCODE -ne 0 -or $head.Trim() -cne $Commit) { throw 'CANDIDATE_SNAPSHOT_HEAD_MISMATCH' }
@@ -402,9 +406,23 @@ function Assert-PbToolkitSnapshotFiles {
         $entries.Add($Matches[3],$Matches[2])
     }
     if ($entries.Count -ne $Files.Count) { throw 'CANDIDATE_SNAPSHOT_FILE_SET_MISMATCH' }
+    $lfsEntries=@{}
+    if ($RestoredLfs) {
+        $listing=(@(& git -C $RepositoryPath lfs ls-files --json $Commit) -join "`n")
+        if ($LASTEXITCODE -ne 0) { throw 'CANDIDATE_LFS_LIST_UNAVAILABLE' }
+        foreach ($pointer in ($listing|ConvertFrom-Json).files) {
+            if ($pointer.oid_type -cne 'sha256' -or $pointer.oid -cnotmatch '^[0-9a-f]{64}$' -or $pointer.version -cne 'https://git-lfs.github.com/spec/v1' -or -not $entries.ContainsKey([string]$pointer.name) -or $lfsEntries.ContainsKey([string]$pointer.name)) { throw 'CANDIDATE_LFS_POINTER_INVALID' }
+            $lfsEntries[[string]$pointer.name]=$pointer
+        }
+    }
     foreach ($file in $Files) {
         if (-not $entries.ContainsKey([string]$file.path)) { throw 'CANDIDATE_SNAPSHOT_FILE_SET_MISMATCH' }
         $path=Join-Path $ToolkitPath $file.path
+        if ($RestoredLfs -and $lfsEntries.ContainsKey([string]$file.path)) {
+            $pointer=$lfsEntries[[string]$file.path]
+            if ($file.sha256 -cne $pointer.oid -or [long]$file.length -ne [long]$pointer.size) { throw "CANDIDATE_LFS_CONTENT_MISMATCH:$($file.path)" }
+            continue
+        }
         $stream=[IO.File]::OpenRead($path)
         $hash=[Security.Cryptography.IncrementalHash]::CreateHash([Security.Cryptography.HashAlgorithmName]::SHA1)
         try {
@@ -421,7 +439,7 @@ function Get-PbLocalToolkitCandidateIdentity {
     <# .SYNOPSIS Verifies actual isolated content without inventing a Toolkit commit or release qualification. #>
     [CmdletBinding()]
     param([Parameter(Mandatory)][string]$ToolkitPath,[Parameter(Mandatory)][string]$ExpectedProductVersion,
-        [string]$Commit,[string]$SnapshotRepositoryPath)
+        [string]$Commit,[string]$SnapshotRepositoryPath,[switch]$RestoredLfs,[switch]$DeferEntrypoint)
     if ([bool]$Commit -ne [bool]$SnapshotRepositoryPath -or ($Commit -and $Commit -cnotmatch '^[0-9a-f]{40}$')) { throw 'CANDIDATE_SNAPSHOT_PARAMETERS_INVALID' }
     $root = Assert-PbReleasePlainPath -Path $ToolkitPath -Recurse
     if ((Test-Path -LiteralPath (Join-Path $root '.git')) -and (-not $Commit -or [IO.Path]::GetFullPath($SnapshotRepositoryPath) -cne $root)) { throw 'CANDIDATE_GIT_METADATA_UNEXPECTED' }
@@ -459,10 +477,17 @@ function Get-PbLocalToolkitCandidateIdentity {
     foreach ($file in $files) {
         if ($file.path -ne 'checks/SHA256SUMS.txt' -and -not $seen.Contains($file.path)) { throw "CANDIDATE_CHECKSUM_COVERAGE_MISSING:$($file.path)" }
     }
-    if ($contract.PSObject.Properties['runtimeInventory']) {
-        $inventoryRelative=[string]$contract.runtimeInventory.path
+    if ($contract.PSObject.Properties['runtimeInventory'] -or (Test-Path -LiteralPath (Join-Path $root 'checks/runtime-inventory.json'))) {
+        # Some installed candidates bind the inventory through the complete Git tree
+        # and SHA256SUMS rather than embedding its hash in the runtime contract.
+        $inventoryRelative='checks/runtime-inventory.json'
+        $inventoryHash=($files|Where-Object path -CEQ $inventoryRelative).sha256
+        if ($contract.PSObject.Properties['runtimeInventory']) {
+            $inventoryRelative=[string]$contract.runtimeInventory.path
+            $inventoryHash=[string]$contract.runtimeInventory.sha256
+        }
         if ($inventoryRelative -cne 'checks/runtime-inventory.json') { throw 'CANDIDATE_RUNTIME_INVENTORY_LOCATION_INVALID' }
-        $inventory=Assert-PbReleaseInputInventory -Root $root -InventoryPath (Join-Path $root $inventoryRelative) -InventorySha256 $contract.runtimeInventory.sha256 -ProductVersion $ExpectedProductVersion
+        $inventory=Assert-PbReleaseInputInventory -Root $root -InventoryPath (Join-Path $root $inventoryRelative) -InventorySha256 $inventoryHash -ProductVersion $ExpectedProductVersion
         $runtimeFiles=@($files | Where-Object path -CLike 'runtime/*')
         if (@($inventory.files).Count -ne $runtimeFiles.Count -or @($inventory.files | Where-Object path -CNotLike 'runtime/*').Count) { throw 'CANDIDATE_RUNTIME_INVENTORY_NOT_CLOSED' }
         $runtimeSet=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
@@ -471,7 +496,7 @@ function Get-PbLocalToolkitCandidateIdentity {
     }
     $snapshot=$null
     if ($Commit) {
-        Assert-PbToolkitSnapshotFiles -ToolkitPath $root -RepositoryPath $SnapshotRepositoryPath -Commit $Commit -Files $files
+        Assert-PbToolkitSnapshotFiles -ToolkitPath $root -RepositoryPath $SnapshotRepositoryPath -Commit $Commit -Files $files -RestoredLfs:$RestoredLfs
         $snapshot=Get-PbToolkitSnapshotIdentity -ToolkitPath $SnapshotRepositoryPath -Commit $Commit
         foreach ($pair in @(@('manifest.json','manifestSha256'),@('checks/toolkit-runtime-contract.json','runtimeContractSha256'),@('runtime/cli/win-x86/PbBridge.Cli.exe','cliSha256'))) {
             if ((Get-PbReleaseFileIdentity (Join-Path $root $pair[0])).sha256 -cne [string]$snapshot.identity.($pair[1])) { throw 'CANDIDATE_SNAPSHOT_IDENTITY_MISMATCH' }
@@ -479,8 +504,10 @@ function Get-PbLocalToolkitCandidateIdentity {
     }
     $binaries = @(Get-PbCandidateRuntimeBinaryFact -RuntimeRoot (Join-Path $root 'runtime') -ExpectedProductVersion $ExpectedProductVersion)
     $cli = Join-Path $root 'runtime/cli/win-x86/PbBridge.Cli.exe'
-    $version = & $cli version
-    if ($LASTEXITCODE -ne 0 -or [string](($version -join "`n" | ConvertFrom-Json).version) -cne $ExpectedProductVersion) { throw 'CANDIDATE_ENTRYPOINT_VERSION_MISMATCH' }
+    if (-not $DeferEntrypoint) {
+        $version = & $cli version
+        if ($LASTEXITCODE -ne 0 -or [string](($version -join "`n" | ConvertFrom-Json).version) -cne $ExpectedProductVersion) { throw 'CANDIDATE_ENTRYPOINT_VERSION_MISMATCH' }
+    }
     [pscustomobject]@{identity=[pscustomobject]@{productVersion=$ExpectedProductVersion;toolkitCommit=$(if ($snapshot) { $Commit } else { $null });
         cliSha256=(Get-PbReleaseFileIdentity $cli).sha256;manifestSha256=(Get-PbReleaseFileIdentity $manifestPath).sha256;
         runtimeContractSha256=(Get-PbReleaseFileIdentity $contractPath).sha256};files=$files;checksums=$seen.Count;binaries=$binaries;
@@ -537,4 +564,108 @@ function Get-PbScoped753PublicationFact {
         fullQualification='not-completed';formalManifestFinalization=$false;authorizationTransferable=$false;artifact=$artifact}
 }
 
-Export-ModuleMember -Function Assert-PbToolkitSnapshotFiles,Get-PbCandidatePreservedInput,Assert-PbReleasePlainPath,Assert-PbReleaseInputInventory,Get-PbCandidateRuntimeBinaryFact,Get-PbLocalToolkitCandidateIdentity,Get-PbReleaseFileIdentity,Write-PbReleaseFrozenFile,Assert-PbReleaseFrozenReference,New-PbReleasePublicationReceipt,Get-PbPublishedReleaseFact,Get-PbReleaseRecoveryPreview,Get-PbToolkitSnapshotIdentity
+function Assert-PbInstalledCandidateSource {
+    param([string]$ToolkitPath,[string]$Commit,[string]$TargetCommit,[string]$Remote)
+    $url=(@(& git -C $ToolkitPath remote get-url --all $Remote 2>$null) -join "`n").Trim()
+    if ($LASTEXITCODE -ne 0 -or $url -cnotmatch '\A(?:https://github\.com/dusdong/PbBridge\.Toolkit(?:\.git)?|git@github\.com:dusdong/PbBridge\.Toolkit(?:\.git)?|ssh://git@github\.com/dusdong/PbBridge\.Toolkit(?:\.git)?)\z') { throw 'candidate-recovery-source-not-official' }
+    $head=(@(& git -C $ToolkitPath rev-parse HEAD) -join '').Trim()
+    if ($LASTEXITCODE -ne 0 -or $head -cne $Commit) { throw 'candidate-recovery-head-changed' }
+    $dirty=@(& git -C $ToolkitPath status --porcelain=v1 --untracked-files=all)
+    if ($LASTEXITCODE -ne 0 -or $dirty.Count) { throw 'candidate-recovery-installation-dirty' }
+    foreach ($pair in @(@($Commit,$TargetCommit),@($TargetCommit,"refs/remotes/$Remote/main"))) {
+        & git -C $ToolkitPath merge-base --is-ancestor $pair[0] $pair[1] 2>$null
+        if ($LASTEXITCODE -ne 0 -or $Commit -ceq $TargetCommit) { throw 'candidate-recovery-fast-forward-required' }
+    }
+    $targetVersion=(@(& git -C $ToolkitPath show "${TargetCommit}:VERSION") -join '').Trim()
+    if ($LASTEXITCODE -ne 0 -or $targetVersion -cne '7.6.1') { throw 'candidate-recovery-target-version-unsupported' }
+}
+
+function Get-PbInstalledCandidateRecovery {
+    <#
+    .SYNOPSIS Prepares or read-only revalidates an installed 7.6.0 candidate copy.
+    .DESCRIPTION Requires official main ancestry and a 7.6.1 fast-forward target. Never issues publication authority.
+    .PARAMETER ExtractionRoot Explicit tree-external recovery directory; occupied incomplete directories are refused.
+    .EXAMPLE Get-PbInstalledCandidateRecovery -ToolkitPath C:/install -Commit $old -TargetCommit $new -Remote github -ExtractionRoot C:/recovery/new -ProjectRoot C:/project
+    .OUTPUTS Recovery status, five-part identity, full inventory and actual child-process output.
+    .NOTES Copy preparation is permitted during updater WhatIf. Installation and business data remain read-only.
+    #>
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$ToolkitPath,[Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{40}$')][string]$Commit,
+        [Parameter(Mandatory)][ValidatePattern('^[0-9a-f]{40}$')][string]$TargetCommit,[string]$Remote='github',
+        [Parameter(Mandatory)][string]$ExtractionRoot,[Parameter(Mandatory)][string]$ProjectRoot,[switch]$RequireExisting)
+    $executionLog=[Collections.Generic.List[object]]::new()
+    try {
+        $root=Assert-PbReleasePlainPath $ExtractionRoot -Recurse
+        foreach ($protected in @($ToolkitPath,$ProjectRoot)) {
+            $protected=[IO.Path]::GetFullPath($protected).TrimEnd('\','/')
+            if ($root.Equals($protected,[StringComparison]::OrdinalIgnoreCase) -or $root.StartsWith($protected+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase) -or $protected.StartsWith($root+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)) { throw 'candidate-recovery-output-overlap' }
+        }
+        Assert-PbInstalledCandidateSource -ToolkitPath $ToolkitPath -Commit $Commit -TargetCommit $TargetCommit -Remote $Remote
+        $installed=Get-PbLocalToolkitCandidateIdentity -ToolkitPath $ToolkitPath -ExpectedProductVersion '7.6.0' -Commit $Commit -SnapshotRepositoryPath $ToolkitPath -RestoredLfs -DeferEntrypoint
+        if (@($installed.files|Where-Object path -CEQ 'checks/runtime-inventory.json').Count -ne 1) { throw 'candidate-recovery-runtime-inventory-required' }
+        $copy=Join-Path $root 'toolkit';$recordPath=Join-Path $root 'recovery-record.json'
+        $reuse=Test-Path -LiteralPath $root
+        if ($reuse) {
+            if (-not (Test-Path -LiteralPath $recordPath -PathType Leaf)) { throw 'candidate-recovery-interrupted-directory' }
+            $record=Get-Content -LiteralPath $recordPath -Raw -Encoding utf8|ConvertFrom-Json -Depth 50
+            if ($record.schemaName -cne 'pbbridge-installed-candidate-recovery' -or $record.recoveryKind -cne 'installed-candidate-copy' -or $record.status -cne 'verified' -or $record.extractedToolkit -cne $copy -or $record.publishable -ne $false -or $record.authorizationTransferable -ne $false) { throw 'candidate-recovery-record-invalid' }
+            foreach ($field in @('productVersion','cliSha256','toolkitCommit','runtimeContractSha256','manifestSha256')) {
+                if ([string]$record.identity.$field -cne [string]$installed.identity.$field) { throw "candidate-recovery-record-identity-mismatch:$field" }
+            }
+            if (@(Get-ChildItem -LiteralPath $root -Force).Count -ne 2) { throw 'candidate-recovery-extra-material' }
+        } else {
+            if ($RequireExisting) { throw 'candidate-recovery-copy-required' }
+            $null=[IO.Directory]::CreateDirectory($copy)
+            foreach ($file in $installed.files) {
+                $destination=Join-Path $copy $file.path
+                $null=[IO.Directory]::CreateDirectory((Split-Path -Parent $destination))
+                [IO.File]::Copy((Join-Path $ToolkitPath $file.path),$destination,$false)
+            }
+        }
+        $verified=Get-PbLocalToolkitCandidateIdentity -ToolkitPath $copy -ExpectedProductVersion '7.6.0' -Commit $Commit -SnapshotRepositoryPath $ToolkitPath -RestoredLfs -DeferEntrypoint
+        if ($reuse) {
+            if ($record.source -cne 'https://github.com/dusdong/PbBridge.Toolkit.git' -or $record.qualification -cne 'candidate-recovery-only' -or $record.recoveryScope -cne 'toolkit-only' -or @($record.files).Count -ne $verified.files.Count -or @($record.executions).Count -ne 2) { throw 'candidate-recovery-record-incomplete' }
+            $recordFiles=@{}
+            foreach ($file in $record.files) {
+                if ($recordFiles.ContainsKey([string]$file.path)) { throw 'candidate-recovery-record-inventory-invalid' }
+                $recordFiles[[string]$file.path]=$file
+            }
+            foreach ($file in $verified.files) {
+                if (-not $recordFiles.ContainsKey([string]$file.path) -or $recordFiles[[string]$file.path].sha256 -cne $file.sha256 -or [long]$recordFiles[[string]$file.path].length -ne $file.length) { throw 'candidate-recovery-record-inventory-invalid' }
+            }
+        }
+        foreach ($field in @('productVersion','cliSha256','toolkitCommit','runtimeContractSha256','manifestSha256')) {
+            if ([string]$verified.identity.$field -cne [string]$installed.identity.$field) { throw 'candidate-recovery-copy-identity-mismatch' }
+        }
+        $entry=Join-Path $copy 'runtime/cli/win-x86/PbBridge.Cli.exe'
+        $executions=@(foreach ($command in @('version','doctor')) {
+            $info=[Diagnostics.ProcessStartInfo]::new(@(Get-Command pwsh -CommandType Application)[0].Source)
+            $info.UseShellExecute=$false;$info.RedirectStandardOutput=$true;$info.RedirectStandardError=$true;$info.WorkingDirectory=$copy
+            $commandText="& '"+$entry.Replace("'","''")+"' '"+$command+"'; exit `$LASTEXITCODE"
+            $encoded=[Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($commandText))
+            foreach ($arg in @('-NoProfile','-NonInteractive','-EncodedCommand',$encoded)) { $info.ArgumentList.Add($arg) }
+            $process=[Diagnostics.Process]::Start($info)
+            $out=$process.StandardOutput.ReadToEndAsync();$err=$process.StandardError.ReadToEndAsync()
+            $process.WaitForExit();$stdout=$out.GetAwaiter().GetResult();$stderr=$err.GetAwaiter().GetResult();$code=$process.ExitCode;$pidValue=$process.Id;$process.Dispose()
+            $executionLog.Add([pscustomobject]@{command=$command;entrypoint=$entry;pid=$pidValue;exitCode=$code;stdout=$stdout;stderr=$stderr})
+            if ($code -ne 0) { throw "candidate-recovery-entrypoint-failed:$command exit=$code $stderr" }
+            if ($command -ceq 'version' -and [string](($stdout|ConvertFrom-Json).version) -cne '7.6.0') { throw 'candidate-recovery-entrypoint-version-mismatch' }
+            [pscustomobject]@{command=$command;entrypoint=$entry;pid=$pidValue;exitCode=$code;stdout=$stdout;stderr=$stderr}
+        })
+        # Detect any entrypoint side effect or concurrent installation change before issuing a record.
+        $null=Get-PbLocalToolkitCandidateIdentity -ToolkitPath $copy -ExpectedProductVersion '7.6.0' -Commit $Commit -SnapshotRepositoryPath $ToolkitPath -RestoredLfs -DeferEntrypoint
+        Assert-PbInstalledCandidateSource -ToolkitPath $ToolkitPath -Commit $Commit -TargetCommit $TargetCommit -Remote $Remote
+        $null=Get-PbLocalToolkitCandidateIdentity -ToolkitPath $ToolkitPath -ExpectedProductVersion '7.6.0' -Commit $Commit -SnapshotRepositoryPath $ToolkitPath -RestoredLfs -DeferEntrypoint
+        $result=[ordered]@{schemaName='pbbridge-installed-candidate-recovery';status='verified';reasonCode=$null;recoveryKind='installed-candidate-copy';recoveryScope='toolkit-only';qualification='candidate-recovery-only';publishable=$false;authorizationTransferable=$false;identity=$installed.identity;source='https://github.com/dusdong/PbBridge.Toolkit.git';extractedToolkit=$copy;entrypoint=$entry;files=$verified.files;executions=$executions;requiresCurrentFacts=$true;businessRestored=$false;reused=$reuse}
+        if (-not $reuse) {
+            $bytes=[Text.UTF8Encoding]::new($false).GetBytes(($result|ConvertTo-Json -Depth 50))
+            $stream=[IO.File]::Open($recordPath,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::None)
+            try { $stream.Write($bytes);$stream.Flush($true) } finally { $stream.Dispose() }
+        }
+        [pscustomobject]$result
+    } catch {
+        [pscustomobject]@{status='unavailable';reasonCode=$_.Exception.Message;recoveryKind='installed-candidate-copy';recoveryScope='toolkit-only';qualification='candidate-recovery-only';publishable=$false;authorizationTransferable=$false;executions=$executionLog.ToArray()}
+    }
+}
+
+Export-ModuleMember -Function Get-PbInstalledCandidateRecovery,Assert-PbToolkitSnapshotFiles,Get-PbCandidatePreservedInput,Assert-PbReleasePlainPath,Assert-PbReleaseInputInventory,Get-PbCandidateRuntimeBinaryFact,Get-PbLocalToolkitCandidateIdentity,Get-PbReleaseFileIdentity,Write-PbReleaseFrozenFile,Assert-PbReleaseFrozenReference,New-PbReleasePublicationReceipt,Get-PbPublishedReleaseFact,Get-PbReleaseRecoveryPreview,Get-PbToolkitSnapshotIdentity

@@ -1,7 +1,7 @@
 {
   "schemaName": "pbbridge-project-config",
   "schemaVersion": 7,
-  "productVersion": "7.6.0",
+  "productVersion": "7.6.1",
   "workspaces": [
     {
       "id": "<workspace-id>",

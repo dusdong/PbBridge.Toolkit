@@ -1,6 +1,6 @@
 {
   "schemaName": "pbbridge-external-project-template",
-  "templateVersion": "7.6.0",
+  "templateVersion": "7.6.1",
   "provenanceRegistry": "managed-provenance.json",
   "managedFiles": [
     { "templatePath": "AGENTS.md", "targetPath": "AGENTS.md", "mergeMode": "manual-if-customized" },
@@ -13,6 +13,7 @@
     { "templatePath": "PbBridge.TemplateMigration.psm1", "targetPath": "scripts/PbBridge.TemplateMigration.psm1", "mergeMode": "overwrite-if-template-managed", "assetGroup": "migration-bootstrap" },
     { "templatePath": "pbbridge-bootstrap.ps1", "targetPath": "scripts/pbbridge-bootstrap.ps1", "mergeMode": "overwrite-if-template-managed" },
     { "templatePath": "pbbridge-toolkit-update.ps1", "targetPath": "scripts/pbbridge-toolkit-update.ps1", "mergeMode": "overwrite-if-template-managed" },
+    { "templatePath": "prepare-toolkit-upgrade-entry.ps1", "targetPath": "scripts/prepare-toolkit-upgrade-entry.ps1", "mergeMode": "overwrite-if-template-managed" },
     { "templatePath": "pbbridge-readonly-sync.ps1", "targetPath": "scripts/pbbridge-readonly-sync.ps1", "mergeMode": "overwrite-if-template-managed" },
     { "templatePath": "pbbridge-import-sr.ps1", "targetPath": "scripts/pbbridge-import-sr.ps1", "mergeMode": "overwrite-if-template-managed" },
     { "templatePath": "pbbridge-import-plan.ps1", "targetPath": "scripts/pbbridge-import-plan.ps1", "mergeMode": "overwrite-if-template-managed" },

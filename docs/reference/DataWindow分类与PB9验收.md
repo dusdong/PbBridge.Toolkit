@@ -4,7 +4,7 @@
 
 ## PB760-P13：当前人工验收收口（2026-10-28）
 
-PB9 IDE构建：验收通过（所有者确认）；物业业务实际验收：验收通过（所有者确认）。两项以owner-attested记录，不再索要用户已豁免的路径/日志或session关联；其他11项自动化通过，包含P12实际数据库原件重核。3.4完成、任务12/12，formalAuthorization=false、publishable=false。本包没有重跑数据库或取得新的原生日志；详情及交接见[当前发布入口](../7.6.0发布说明.md)。下文P12/P04仍为历史实测范围。
+PB9 IDE构建：验收通过（所有者确认）；物业业务实际验收：验收通过（所有者确认）。两项以owner-attested记录，不再索要用户已豁免的路径/日志或session关联；其他11项自动化通过，包含P12实际数据库原件重核。3.4完成、任务12/12，formalAuthorization=false、publishable=false。本包没有重跑数据库或取得新的原生日志；详情及交接见[当前发布入口](93-7.6.0发布说明.md)。下文P12/P04仍为历史实测范围。
 ## 历史PB760-P12：新PB9数据库实证（2026-10-27）
 
 P04原件已由所有者清理，其历史缺失保持。P12在新独占schema执行PB9 x86/ODBC17实测：21项原断言及3项新增负向断言通过，参数化Retrieve返回id=2/label=p12-two，坏Create和坏列Retrieve均返回-1并保留原错误。新原件为`F:\CodexRuns\PB760-P12-20261027\native\run-04\native-results.txt`（CP936）；PBVM90来自不变候选，PBODB90来自已安装PB9 9.0.3.8836，32位驱动实际加载Hash另存。schema按对象ID、时间、token、元数据及内容核验清理；真实SQL反例证明错误ID/内容变化拒绝清理。
@@ -36,7 +36,7 @@ SQL Server / inline / mock profile 元数据检查与真实数据库执行分别
 
 V8 使用 `delivery close-loop ... --database-profile <json> [--database-profile-id <id>]` 显式请求；continue 从 preflight 恢复该选择，配置内容进入 freshness facts。显式数据库校验不复用离线缓存。逐项 check 与 blocked item 保留 `diagnosticField`，check 另保留归因和 evidence 路径。
 
-本包 PB9 样例使用 9.0.3.8836 x86，实际加载 `pbodb90.dll` 与 32 位 ODBC Driver 17。合成 external 实际 Create、InsertRow、SetItem、GetItem 与列类型检查成立；授权测试库中的唯一合成 schema 实际参数化 Retrieve 返回预期行，缺失列负例实际返回 -1。资源创建前确认不存在，结束后按归属检查删除，既有表元数据前后摘要相同。确切版本、模块哈希、输入、运行器失败历史及清理查询见本变更 证据索引（父仓 openspec/changes/fix-pbbridge-7-6-0-datawindow-validation/evidence-index.md）。
+本包 PB9 样例使用 9.0.3.8836 x86，实际加载 `pbodb90.dll` 与 32 位 ODBC Driver 17。合成 external 实际 Create、InsertRow、SetItem、GetItem 与列类型检查成立；授权测试库中的唯一合成 schema 实际参数化 Retrieve 返回预期行，缺失列负例实际返回 -1。资源创建前确认不存在，结束后按归属检查删除，既有表元数据前后摘要相同。确切版本、模块哈希、输入、运行器失败历史及清理查询见本变更 证据索引（父仓 openspec/changes/archive/2026-10-30-fix-pbbridge-7-6-0-datawindow-validation/evidence-index.md）。
 
 复跑需在本包输出根准备新的短目录；先构建 `scripts/pb9-datawindow-validation/DataWindowNative.csproj` 的 x86 工具，以新的唯一 schema 生成合成 PBL/EXE，再调用 `Invoke-NativeDataWindow.ps1`。脚本限定既定授权目标、加密凭据引用和新结果目录；其他环境须独立授权并调整边界。不可把旧目录当作可覆盖的模板。
 

@@ -1,4 +1,0 @@
-interface:
-  display_name: "PbBridge Maintenance Router"
-  short_description: "为 PbBridge 维护任务选择合适 workflow"
-  default_prompt: "Use $pbbridge-project-maintenance-router to choose the right PbBridge development workflow skill for the current maintenance task."

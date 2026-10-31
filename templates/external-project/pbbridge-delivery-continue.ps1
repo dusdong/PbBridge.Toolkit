@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.6.0
+# PbBridge-TemplateVersion: 7.6.1
 <#
 .SYNOPSIS
 从 V8 preflight 继续执行受控 PBL Apply。

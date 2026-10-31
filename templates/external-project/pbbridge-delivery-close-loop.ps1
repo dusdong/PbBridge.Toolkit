@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.6.0
+# PbBridge-TemplateVersion: 7.6.1
 <#
 .SYNOPSIS
 运行 V8 delivery 纯预检。

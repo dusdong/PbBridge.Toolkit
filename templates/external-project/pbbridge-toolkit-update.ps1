@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.6.0
+# PbBridge-TemplateVersion: 7.6.1
 <#
 .SYNOPSIS
 检查或更新外部项目使用的 Toolkit 快照。
@@ -9,6 +9,10 @@
 普通快进沿用受控更新；无共同祖先时必须选择刚 fetch 的远端分支头、通过契约校验并显式确认，才允许 detached HEAD 切换。
 .PARAMETER TargetCommit
 目标提交，必须为本次 fetch 的官方 main 本身或祖先的 40 位 SHA；不得回退或丢弃本地分叉。
+.PARAMETER RecoveryPurpose
+CompleteQualification（默认）要求完整发布材料；HistoricalRecovery 使用 7.5.3 原 ZIP。
+InstalledCandidateRecovery 仅允许清洁 7.6.0 候选到 7.6.1 普通快进，须提供 ToolkitRoot 和树外 RecoveryExtractionRoot；禁止混入发布 record/receipt/artifact 参数。
+WhatIf 可实际准备并验证显式副本及写 ResultPath，但不会切换安装。
 .PARAMETER AcknowledgeHistoryDiscontinuity
 显式确认无共同祖先的历史断代切换；该开关不会放宽本地分叉保护。
 #>
@@ -27,6 +31,8 @@ param(
     [string]$PublicationReceiptPath = "",
     [string]$RecoveryArtifactRoot = "",
     [string]$RecoveryExtractionRoot = "",
+    [ValidateSet('CompleteQualification','HistoricalRecovery','InstalledCandidateRecovery')]
+    [string]$RecoveryPurpose = 'CompleteQualification',
     [switch]$AcknowledgeHistoryDiscontinuity,
     [switch]$Apply,
     [switch]$PassThru,
@@ -42,7 +48,11 @@ if (-not (Test-Path -LiteralPath $wrapperModulePath -PathType Leaf)) {
 }
 Import-Module $wrapperModulePath -Force -ErrorAction Stop
 Import-Module (Join-Path $PSScriptRoot 'PbBridge.ReleaseIdentity.psm1') -Force -ErrorAction Stop
-if ($Help.IsPresent) { Show-PbBridgeWrapperHelp -WrapperName "pbbridge-toolkit-update.ps1" -CliCommand "pbbridge toolkit update"; exit 0 }
+if ($Help.IsPresent) {
+    Show-PbBridgeWrapperHelp -WrapperName "pbbridge-toolkit-update.ps1" -CliCommand "pbbridge toolkit update"
+    Get-Help $PSCommandPath -Detailed
+    exit 0
+}
 if ($CliHelp.IsPresent) { Invoke-PbBridgeCliHelp -ProjectRoot $RepoRoot -Arguments @("toolkit", "update", "--help"); exit 0 }
 
 function Resolve-TemplateToolkitRoot {
@@ -322,6 +332,7 @@ function New-ToolkitUpdateResult {
         previousBuild = $previousBuild
         targetBuild = $targetBuild
         recovery = $recovery
+        recoveryPurpose = $RecoveryPurpose
         recoveryScope = 'toolkit-only'
         requiresCurrentFacts = $true
         recoveryCommand = $RecoveryCommand
@@ -332,16 +343,60 @@ function New-ToolkitUpdateResult {
     }
 }
 
+function Assert-ToolkitUpdateResultPath {
+    param([string]$Path)
+    # The project is a protected input boundary. Only its dedicated updater
+    # report is writable; custom reports belong in an independent task directory.
+    $full=[IO.Path]::GetFullPath($Path)
+    $default=[IO.Path]::GetFullPath((Join-Path $projectRootFull '.pbbridge/toolkit-update-check.json'))
+    $gitDirectories=@(foreach ($repository in @($projectRootFull,$toolkitRootFull)) {
+        if (Test-Path -LiteralPath $repository -PathType Container) {
+            $resolved=Invoke-ToolkitGit -WorkingDirectory $repository -Arguments @('rev-parse','--path-format=absolute','--git-dir','--git-common-dir')
+            if ($resolved.exitCode -eq 0) { $resolved.stdout -split '\r?\n' }
+        }
+    })
+    foreach ($protected in @($toolkitRootFull,$RecoveryExtractionRoot)+$gitDirectories) {
+        if (-not $protected) { continue }
+        $protected=[IO.Path]::GetFullPath($protected).TrimEnd('\','/')
+        if ($full.Equals($protected,[StringComparison]::OrdinalIgnoreCase) -or $full.StartsWith($protected+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase) -or $protected.StartsWith($full+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)) { throw 'toolkit-result-path-protected' }
+    }
+    if (($full.Equals($projectRootFull,[StringComparison]::OrdinalIgnoreCase) -or $full.StartsWith($projectRootFull.TrimEnd('\','/')+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)) -and -not $full.Equals($default,[StringComparison]::OrdinalIgnoreCase)) { throw 'toolkit-result-path-project-input' }
+    if ($full -match '(?i)(^|[\\/])\.git([\\/]|$)' -or [IO.Path]::GetExtension($full) -ine '.json') { throw 'toolkit-result-path-invalid' }
+    # Get-Item also observes dangling links; Test-Path alone would miss a
+    # result-file symlink whose protected target does not exist yet.
+    $current=$full
+    while ($current) {
+        try { $item=Get-Item -LiteralPath $current -Force -ErrorAction Stop }
+        catch [System.Management.Automation.ItemNotFoundException] { $item=$null }
+        if ($null -ne $item) {
+            if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'CANDIDATE_REPARSE_PATH' }
+            if ($item.LinkType) { throw 'toolkit-result-path-link' }
+        }
+        $parent=Split-Path -Parent $current
+        if ($parent -eq $current) { break };$current=$parent
+    }
+    if (Test-Path -LiteralPath $full) {
+        if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { throw 'toolkit-result-path-not-file' }
+        if ((Get-Item -LiteralPath $full -Force).LinkType) { throw 'toolkit-result-path-link' }
+        # Existing query reports can be refreshed; arbitrary original JSON is
+        # not an updater output, even when it is outside the project tree.
+        try { $previous=Get-Content -LiteralPath $full -Raw -Encoding utf8|ConvertFrom-Json }
+        catch { throw 'toolkit-result-path-occupied' }
+        if (-not $previous.PSObject.Properties['schemaName'] -or $previous.schemaName -cne 'pbbridge-toolkit-update-check') { throw 'toolkit-result-path-occupied' }
+    }
+}
+
 function Write-ToolkitUpdateResult {
     param(
         [Parameter(Mandatory = $true)][object]$Result,
         [Parameter(Mandatory = $true)][string]$Path
     )
+    Assert-ToolkitUpdateResultPath -Path $Path
     $parent = Split-Path -Parent $Path
     if (-not [string]::IsNullOrWhiteSpace($parent)) {
-        New-Item -ItemType Directory -Path $parent -Force | Out-Null
+        $null=[IO.Directory]::CreateDirectory($parent)
     }
-    $Result | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $Path -Encoding utf8
+    [IO.File]::WriteAllText($Path,($Result | ConvertTo-Json -Depth 20),[Text.UTF8Encoding]::new($false))
 }
 
 $projectRootFull = Resolve-TemplateProjectRoot -ExplicitRoot $RepoRoot
@@ -355,6 +410,10 @@ elseif ([System.IO.Path]::IsPathRooted($ResultPath)) {
 else {
     [System.IO.Path]::GetFullPath((Join-Path $projectRootFull $ResultPath))
 }
+
+# Validate outside the workflow catch: an invalid output must never be used to
+# write its own exception summary. Repeat at the actual write boundary as well.
+Assert-ToolkitUpdateResultPath -Path $resultPathFull
 
 $issues = @()
 $nextActions = @()
@@ -376,6 +435,10 @@ $recovery = [pscustomobject]@{status='unavailable';reasonCode='recovery-original
 $remoteRef = "refs/remotes/$Remote/$Branch"
 
 try {
+    if ($RecoveryPurpose -ceq 'InstalledCandidateRecovery' -and
+        ($ReleaseRecordPath -or $PublicationReceiptPath -or $RecoveryArtifactRoot -or -not $RecoveryExtractionRoot -or -not $ToolkitRoot -or $AcknowledgeHistoryDiscontinuity)) {
+        throw 'candidate-recovery-parameters-invalid: use ToolkitRoot and tree-external RecoveryExtractionRoot only'
+    }
     if (-not (Test-Path -LiteralPath $toolkitRootFull -PathType Container)) {
         $issues += New-ToolkitUpdateIssue -Code "toolkit-submodule-missing" -Severity "error" -Message "未找到 Toolkit submodule：$toolkitRootFull"
         $nextActions += "先以 submodule 方式引入 .pbbridge/PbBridge.Toolkit。"
@@ -431,8 +494,14 @@ try {
                     $historyRelation = Get-ToolkitHistoryRelation -ToolkitRoot $toolkitRootFull -LocalCommit $localCommit -RemoteCommit $remoteCommit
                     $previousBuild = Get-PbToolkitSnapshotIdentity -ToolkitPath $toolkitRootFull -Commit $localCommit
                     $targetBuild = Get-PbToolkitSnapshotIdentity -ToolkitPath $toolkitRootFull -Commit $remoteCommit
-                    if ($ReleaseRecordPath -and $RecoveryArtifactRoot -and $RecoveryExtractionRoot) {
-                        $recovery = Get-PbReleaseRecoveryPreview -RecordPath $ReleaseRecordPath -PublicationReceiptPath $PublicationReceiptPath -ArtifactRoot $RecoveryArtifactRoot -ExtractionRoot $RecoveryExtractionRoot
+                    if ($RecoveryPurpose -ceq 'InstalledCandidateRecovery') {
+                        if ($historyRelation -cne 'fast-forward' -or $localVersion -cne '7.6.0' -or $remoteVersion -cne '7.6.1') { throw 'candidate-recovery-only-760-to-761-fast-forward' }
+                        $recovery = Get-PbInstalledCandidateRecovery -ToolkitPath $toolkitRootFull -Commit $localCommit -TargetCommit $remoteCommit -Remote $Remote -ExtractionRoot $RecoveryExtractionRoot -ProjectRoot $projectRootFull
+                        if ($recovery.status -ceq 'verified') { $recoveryCommand = "从副本 $($recovery.entrypoint) 运行 version 和 doctor；恢复或升级后重新生成当前 facts。" }
+                        $nextActions += '副本仅用于 candidate-recovery-only / toolkit-only，不能发布或转移授权；从 recovery.entrypoint 运行 version/doctor，升级后重新生成当前 facts。'
+                    }
+                    elseif ($ReleaseRecordPath -and $RecoveryArtifactRoot -and $RecoveryExtractionRoot) {
+                        $recovery = Get-PbReleaseRecoveryPreview -RecordPath $ReleaseRecordPath -PublicationReceiptPath $PublicationReceiptPath -ArtifactRoot $RecoveryArtifactRoot -ExtractionRoot $RecoveryExtractionRoot -Purpose $RecoveryPurpose
                         if ($recovery.status -eq 'verified') {
                             foreach ($field in @('productVersion','cliSha256','toolkitCommit','runtimeContractSha256','manifestSha256')) {
                                 if ([string]$recovery.identity[$field] -cne [string]$previousBuild.identity.$field) {
@@ -466,10 +535,10 @@ try {
                         $nextActions += "保留本地分支，手工审查 Toolkit 本地提交与远端快照差异。"
                     }
                     elseif ($historyRelation -eq "fast-forward") {
-                        if ($Apply.IsPresent -and $recovery.status -ne 'verified') {
+                        if (($Apply.IsPresent -or $RecoveryPurpose -ceq 'InstalledCandidateRecovery') -and $recovery.status -ne 'verified') {
                             $status='blocked'
                             $issues += New-ToolkitUpdateIssue -Code 'toolkit-recovery-unverified' -Severity error -Message $recovery.reasonCode
-                            $nextActions += '提供旧发行树外记录、原始制品渠道与新的隔离恢复目录，核验旧完整身份及入口后再切换。'
+                            $nextActions += if ($RecoveryPurpose -ceq 'InstalledCandidateRecovery') { '核对清洁 7.6.0 候选与官方 7.6.1 快进目标，保留失败目录，显式选择新的树外 RecoveryExtractionRoot；不得混入发布材料。' } else { '提供旧发行树外记录、原始制品渠道与新的隔离恢复目录，核验旧完整身份及入口后再切换。' }
                         }
                         elseif (-not $Apply.IsPresent) {
                             $status = "outdated"
@@ -477,6 +546,14 @@ try {
                             $nextActions += "运行 scripts/pbbridge-toolkit-update.ps1 -Apply 更新 Toolkit submodule 工作树。"
                         }
                         elseif ($PSCmdlet.ShouldProcess($toolkitRootFull, "Checkout Toolkit snapshot $remoteCommit")) {
+                            if ($RecoveryPurpose -ceq 'InstalledCandidateRecovery') {
+                                $recovery = Get-PbInstalledCandidateRecovery -ToolkitPath $toolkitRootFull -Commit $localCommit -TargetCommit $remoteCommit -Remote $Remote -ExtractionRoot $RecoveryExtractionRoot -ProjectRoot $projectRootFull -RequireExisting
+                                if ($recovery.status -cne 'verified') { throw $recovery.reasonCode }
+                                $rechecked=Get-PbToolkitSnapshotIdentity -ToolkitPath $toolkitRootFull -Commit $remoteCommit
+                                foreach ($field in @('productVersion','cliSha256','toolkitCommit','runtimeContractSha256','manifestSha256')) {
+                                    if ([string]$rechecked.identity.$field -cne [string]$targetBuild.identity.$field) { throw 'candidate-recovery-target-changed' }
+                                }
+                            }
                             $lfsPrefetch=Save-ToolkitTargetLfs -Root $toolkitRootFull -Commit $remoteCommit
                             $checkout = Invoke-ToolkitGit -WorkingDirectory $toolkitRootFull -Arguments @("checkout", "--detach", $remoteCommit)
                             if ($checkout.exitCode -ne 0) {
