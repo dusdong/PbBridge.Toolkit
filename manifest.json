@@ -4,7 +4,7 @@
   "developmentOnly": true,
   "candidatePreparation": true,
   "sourceAdoption": "pending",
-  "qualification": "candidate-preparation-source-adoption-and-independent-qualification-pending",
+  "qualification": "verified-capabilities-release-pending-final-validation",
   "omittedRuntimes": null,
   "externalProjectTemplateVersion": "7.6.1",
   "generatedAt": "2026-11-01T02:16:05.4166134+08:00",
@@ -227,5 +227,10 @@
     "pb9PblWriteback": "Windows x86 + PBSpy + PBSDK",
     "orcaPblWriteback": "candidate",
     "note": "toolkit 负责 .pbl/.sr* 导出与导入协作，自带 PBSpy/PBSDK 运行时以降低环境依赖；不替代 PowerBuilder IDE 编译，也不扩大支持承诺"
-  }
+  },
+  "releaseScope": "verified-capabilities",
+  "unverifiedScopes": [
+    "full-guoxing-guorun-erp",
+    "pb9-manual-ide-and-onsite-acceptance"
+  ]
 }
