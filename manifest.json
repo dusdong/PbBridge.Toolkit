@@ -11,7 +11,27 @@
   "runtimeInput": {
     "root": "runtime",
     "inventorySha256": "343af423e852b7d645b96bbbfcf3db241f8ce8894a09e88e878ca062238ffc48",
-    "rebuilt": false
+    "rebuilt": true,
+    "cliBuildSource": "fb14650a149eb62c94ec6b19204a02d731ed055c",
+    "change": "Plain version JSON serialization startup optimization",
+    "cliAssemblies": [
+      {
+        "path": "runtime/cli/win-x86/PbBridge.Adapter.PB9.dll",
+        "sha256": "91fa32c34f441639e5019bd163a72a8e1d1f1a81c49a38e0bb4ccf8d3c161b74"
+      },
+      {
+        "path": "runtime/cli/win-x86/PbBridge.Cli.dll",
+        "sha256": "2f85ea0850cf34688128d1e6a26137235a54eebcd1eeb2e5acc8937715ff2c21"
+      },
+      {
+        "path": "runtime/cli/win-x86/PbBridge.Core.dll",
+        "sha256": "d3814350a1330de3cb1a1032d419e13f3ab077e979687ae1e46e943b27759077"
+      },
+      {
+        "path": "runtime/cli/win-x86/PbBridge.Delivery.dll",
+        "sha256": "6e9e8d14b2b8c8fd2e23044d1acfcbf5c1ef2049bd3eaf97df9e64a06b2dc98a"
+      }
+    ]
   },
   "runtime": {
     "cli": [
