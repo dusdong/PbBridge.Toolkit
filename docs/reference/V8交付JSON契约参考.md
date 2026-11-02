@@ -2,7 +2,7 @@
 
 当前 full/compact 分别为 `pbbridge-v8-delivery` 与 `pbbridge-v8-compact-summary`，`schemaVersion=8`。
 
-`pbbridge delivery history --session-file <path> [--result <new-independent-json>]` 仅读取已知 7.5.2/7.5.3/7.6.0 V8 session。独立报告为 `pbbridge-delivery-history`、schemaVersion 1、reportMode historical-read-only、canContinue false。readerProductVersion 与 recordedProductVersion 分离；原身份缺失字段由 missingProducerIdentityFields 列明。sessionFileSha256 与解析来自同一快照。recordedState 仅记原状态，currentEvaluationStatus 为 not-evaluated；附件 evaluationStatus 为 not-rechecked，缺失引用 unavailable。该报告不属于当前 Delivery/session/preflight/evidence，当前入口仍拒绝它及原旧 session。
+`pbbridge delivery history --session-file <path> [--result <new-independent-json>]` 仅读取已知 7.5.2/7.5.3/7.6.0/7.6.1 V8 session。独立报告为 `pbbridge-delivery-history`、schemaVersion 1、reportMode historical-read-only、canContinue false。readerProductVersion 与 recordedProductVersion 分离；原身份缺失字段由 missingProducerIdentityFields 列明。sessionFileSha256 与解析来自同一快照。recordedState 仅记原状态，currentEvaluationStatus 为 not-evaluated；附件 evaluationStatus 为 not-rechecked，缺失引用 unavailable。该报告不属于当前 Delivery/session/preflight/evidence，当前入口仍拒绝它及原旧 session。
 
 历史报告附件字段独立保真：`recordedType` 仅来自原 `type`，`recordedStatus` 仅来自原 `status`。缺失或非字符串字段省略，表示未知；不得从类型推断状态，也不得从状态补齐类型。路径/哈希仍为原记录文本，附件始终 `not-rechecked`。
 

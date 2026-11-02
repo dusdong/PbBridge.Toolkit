@@ -2,7 +2,7 @@
 
 资产生成版本为 `7.6.2`。V8 delivery 是当前 `.sr*` 交付主路径；当前执行拒绝非当前输入。7.6.2 开发候选的完整发行资格和发布事实须另查独立回执。
 
-历史查询：`pbbridge delivery history --session-file <path> [--result <new-independent-json>]` 仅读取已知 7.5.2/7.5.3/7.6.0 V8 session。独立历史报告的当前状态未评估，附件未复查，不能继续执行或进入当前 evidence；不改变 workspace 和原文件。
+历史查询：`pbbridge delivery history --session-file <path> [--result <new-independent-json>]` 仅读取已知 7.5.2/7.5.3/7.6.0/7.6.1 V8 session。独立历史报告的当前状态未评估，附件未复查，不能继续执行或进入当前 evidence；不改变 workspace 和原文件。
 
 ## 当前阅读路径
 

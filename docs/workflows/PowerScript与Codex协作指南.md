@@ -84,7 +84,7 @@ Apply 后仍由 PowerBuilder IDE 负责编译、调试和运行验收。
 
 Toolkit 内置的是 Codex 可用的 PowerScript 轻量资料包。PowerScript 全文手册、PDF 抽取 Spike 和生成校验工具链由 `Powerbuilder.IDE` 父仓库维护，不要求外部项目安装或运行。
 
-历史查询使用 `pbbridge delivery history --session-file <known-session.json>`，只读范围为已知 7.5.2/7.5.3/7.6.0 V8 session。输出位于 Git 仓库内时，先准备最近所属仓库的 `.pbbridge/local/<task>`，再传 `--result <该目录/new.json>`；仓库外的独立任务目录按既有本地路径规则判断。两种情况均须使用本地固定盘上既存的父目录，拒绝链接、受保护路径及记录的 workspace 受管位置，保留全部祖先的身份与安全检查；只新建 JSON，禁止覆盖。报告保留原状态和身份缺失，当前未评估、附件未复查，不能继续执行。
+历史查询使用 `pbbridge delivery history --session-file <known-session.json>`，只读范围为已知 7.5.2/7.5.3/7.6.0/7.6.1 V8 session。输出位于 Git 仓库内时，先准备最近所属仓库的 `.pbbridge/local/<task>`，再传 `--result <该目录/new.json>`；仓库外的独立任务目录按既有本地路径规则判断。两种情况均须使用本地固定盘上既存的父目录，拒绝链接、受保护路径及记录的 workspace 受管位置，保留全部祖先的身份与安全检查；只新建 JSON，禁止覆盖。报告保留原状态和身份缺失，当前未评估、附件未复查，不能继续执行。
 
 
 ### 规范化预览的观察范围
