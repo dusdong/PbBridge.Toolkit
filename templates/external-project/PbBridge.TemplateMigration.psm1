@@ -4,7 +4,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$script:ProductVersion = '7.6.1'
+$script:ProductVersion = '7.6.2'
 $script:NormalizationProfile = 'powershell-text-v1'
 $script:SupportedSourceProductVersions = @(
     '7.0.0'
@@ -27,6 +27,8 @@ $script:SupportedSourceProductVersions = @(
     '7.5.1'
     '7.5.2'
     '7.5.3'
+    '7.6.0'
+    '7.6.1'
     $script:ProductVersion
 ) | Select-Object -Unique
 $script:ApprovedMigrationBootstrapPatchHashes = @{
@@ -1174,7 +1176,7 @@ function Save-PbBridgeMigrationIndex {
 
     $index = Get-PbBridgeMigrationIndex -MigrationRoot $MigrationRoot
     $entries = New-Object System.Collections.Generic.List[object]
-    foreach ($entry in @($index.entries | Where-Object { [string]$_.planHash -ne $PlanHash })) {
+    foreach ($entry in @($index.entries | Where-Object { [string]$_.transactionRoot -ne $TransactionRoot })) {
         $entries.Add($entry)
     }
     $entries.Add([ordered]@{
@@ -1200,7 +1202,14 @@ function Resolve-PbBridgeTransactionForPlan {
     )
 
     $index = Get-PbBridgeMigrationIndex -MigrationRoot $MigrationRoot
-    $entry = @($index.entries | Where-Object { [string]$_.planHash -eq $PlanHash }) | Select-Object -First 1
+    $entry = @($index.entries | Where-Object { [string]$_.planHash -eq $PlanHash } | Sort-Object updatedAt -Descending | Where-Object {
+        $resultPath = Join-Path ([string]$_.transactionRoot) 'result.json'
+        if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf)) { return $false }
+        $result = [IO.File]::ReadAllText($resultPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+        # Only an unexecuted plan can receive decisions and Apply. Terminal attempts
+        # retain their original plan/result/recovery evidence even for the same hash.
+        [string]$result.phase -in @('plan', 'decide') -and [string]$result.outcome -in @('ready-to-apply', 'awaiting-decisions', 'no-change')
+    }) | Select-Object -First 1
     if ($null -eq $entry) { return $null }
     return [pscustomobject]@{
         migrationId = [string]$entry.migrationId
@@ -1208,24 +1217,117 @@ function Resolve-PbBridgeTransactionForPlan {
     }
 }
 
+function Test-PbBridgeRecoverySuccessor {
+    param($RecoveryEntry, $FailedResult, [object[]]$IndexEntries, [string]$FailedTransactionRoot,
+        [AllowNull()][System.Collections.Generic.List[string]]$EvidencePaths)
+
+    # A matching installation before this failure cannot discharge its writes.
+    # Time only orders the evidence; the manifest and actual writes below must
+    # also prove the same original existence/raw bytes were restored before Apply.
+    try { $failedAt = [DateTimeOffset]$FailedResult.generatedAt }
+    catch { return $false }
+    foreach ($successor in $IndexEntries) {
+        if ([string]$successor.transactionRoot -eq $FailedTransactionRoot) { continue }
+        $resultPath = Join-Path ([string]$successor.transactionRoot) 'result.json'
+        $manifestPath = Join-Path ([string]$successor.transactionRoot) 'recovery-manifest.json'
+        if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf) -or
+            -not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) { continue }
+        $result = [IO.File]::ReadAllText($resultPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+        try { $successorAt = [DateTimeOffset]$result.generatedAt }
+        catch { continue }
+        if ($successorAt -le $failedAt) { continue }
+        if ([string]$result.phase -ne 'completed' -or
+            [string]$result.outcome -notin @('applied', 'applied-with-preserved-customizations') -or
+            $result.transaction.installedValidated -isnot [bool] -or
+            -not $result.transaction.installedValidated -or
+            [string]$successor.migrationId -ne [string]$result.migrationId -or
+            [string]$successor.planHash -ne [string]$result.planHash) { continue }
+        $manifest = [IO.File]::ReadAllText($manifestPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+        if ([string]$manifest.migrationId -ne [string]$result.migrationId -or
+            [string]$manifest.planHash -ne [string]$result.planHash) { continue }
+        foreach ($item in @($manifest.entries)) {
+            if ([string]$item.targetPath -ne [string]$RecoveryEntry.targetPath -or
+                [bool]$item.existed -ne [bool]$RecoveryEntry.existed -or
+                [string]$item.originalSha256 -ne [string]$RecoveryEntry.originalSha256) { continue }
+            $writes = @($result.actualWrites | Where-Object {
+                [string]$_.targetPath -eq [string]$item.targetRelativePath -and
+                [string]$_.beforeRawSha256 -eq [string]$item.originalSha256 -and
+                [string]$_.afterRawSha256 -eq [string]$item.candidateSha256
+            })
+            # installedValidated plus the recorded before/after writes is durable
+            # restoration evidence, like a proven rollback. Later legitimate
+            # configuration edits are checked by current-content validation.
+            if ($writes.Count -eq 1 -and [string]$item.candidateSha256 -match '^[0-9a-fA-F]{64}$') {
+                if ($null -ne $EvidencePaths) { $EvidencePaths.Add($resultPath); $EvidencePaths.Add($manifestPath) }
+                return $true
+            }
+        }
+    }
+    return $false
+}
+
+function Test-PbBridgeRecordedRollback {
+    param($Result, $Recovery)
+
+    if ([string]$Result.outcome -ne 'rolled-back' -or [string]$Result.phase -ne 'completed') { return $false }
+    if ($Result.rollback.succeeded -isnot [bool] -or -not $Result.rollback.succeeded -or
+        [string]$Recovery.migrationId -ne [string]$Result.migrationId -or
+        [string]$Recovery.planHash -ne [string]$Result.planHash) { return $false }
+    $restored = @($Result.rollback.restoredFiles)
+    if ($restored.Count -ne @($Recovery.entries).Count) { return $false }
+    foreach ($entry in @($Recovery.entries)) {
+        if ([string]::IsNullOrWhiteSpace([string]$entry.targetRelativePath)) { return $false }
+        $rows = @($restored | Where-Object { [string]$_.targetPath -eq [string]$entry.targetRelativePath })
+        if ($rows.Count -ne 1 -or $rows[0].matchesOriginal -isnot [bool] -or -not $rows[0].matchesOriginal -or
+            [string]$rows[0].expectedRawSha256 -ne [string]$entry.originalSha256) { return $false }
+        if ([bool]$entry.existed) {
+            if ([string]$entry.originalSha256 -notmatch '^[0-9a-fA-F]{64}$' -or
+                [string]$rows[0].restoredRawSha256 -ne [string]$entry.originalSha256) { return $false }
+        }
+        elseif ($null -ne $rows[0].restoredRawSha256) { return $false }
+    }
+    return $true
+}
+
 function Get-PbBridgeUnresolvedRecovery {
-    param([Parameter(Mandatory = $true)][string]$MigrationRoot)
+    param([Parameter(Mandatory = $true)][string]$MigrationRoot, [string[]]$ScopePaths = @(),
+        [AllowNull()][System.Collections.Generic.List[string]]$EvidencePaths)
 
     $unresolved = New-Object System.Collections.Generic.List[object]
     $index = Get-PbBridgeMigrationIndex -MigrationRoot $MigrationRoot
+    if ($null -ne $EvidencePaths -and (Test-Path -LiteralPath $index.path -PathType Leaf)) { $EvidencePaths.Add($index.path) }
     foreach ($entry in @($index.entries)) {
         $transactionRoot = [string]$entry.transactionRoot
         $resultPath = Join-Path $transactionRoot 'result.json'
-        if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf)) { continue }
+        $hasResult = Test-Path -LiteralPath $resultPath -PathType Leaf
+        if (-not $hasResult -and
+            -not (Test-Path -LiteralPath (Join-Path $transactionRoot 'recovery-manifest.json') -PathType Leaf)) { continue }
         try {
-            $result = [System.IO.File]::ReadAllText($resultPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
-            if ([string]$result.outcome -ne 'recovery-required') { continue }
+            $result = if ($hasResult) {
+                [System.IO.File]::ReadAllText($resultPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+            } else { [pscustomobject]@{ outcome = 'recovery-required' } }
+            if ([string]$result.outcome -in @('applied', 'applied-with-preserved-customizations', 'no-change')) { continue }
+            $hasWrites = $result.PSObject.Properties.Name -contains 'actualWrites' -and @($result.actualWrites).Count -gt 0
+            if ([string]$result.outcome -ne 'recovery-required' -and
+                -not $hasWrites -and
+                -not (Test-Path -LiteralPath (Join-Path $transactionRoot 'recovery-manifest.json') -PathType Leaf)) { continue }
             $manifestPath = Join-Path $transactionRoot 'recovery-manifest.json'
             if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
+                if ($null -ne $EvidencePaths) { $EvidencePaths.Add($resultPath); $EvidencePaths.Add($manifestPath) }
                 $unresolved.Add([pscustomobject]@{ migrationId = [string]$entry.migrationId; recoveryManifestPath = $manifestPath; targetPath = $null; reason = 'recovery-manifest-missing' })
                 continue
             }
             $recovery = [System.IO.File]::ReadAllText($manifestPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+            if (@($recovery.entries).Count -eq 0) {
+                if ($hasWrites -or ($hasResult -and [string]$result.outcome -eq 'recovery-required')) {
+                    if ($null -ne $EvidencePaths) { $EvidencePaths.Add($resultPath); $EvidencePaths.Add($manifestPath) }
+                    $unresolved.Add([pscustomobject]@{ migrationId = [string]$entry.migrationId; recoveryManifestPath = $manifestPath; targetPath = $null; reason = 'recovery-manifest-empty' })
+                }
+                continue
+            }
+            if ($ScopePaths.Count -gt 0 -and @($recovery.entries | Where-Object { [string]$_.targetPath -in $ScopePaths }).Count -eq 0) { continue }
+            if ($null -ne $EvidencePaths) { $EvidencePaths.Add($resultPath); $EvidencePaths.Add($manifestPath) }
+            if (Test-PbBridgeRecordedRollback -Result $result -Recovery $recovery) { continue }
             foreach ($recoveryEntry in @($recovery.entries)) {
                 $targetPath = [string]$recoveryEntry.targetPath
                 $exists = Test-Path -LiteralPath $targetPath -PathType Leaf
@@ -1234,6 +1336,9 @@ function Get-PbBridgeUnresolvedRecovery {
                 }
                 else {
                     -not $exists
+                }
+                if (-not $resolved) {
+                    $resolved = Test-PbBridgeRecoverySuccessor -RecoveryEntry $recoveryEntry -FailedResult $result -IndexEntries @($index.entries) -FailedTransactionRoot $transactionRoot -EvidencePaths $EvidencePaths
                 }
                 if (-not $resolved) {
                     $unresolved.Add([pscustomobject]@{ migrationId = [string]$entry.migrationId; recoveryManifestPath = $manifestPath; targetPath = $targetPath; reason = 'raw-hash-not-restored' })
@@ -1287,7 +1392,7 @@ function Import-PbBridgeReusableDecisions {
 
     foreach ($request in @($DecisionRequests)) {
         if (@($decisions | Where-Object { [string]$_.path -eq [string]$request.path }).Count -gt 0) { continue }
-        foreach ($entry in @($index.entries | Where-Object { [string]$_.planHash -ne $PlanHash } | Sort-Object updatedAt -Descending)) {
+        foreach ($entry in @($index.entries | Where-Object { [string]$_.transactionRoot -ne $TransactionRoot } | Sort-Object updatedAt -Descending)) {
             $priorPlanPath = Join-Path ([string]$entry.transactionRoot) 'plan.json'
             $priorDecisionPath = Join-Path ([string]$entry.transactionRoot) 'decisions.json'
             if (-not (Test-Path -LiteralPath $priorPlanPath -PathType Leaf) -or
@@ -1666,7 +1771,9 @@ function Invoke-PbBridgeTemplateMigration {
     foreach ($issue in @($policy.issues)) {
         $manual.Add([pscustomobject]@{ file = $issue.path; code = $issue.code; message = $issue.message; line = $null; column = $null })
     }
-    foreach ($recovery in @(Get-PbBridgeUnresolvedRecovery -MigrationRoot $migrationRoot)) {
+    $recoveryScope = @($manifest.managedFiles | ForEach-Object { Join-Path $projectRootFull ([string]$_.targetPath) }) +
+        @((Join-Path $projectRootFull '.pbbridge/project.json'), (Join-Path $projectRootFull ".pbbridge/workspaces/$WorkspaceId/workspace.json"))
+    foreach ($recovery in @(Get-PbBridgeUnresolvedRecovery -MigrationRoot $migrationRoot -ScopePaths $recoveryScope)) {
         $manual.Add([pscustomobject]@{
             file = [string]$recovery.recoveryManifestPath
             code = 'migration-recovery-required'
@@ -2579,4 +2686,59 @@ function Invoke-PbBridgeTemplateMigration {
     return [pscustomobject]$report
 }
 
-Export-ModuleMember -Function Invoke-PbBridgeTemplateMigration
+function Test-PbBridgeRequiredText {
+    param([string]$TargetPath, [string]$TemplatePath)
+    if (-not (Test-Path -LiteralPath $TargetPath -PathType Leaf)) { return $false }
+    $actual = @([IO.File]::ReadAllLines($TargetPath, [Text.Encoding]::UTF8) | ForEach-Object { $_.Trim() })
+    $required = @([IO.File]::ReadAllLines($TemplatePath, [Text.Encoding]::UTF8) | ForEach-Object { $_.Trim() } | Where-Object { $_ -and -not $_.StartsWith('#') -and -not $_.StartsWith('<!-- PbBridge-TemplateVersion:') })
+    return @($required | Where-Object { $_ -notin $actual }).Count -eq 0
+}
+
+function Get-PbBridgeTemplateUpgradeFact {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$ProjectRoot, [Parameter(Mandatory)][string]$ToolkitRoot,
+        [Parameter(Mandatory)][string]$WorkspaceId, [string]$WorkspaceConfigurationPath)
+
+    $templateRoot = Join-Path $ToolkitRoot 'templates/external-project'
+    $manifest = Get-Content -LiteralPath (Join-Path $templateRoot 'template-manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    $registry = Get-Content -LiteralPath (Join-Path $templateRoot ([string]$manifest.provenanceRegistry)) -Raw -Encoding UTF8 | ConvertFrom-Json
+    $policy = Read-PbBridgeMigrationPolicy -ProjectRoot $ProjectRoot
+    $assets = foreach ($file in @($manifest.managedFiles | Where-Object mergeMode -eq 'overwrite-if-template-managed')) {
+        $target = Resolve-PbBridgePathInsideRoot -Root $ProjectRoot -Path (Join-Path $ProjectRoot ([string]$file.targetPath)) -ReasonCode 'managed-target-outside-project'
+        # Legacy expert wrappers are checked when installed, never required on new-entry projects.
+        if ([string]$file.targetPath -in @('scripts/pbbridge-import-sr.ps1', 'scripts/pbbridge-import-plan.ps1') -and
+            -not (Test-Path -LiteralPath $target -PathType Leaf)) { continue }
+        $fact = Resolve-PbBridgeManagedFileClassification -TargetPath $target -TemplatePath (Join-Path $templateRoot ([string]$file.templatePath)) -TargetRelativePath ([string]$file.targetPath) -ProvenanceRegistry $registry
+        [pscustomobject]@{ path = [string]$file.targetPath; classification = $fact.classification;
+            current = $fact.classification -eq 'managed-current-exact' -or
+                ($fact.classification -eq 'managed-known-format-variant' -and $fact.matchedTemplateVersion -eq $script:ProductVersion);
+            preserved = @($policy.files | Where-Object { [string]$_.path -eq [string]$file.targetPath }).Count -eq 1 }
+    }
+    foreach ($file in @($manifest.managedFiles | Where-Object { [string]$_.targetPath -in @('AGENTS.md', '.gitignore', '.gitattributes') })) {
+        $target = Join-Path $ProjectRoot ([string]$file.targetPath)
+        $current = Test-PbBridgeRequiredText -TargetPath $target -TemplatePath (Join-Path $templateRoot ([string]$file.templatePath))
+        if (-not $current -and [string]$file.targetPath -eq 'AGENTS.md') {
+            $snippets = @(Get-ChildItem -LiteralPath (Join-Path $templateRoot 'agents-snippets') -Filter '*.md' -File)
+            $current = $snippets.Count -gt 0 -and @($snippets | Where-Object { -not (Test-PbBridgeRequiredText -TargetPath $target -TemplatePath $_.FullName) }).Count -eq 0
+        }
+        $assets += [pscustomobject]@{ path=[string]$file.targetPath; classification='managed-document-fragments'; current=$current; preserved=$false }
+    }
+    $paths = @($manifest.managedFiles | ForEach-Object { Join-Path $ProjectRoot ([string]$_.targetPath) }) +
+        @((Join-Path $ProjectRoot '.pbbridge/project.json'), (Join-Path $ProjectRoot ".pbbridge/workspaces/$WorkspaceId/workspace.json"))
+    $workspaceConfig = if ($WorkspaceConfigurationPath) { Resolve-PbBridgePathInsideRoot -Root $ProjectRoot -Path $WorkspaceConfigurationPath -ReasonCode 'workspace-config-outside-project' } else { Join-Path $ProjectRoot ".pbbridge/workspaces/$WorkspaceId/workspace.json" }
+    $paths += $workspaceConfig
+    $versions = foreach ($path in @('.pbbridge/project.json', $workspaceConfig)) {
+        $configPath = if ([IO.Path]::IsPathRooted($path)) { $path } else { Join-Path $ProjectRoot $path }
+        $config = Get-Content -LiteralPath $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        [pscustomobject]@{ path=[IO.Path]::GetRelativePath($ProjectRoot, $configPath).Replace('\','/'); version=[string]$config.productVersion; supported=(Test-PbBridgeSupportedSourceProductVersion ([string]$config.productVersion)); current=[string]$config.productVersion -eq $script:ProductVersion }
+    }
+    $recoveryEvidence = [System.Collections.Generic.List[string]]::new()
+    $recovery = @(Get-PbBridgeUnresolvedRecovery -MigrationRoot (Join-Path $ProjectRoot '.pbbridge/local/migrations') -ScopePaths $paths -EvidencePaths $recoveryEvidence)
+    $currentInputs = @((Join-Path $ProjectRoot '.pbbridge/project.json'), $workspaceConfig,
+        (Join-Path $templateRoot 'template-manifest.json'), (Join-Path $templateRoot ([string]$manifest.provenanceRegistry))) +
+        @($assets | ForEach-Object { Join-Path $ProjectRoot ([string]$_.path) })
+    [pscustomobject]@{ versions=@($versions); assets=@($assets); recovery=$recovery; policyIssues=@($policy.issues);
+        evidencePaths=@(($currentInputs + $recoveryEvidence.ToArray()) | Select-Object -Unique) }
+}
+
+Export-ModuleMember -Function Invoke-PbBridgeTemplateMigration, Get-PbBridgeTemplateUpgradeFact

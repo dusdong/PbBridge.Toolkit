@@ -7,13 +7,13 @@
   "targets": {
     ".NETCoreApp,Version=v10.0": {},
     ".NETCoreApp,Version=v10.0/win-x86": {
-      "PbBridge.Cli/7.6.1": {
+      "PbBridge.Cli/7.6.2": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "10.0.14",
-          "PbBridge.Adapter.PB9": "7.6.1",
-          "PbBridge.Adapter.PB9.Orca": "7.6.1",
-          "PbBridge.Core": "7.6.1",
-          "PbBridge.Delivery": "7.6.1",
+          "PbBridge.Adapter.PB9": "7.6.2",
+          "PbBridge.Adapter.PB9.Orca": "7.6.2",
+          "PbBridge.Core": "7.6.2",
+          "PbBridge.Delivery": "7.6.2",
           "runtimepack.Microsoft.NETCore.App.Runtime.win-x86": "10.0.14"
         },
         "runtime": {
@@ -775,58 +775,58 @@
           }
         }
       },
-      "PbBridge.Adapter.PB9/7.6.1": {
+      "PbBridge.Adapter.PB9/7.6.2": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.14",
-          "PbBridge.Core": "7.6.1"
+          "PbBridge.Core": "7.6.2"
         },
         "runtime": {
           "PbBridge.Adapter.PB9.dll": {
-            "assemblyVersion": "7.6.1.0",
-            "fileVersion": "7.6.1.0"
+            "assemblyVersion": "7.6.2.0",
+            "fileVersion": "7.6.2.0"
           }
         }
       },
-      "PbBridge.Adapter.PB9.Orca/7.6.1": {
+      "PbBridge.Adapter.PB9.Orca/7.6.2": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.14",
-          "PbBridge.Adapter.PB9": "7.6.1",
-          "PbBridge.Core": "7.6.1"
+          "PbBridge.Adapter.PB9": "7.6.2",
+          "PbBridge.Core": "7.6.2"
         },
         "runtime": {
           "PbBridge.Adapter.PB9.Orca.dll": {
-            "assemblyVersion": "7.6.1.0",
-            "fileVersion": "7.6.1.0"
+            "assemblyVersion": "7.6.2.0",
+            "fileVersion": "7.6.2.0"
           }
         }
       },
-      "PbBridge.Core/7.6.1": {
+      "PbBridge.Core/7.6.2": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.14",
-          "PbBridge.Delivery": "7.6.1"
+          "PbBridge.Delivery": "7.6.2"
         },
         "runtime": {
           "PbBridge.Core.dll": {
-            "assemblyVersion": "7.6.1.0",
-            "fileVersion": "7.6.1.0"
+            "assemblyVersion": "7.6.2.0",
+            "fileVersion": "7.6.2.0"
           }
         }
       },
-      "PbBridge.Delivery/7.6.1": {
+      "PbBridge.Delivery/7.6.2": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.14"
         },
         "runtime": {
           "PbBridge.Delivery.dll": {
-            "assemblyVersion": "7.6.1.0",
-            "fileVersion": "7.6.1.0"
+            "assemblyVersion": "7.6.2.0",
+            "fileVersion": "7.6.2.0"
           }
         }
       }
     }
   },
   "libraries": {
-    "PbBridge.Cli/7.6.1": {
+    "PbBridge.Cli/7.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -850,22 +850,22 @@
       "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.14",
       "hashPath": "microsoft.extensions.dependencyinjection.abstractions.10.0.14.nupkg.sha512"
     },
-    "PbBridge.Adapter.PB9/7.6.1": {
+    "PbBridge.Adapter.PB9/7.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "PbBridge.Adapter.PB9.Orca/7.6.1": {
+    "PbBridge.Adapter.PB9.Orca/7.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "PbBridge.Core/7.6.1": {
+    "PbBridge.Core/7.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "PbBridge.Delivery/7.6.1": {
+    "PbBridge.Delivery/7.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

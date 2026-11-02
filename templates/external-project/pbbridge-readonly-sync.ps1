@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.6.1
+# PbBridge-TemplateVersion: 7.6.2
 param(
     [string]$WorkspacePath = "",
     [Alias('ProjectRoot')]

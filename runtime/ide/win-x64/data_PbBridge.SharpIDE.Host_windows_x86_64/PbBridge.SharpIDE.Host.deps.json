@@ -7,7 +7,7 @@
   "targets": {
     ".NETCoreApp,Version=v10.0": {},
     ".NETCoreApp,Version=v10.0/win-x64": {
-      "PbBridge.SharpIDE.Host/7.6.1": {
+      "PbBridge.SharpIDE.Host/7.6.2": {
         "dependencies": {
           "GodotServiceDefaults": "1.0.0",
           "GodotSharp": "4.7.1",
@@ -16,8 +16,8 @@
           "ObservableCollections": "3.3.4",
           "ObservableCollections.R3": "3.3.4",
           "Octokit": "14.0.0",
-          "PbBridge.Adapter.PB9": "7.6.1",
-          "PbBridge.SharpIDE.Extension": "7.6.1",
+          "PbBridge.Adapter.PB9": "7.6.2",
+          "PbBridge.SharpIDE.Extension": "7.6.2",
           "R3": "1.3.1",
           "SharpIDE.Application": "1.0.0",
           "SharpIDE.Extensibility": "1.0.0",
@@ -3318,51 +3318,51 @@
           }
         }
       },
-      "PbBridge.Adapter.PB9/7.6.1": {
+      "PbBridge.Adapter.PB9/7.6.2": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.14",
-          "PbBridge.Core": "7.6.1"
+          "PbBridge.Core": "7.6.2"
         },
         "runtime": {
           "PbBridge.Adapter.PB9.dll": {
-            "assemblyVersion": "7.6.1.0",
-            "fileVersion": "7.6.1.0"
+            "assemblyVersion": "7.6.2.0",
+            "fileVersion": "7.6.2.0"
           }
         }
       },
-      "PbBridge.Core/7.6.1": {
+      "PbBridge.Core/7.6.2": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.14",
-          "PbBridge.Delivery": "7.6.1"
+          "PbBridge.Delivery": "7.6.2"
         },
         "runtime": {
           "PbBridge.Core.dll": {
-            "assemblyVersion": "7.6.1.0",
-            "fileVersion": "7.6.1.0"
+            "assemblyVersion": "7.6.2.0",
+            "fileVersion": "7.6.2.0"
           }
         }
       },
-      "PbBridge.Delivery/7.6.1": {
+      "PbBridge.Delivery/7.6.2": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.14"
         },
         "runtime": {
           "PbBridge.Delivery.dll": {
-            "assemblyVersion": "7.6.1.0",
-            "fileVersion": "7.6.1.0"
+            "assemblyVersion": "7.6.2.0",
+            "fileVersion": "7.6.2.0"
           }
         }
       },
-      "PbBridge.SharpIDE.Extension/7.6.1": {
+      "PbBridge.SharpIDE.Extension/7.6.2": {
         "dependencies": {
-          "PbBridge.Core": "7.6.1",
+          "PbBridge.Core": "7.6.2",
           "SharpIDE.Application": "1.0.0",
           "SharpIDE.Extensibility": "1.0.0"
         },
         "runtime": {
           "PbBridge.SharpIDE.Extension.dll": {
-            "assemblyVersion": "7.6.1.0",
-            "fileVersion": "7.6.1.0"
+            "assemblyVersion": "7.6.2.0",
+            "fileVersion": "7.6.2.0"
           }
         }
       },
@@ -3460,7 +3460,7 @@
     }
   },
   "libraries": {
-    "PbBridge.SharpIDE.Host/7.6.1": {
+    "PbBridge.SharpIDE.Host/7.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -4322,22 +4322,22 @@
       "serviceable": false,
       "sha512": ""
     },
-    "PbBridge.Adapter.PB9/7.6.1": {
+    "PbBridge.Adapter.PB9/7.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "PbBridge.Core/7.6.1": {
+    "PbBridge.Core/7.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "PbBridge.Delivery/7.6.1": {
+    "PbBridge.Delivery/7.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "PbBridge.SharpIDE.Extension/7.6.1": {
+    "PbBridge.SharpIDE.Extension/7.6.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

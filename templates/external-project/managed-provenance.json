@@ -1,7 +1,7 @@
 {
   "schemaName": "pbbridge-managed-template-provenance",
   "schemaVersion": 2,
-  "productVersion": "7.6.1",
+  "productVersion": "7.6.2",
   "files": [
     {
       "targetPath": "scripts/move-pb-build-output.ps1",
@@ -5940,6 +5940,14 @@
       "normalizationProfile": "powershell-text-v1"
     },
     {
+      "targetPath": "scripts/PbBridge.ReleaseIdentity.psm1",
+      "templateVersion": "7.6.0",
+      "kind": "powershell-module",
+      "rawSha256": "01b658cf2f961fb5761169da68972ebe2169273a2d3bbf4e01dbadb678745072",
+      "normalizedTextSha256": "80323aba1d879744f76f14ea65b0f52ab4b700ada6dacd7ebe5e700d4f2e7222",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
       "targetPath": "scripts/PbBridge.Wrapper.psm1",
       "templateVersion": "7.6.1",
       "kind": "powershell-module",
@@ -6201,6 +6209,270 @@
       "kind": "powershell-wrapper",
       "rawSha256": "c393542391177472e49a2be27c03917d12513331b822315c518723f6771d400e",
       "normalizedTextSha256": "6dc70a43c99cc78d9a3e775c3007e61c6da03c98dce576b81e36033577b03b2c",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/PbBridge.Wrapper.psm1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-module",
+      "rawSha256": "5ad5b5cd000c935971f9ac4d759d7291e74d50f97425b351f68032e3ff923a1e",
+      "normalizedTextSha256": "bfcbcc5f123fe9af80556ceb942cae3fa4f16ae8f7742002dfb603be3d61f506",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/PbBridge.ReleaseIdentity.psm1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-module",
+      "rawSha256": "1aecec489323c72c8ab805f234e2b52beb448feb2b00c95d663f76097a9fd22d",
+      "normalizedTextSha256": "44ad757a68fa2fdf1e54fbb7074f9340cf92a233ba7b4c3523164e0c44a9f5de",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-runtime-check.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "67ea72d8907ed43972723701a41dc82d3472883d2325f66007d21e69c198e800",
+      "normalizedTextSha256": "4729dd3603c523e4df6da5614fbccce64dfb0354c5fd37712180e6a5125a485b",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-template-migrate.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "d92562718df5d1e050abab05820f4dac705e960f86325f5a85c9213bc3062e45",
+      "normalizedTextSha256": "4f5b69f3e13e1b9f61b2ee471e8c0380229c3f2e5f94fec15a97b157c9b089cc",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/PbBridge.TemplateMigration.psm1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-module",
+      "rawSha256": "599952e80c8cf4caad1e6687f675c4fa206f99ca2419655dcc7db7249bbee7d4",
+      "normalizedTextSha256": "13979601b0cdc8ebd69a0534f501ef59811961db3daa8996a63d8e9f84b9a068",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-bootstrap.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "7f37f03ca879530ba1bf1d32a90ae83b2602a35692fca147d4da83263f0116da",
+      "normalizedTextSha256": "4c22726b90461c0cbdc9a213d06f855b9b32b3d4735148bfa01657fa8f0eaec7",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-toolkit-update.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "c313953da366a2597ef955d79ef140d00982b16bd118b3413f51107e3b686912",
+      "normalizedTextSha256": "9203ae276b2efddda90c549629fb2b38d34cf4df0d2ebb096869e3c008e749bb",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/prepare-toolkit-upgrade-entry.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "21d1e4955d4dff8aeab53dbfdf9a0043be2ebfb7e8a5a2bc7122326e0e441344",
+      "normalizedTextSha256": "c396dab12773b3f97efe8ba4f77a027f8de77ab5b2d54f725189cd89c62e3dbd",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-readonly-sync.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "ad0c7dc959364446e0f1ba309242c71a91f42cf4b1e452153f915b13571e82ac",
+      "normalizedTextSha256": "46a8f9befed90660547d94b189632590b52f13338600a1c8d7296a369d742a52",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-import-sr.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "60af92a55aefe2c1adf20a7161eaab4061f9acb3af958a1823dc463e0e660c9f",
+      "normalizedTextSha256": "5d74b0d4c73d73fac80ab49c1c1d5dce3e009bb09b9cc4abd4a15c1e753b12e7",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-import-plan.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "b7418ff967a749cb8519883a23457f8e7ef10ba1dc2f2e208bce4e15ab02e6e2",
+      "normalizedTextSha256": "d444eacf86c6e67fc88012927ad4e30fd9190c708b52bfeb6b7eb32bf3022af2",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-import-object.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "93df58fcef74faf187283802aac90cd5ca14589f6f16a6fee56174e1ce00e364",
+      "normalizedTextSha256": "49e93f36be737cbd033d59a4d0b06034c00dc66507205d67cadba129b680ba4d",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-import-objects.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "10ef6a23a4acde58149313a24d2fd3dd2c7ea798d40defdd488ad6b547f6a9ec",
+      "normalizedTextSha256": "278754b58194392047dba91582c46f0061bf4a90114828e321cce8b5fe3eb5d3",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-import-source.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "f0eff89128cf6f6745f8ce4ec92b1829461745f92870aa3184a5d8e575b13099",
+      "normalizedTextSha256": "13d344e1990492154be177b567973d57b6dfaf1c325b9aed22c0754991341f00",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-writeback-object.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "92a7b49e39f53ec3c960a93e62089cef3f4aeecf4710312202d61b6ab2bb1481",
+      "normalizedTextSha256": "3486c96d6b6e01bed1e789d437ef0dcb5637717ec2b097e496743b7b37a79188",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-writeback-close-loop.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "f210eeeb4d8fdff233449c14fb2a1cdc8f3f29149e9793de157bbf4cf5679ae1",
+      "normalizedTextSha256": "4eccb24849caf940fc68317ba141b2ed5afc19d6c61178e77025e27a5e8a3d52",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-delivery-close-loop.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "71c856fb1687eb616a922d3bdfddfc6e0a651b6f082c50fb5e8ca3a3d866a58c",
+      "normalizedTextSha256": "ea3fc80b3f55bf0eb8964a5fc3de892b9e719c5c876b7f943ccb74eb7010a86e",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-delivery-continue.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "dd6861354ce882129615c27b9eb02b64a1f47068bdbb39b4b6c9217263e6f711",
+      "normalizedTextSha256": "96876cfdd3dfcc872a5b5e98d253ecda6e2a05e7c81bfc81828815f95c0d6079",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-toolkit-upgrade-check.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "0b81f3b1c892350460c25e7650293d465a0977ae996aeaa9f3ea1a07aefec003",
+      "normalizedTextSha256": "825de7cc04d4fb148d41a43ad82a170c7223d5e0287cca070ea7e20c4361daed",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-performance-benchmark.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "7dcca46210dff2618b662e6c3068ae6fd4431aa77974c91a8cc310d2659a90db",
+      "normalizedTextSha256": "236437b29a4ac5e38513e76dd58a13a17dfa423eceb7ba0bc2965e1d861a0c3b",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-import-package.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "fdaaea744f636ae33d6b502aa8f6cefb8eac740f0cc980f61964ec3dee37a806",
+      "normalizedTextSha256": "3e99c8efc1b0759657f6f7be8e90d6458cf671e13e6979c22910ce868f8d104a",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-source-accepted.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "10a2a16febc15ef81f6b45dcd33db7879226eda9b924474707850127fb11eadc",
+      "normalizedTextSha256": "f2761e254c06b7a21a1cc6ab2e481aef872790293c972f7cc630653930b3162b",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-orca-candidate-smoke.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "2763add04d0633aa0b0dbf871100bc03f30466b2f06f50b401545b35d2eac38a",
+      "normalizedTextSha256": "ca52f8c40631d483a8c6da20a7ab9b4eb2ae6d8d6fced9ae384283a6b0166cc3",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-check-shared-library-writeback.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "b3ad6378328cf2d02ba8609f053cda7eb0c1e4803fb0379385d4ab15b9f17114",
+      "normalizedTextSha256": "c922f2f99cbaad05f2eb033e5480693b9f7342667e6b0a3b77d825cf86c9724e",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-shared-library-evidence.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "0821f78fde4df6cc795650defde0b9ee3038f541ad3973dffc895bcdf2875329",
+      "normalizedTextSha256": "ee7b5c4f541b9cba7b1f28d4dada419bec59a49b8bebbf5721805c38935dc548",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-project-health.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "c38c8da137b6514c8c302d459e17a93a6a0a728132125477b4843651a04eb063",
+      "normalizedTextSha256": "e75482b0343a0cfd02961992e30fcba53a7eece16c26edd9d6c5c0fc8feb1ab1",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-pbl-drift-remediation.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "94c907881fb87334456ce7fbb72a82290c35144524591c18fedb0f5e7048f214",
+      "normalizedTextSha256": "cefe93634b6e957d23e547c03539dbfa04e34a828a380635530d85c348e6d2cc",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-pbl-change-intake.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "d521b7c2dd17f1e89b00ac54e29699dd153905ab70ceac4bab89ca7778d41269",
+      "normalizedTextSha256": "23b0da4fcdf2bceaa7e7a03d87f1338bd5af63ae61e87968771fb4f164fa62a6",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-pbl-binary-baseline.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "d4e042f11e1992d6f9f709bc4ae14f5d3b1cc53f06e13157ac0ca0383a4a0436",
+      "normalizedTextSha256": "a064bbe84604bde0aab4874b7baf5e669a8cea0efcfa4fca9423ea78147f52f1",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-release-check.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "b5a93055cb8dc8fb1e0c9e3261dfc0bb5e94f0620e5446eae6e3ba0727fc87d6",
+      "normalizedTextSha256": "06d7055bebee0c7a53b1b73a1d816fdae2f83d929389788e14dcce9ec46aec95",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-precommit-summary.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "078ad69dc5d92d00ef348b1a621e65cdcf96c261d7fa28c2926c45dbd77bfafd",
+      "normalizedTextSha256": "2c284186e2f5354a56bce9c77c562dc573c80c716fd61c9eaddbd2881abbe827",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/pbbridge-init-shared-libraries.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "6e7b90786ecd834b837cd7fb8a41fabcd7a39a02427c2932ba099517e0c6d5f3",
+      "normalizedTextSha256": "d11b6754c0833912fb7aca31ba399ad36cd16c82047de67aa330a769ae18d9a2",
+      "normalizationProfile": "powershell-text-v1"
+    },
+    {
+      "targetPath": "scripts/move-pb-build-output.ps1",
+      "templateVersion": "7.6.2",
+      "kind": "powershell-wrapper",
+      "rawSha256": "87ade0859bda8a2a17809bd08149eac2fa9a16425b5eb9eb9dcaec9b530d9b73",
+      "normalizedTextSha256": "c499dbd4ed6b0ee864668eec122b39423bc16562a8dd75fc642163d59edc2a6f",
       "normalizationProfile": "powershell-text-v1"
     }
   ]

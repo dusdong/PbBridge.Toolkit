@@ -2,8 +2,8 @@
   "candidatePreparation": true,
   "sourceAdoption": "pending",
   "schemaName": "pbbridge-toolkit-runtime-contract",
-  "toolkitVersion": "7.6.1",
-  "cliDoctorContractVersion": "7.6.1",
+  "toolkitVersion": "7.6.2",
+  "cliDoctorContractVersion": "7.6.2",
   "orcaCandidateDoctorRequired": true,
   "requiredDoctorFields": [
     "adapterFamily",
@@ -13,7 +13,7 @@
     "x86Status",
     "importSupportStatus"
   ],
-  "generatedAt": "2026-11-01T02:16:05.4166134+08:00",
+  "generatedAt": "2026-11-02T18:20:07.5961794+08:00",
   "cliPath": "runtime/cli/win-x86/PbBridge.Cli.exe",
   "evidence": {
     "cliDoctor": "checks/cli-doctor.txt",
@@ -72,6 +72,6 @@
       }
     ],
     "evidenceScope": "portable-toolkit-runtime-summary",
-    "rawEvidenceSha256": "93beed489bc70a0af782a62e67b46a13a94fb5dde0de98a11ac2aa11c62171e5"
+    "rawEvidenceSha256": "639cae5cb6de7a777ba496de0e55ba4f3b3f325535fa45b470ad0def41bd6fea"
   }
 }
