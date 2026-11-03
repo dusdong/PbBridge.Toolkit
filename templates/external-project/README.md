@@ -1,6 +1,6 @@
 # 外部项目模板
 
-模板版本为 `7.6.2`。`pbbridge-delivery-close-loop.ps1` 是 V8 纯预检入口，`pbbridge-delivery-continue.ps1` 是受 `ShouldProcess` 保护的写回入口。
+模板版本为 `7.7.0`。`pbbridge-delivery-close-loop.ps1` 是 V8 纯预检入口，`pbbridge-delivery-continue.ps1` 是受 `ShouldProcess` 保护的写回入口。
 
 当前业务运行时为 PowerShell 7.4+。先运行 `./scripts/pbbridge-runtime-check.ps1` 获取结构化准入结果，随后统一使用 `pwsh` 执行 wrapper；Windows PowerShell 5.1 不再是业务运行时。
 
@@ -35,7 +35,7 @@ pbbridge delivery summary --repo-root . --workspace canyin --session <id> --comp
 
 多对象写回通过重复 `--depends-on <dependent>=<dependency>` 声明可信边；工具也会提取请求内可唯一定位的继承和直接静态调用。动态调用只作为 advisory，不改变写回顺序。任一对象导入或反向复核失败后，后续 importer 不再调用。
 
-`hygiene fix` 在 7.6.2 只支持 `--what-if`，`delivery cleanup` 也只提供可再生候选预览；二者都不写 `.gitignore`、不删除证据。
+`hygiene fix` 在 7.7.0 只支持 `--what-if`，`delivery cleanup` 也只提供可再生候选预览；二者都不写 `.gitignore`、不删除证据。
 ## 发行身份与升级恢复
 
 运行包内 `PbBridge.Cli.exe version --identity --repo-root .` 查看实际五元身份及 `产品版本 / build <CLI hash 前12位> / toolkit <实际 commit>`。身份缺失时查看 `identityReasonCodes`，不要以短标识授权 Apply。实际 Toolkit HEAD 和父仓 gitlink 差异会同时展示。
@@ -109,3 +109,14 @@ $upgradeArgs=@('-RepoRoot',$project,'-ToolkitRoot',$toolkit,'-Remote',$remote,'-
 ResultPath 默认仅使用项目专用 `.pbbridge/toolkit-update-check.json`；自定义结果须为项目、安装和恢复树外的独立 JSON 路径。已有 updater 查询报告可刷新，其他已存在文件不能覆盖。Git 管理路径、业务项目内的其他路径、安装/恢复副本/记录及链接输出在任何写入（包括异常摘要）前拒绝，错误直接返回，不再把错误写到被拒绝路径。合法独立结果在 WhatIf 下仍实际保存。
 
 `-Apply -WhatIf` 可实际创建/验证显式恢复目录并写 ResultPath，可 fetch 对象和远程跟踪引用；不切换安装 HEAD、index 或文件，不修改父仓 gitlink/配置、业务 PBL、源码和 session。普通检查和实际 Apply 分别记录。候选副本只证明 `installed-candidate-copy / toolkit-only / candidate-recovery-only`，`publishable=false`、`authorizationTransferable=false`；不能替代正式回执、GitHub LFS 冷下载或业务恢复。完整发布 reader 拒绝该记录。恢复时在副本运行 `toolkit/runtime/cli/win-x86/PbBridge.Cli.exe version` 和 `doctor`，审查原字节后由所有者决定工具包替换；不自动回退业务。升级或恢复后逐 workspace 重新生成 readonly-sync/export、baseline 和 V8 preflight。
+
+
+## 文档必要片段与项目定制（7.7.0）
+
+`template-manifest.json` 的 `documentRules` 指向有限规则清单。AGENTS 使用必要片段的确定性匹配；项目 workspace、对象路径及命令示例可自行调整。`.gitignore` 必须保留本机证据等目录的忽略规则，否定例外无法证明安全时需人工处理；`.gitattributes` 必须保留 PBL/PBD 的二进制属性，LFS 扩展名列表属于建议。Toolkit 分发仓自身的 LFS 合同独立保持。
+
+先通过当前 Toolkit 的 `templates/external-project/pbbridge-template-migrate.ps1 -ProjectRoot <副本路径> -ToolkitRoot <Toolkit路径> -WorkspaceId <id> -Plan` 查询。文档缺项在 `manualMigrations` 中列出 `ruleId`、`file`、`snippet` 和影响范围：只把对应必要片段合并进项目文件，保留私有规则与示例，再重新 Plan 和 upgrade-check；不要覆盖整份文件。规范片段见 `templates/external-project/document-rules.json` 的对应 ruleId；AGENTS 引用还给出模板行号。文档没有 Decide 请求，已有 preserve policy 也不能豁免必要片段。
+
+例如 `ignore-local` 缺失时，向项目 `.gitignore` 合并 `.pbbridge/local/` 并处理抵消该规则的 `!` 例外；没有采用 `*.zip filter=lfs` 不会阻断升级。自定义自然语言无法匹配时仍需合并精确片段，检查器不推断语义等价。Plan 绑定文档和规则原字节，变化后旧 PlanHash 会被拒绝。审计仅保存规则缺项、引用和输入 Hash，不保存文档正文或 diff。
+
+升级检查与业务 readonly-sync、Git 提交、PBL 写回和发布资格分别判定。文档已满足不等于可以写回或发布。脚本定制仍按现有 provenance、policy/Decide、兼容性与 recovery 流程处理。

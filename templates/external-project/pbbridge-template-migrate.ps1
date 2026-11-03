@@ -32,7 +32,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-$script:ProductVersion = '7.6.2'
+$script:ProductVersion = '7.7.0'
 
 if ($Help.IsPresent -or $CliHelp.IsPresent) {
     @'

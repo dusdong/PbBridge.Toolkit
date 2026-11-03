@@ -1,0 +1,266 @@
+{
+  "schemaName": "pbbridge-template-document-rules",
+  "schemaVersion": 1,
+  "customization": "Project examples, paths and other prose are project-custom.",
+  "rules": [
+    {
+      "ruleId": "agents-contract-01",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "先读取本文件中的项目私有约束，再读取 `.pbbridge/PbBridge.Toolkit/CODEX-START.md`。",
+      "snippet": "AGENTS.md#L4"
+    },
+    {
+      "ruleId": "agents-contract-02",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "PowerBuilder 业务源码以受管 `.sr*` 为事实源；PBL 写回后由 Codex 反向确认并交接用户完成 IDE/运行验收，收到结果后再记录证据。",
+      "snippet": "AGENTS.md#L5"
+    },
+    {
+      "ruleId": "agents-contract-03",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "当前唯一交付主路径是 V8 `delivery close-loop` 预检加 `delivery continue` 写回。",
+      "snippet": "AGENTS.md#L6"
+    },
+    {
+      "ruleId": "agents-contract-04",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "对象键固定为 `<workspace-relative-pbl-path>:<object-type>:<object-name>`。",
+      "snippet": "AGENTS.md#L7"
+    },
+    {
+      "ruleId": "agents-contract-05",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "非当前 Delivery/session JSON 必须拒绝，不得触发写操作或加入当前 session。",
+      "snippet": "AGENTS.md#L8"
+    },
+    {
+      "ruleId": "agents-contract-06",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "多对象 V8 Apply 必须使用当前 preflight 的 trusted dependency plan；依赖漂移后重新预检。",
+      "snippet": "AGENTS.md#L9"
+    },
+    {
+      "ruleId": "agents-contract-07",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "workspace-command-fragment",
+      "fragment": "提交前运行 `pbbridge git governance --workspace <id>`；不得把本机会话、缓存、诊断或无证据二进制漂移加入提交。",
+      "snippet": "AGENTS.md#L10"
+    },
+    {
+      "ruleId": "agents-contract-08",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "`close-loop` 纯预检，不接受 Apply 参数。",
+      "snippet": "AGENTS.md#L20"
+    },
+    {
+      "ruleId": "agents-contract-09",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "`continue` 通过 `ShouldProcess`、事实新鲜度、目标漂移和冲突门禁后才写回。",
+      "snippet": "AGENTS.md#L21"
+    },
+    {
+      "ruleId": "agents-contract-10",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "分开读取写回、IDE 和发布 readiness；按带类型的 `nextAction` 行动。",
+      "snippet": "AGENTS.md#L22"
+    },
+    {
+      "ruleId": "agents-contract-11",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "当前 Windows 环境不支持 Codex 操控 PowerBuilder IDE；不使用桌面自动化、UIA、SendKeys、鼠标坐标或临时脚本操作 PB IDE，不寻找 GUI 替代工具。已授权的 Toolkit CLI 写回仍按既有门禁执行。",
+      "snippet": "AGENTS.md#L23"
+    },
+    {
+      "ruleId": "agents-contract-12",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "Regenerate、Full Build、Painter、调试与运行验收由用户完成。",
+      "snippet": "AGENTS.md#L24"
+    },
+    {
+      "ruleId": "agents-contract-13",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "不主动扫描或检查 PB90/PB IDE 是否运行，不把进程存在或“已关闭”回复设为预检、写回的前置条件，也不为此询问许可。由 CLI 的实际文件锁、目标快照、冲突与恢复结果判断能否继续；确有阻断时报告具体对象、原因和所需操作，不自动关闭或终止 IDE 进程。",
+      "snippet": "AGENTS.md#L25"
+    },
+    {
+      "ruleId": "agents-contract-14",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "用户已授权当前任务的源码修改和受控写回时，明确的源码语法/编译错误可自行做最小修复、重新预检，并在门禁通过后继续，无需逐次确认。即使 CLI 将此类错误标为 `manual-action`，也先结合诊断、reason code 和实际所需动作判断；该标签本身不撤销既有授权。",
+      "snippet": "AGENTS.md#L26"
+    },
+    {
+      "ruleId": "agents-contract-15",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "修复后使用新预检结果及其可信依赖计划继续；核对已有成功对象与当前目标事实，避免重复写入。每次重试必须有源码、依赖或环境事实变化；同一原因在没有新修复依据时仍失败，应报告阻断，禁止原样循环 Apply。源码修正、预检通过、实际写入和 IDE 验收分别汇报，累计写入只计实际成功结果。",
+      "snippet": "AGENTS.md#L27"
+    },
+    {
+      "ruleId": "agents-contract-16",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "只有实际需要 PB IDE 操作、人工验收、用户决策或无法在授权范围内解决的阻断，才完成其余独立工作后生成 checklist/handoff，列明 workspace/PBW、PBL/对象、session、原因、人工步骤与所需证据，并暂停依赖步骤。`manual-action` 或 `ide-fallback-required` 的人工动作说明不得拼成命令执行，也不得通过修改结果 JSON、跳过门禁或伪造证据继续。",
+      "snippet": "AGENTS.md#L28"
+    },
+    {
+      "ruleId": "agents-contract-17",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "未验收项保持 `not-checked`，已有失败或阻断继续保留；人工确认只能记为 `attested`，不能冒充 `verified`。允许汇报“自动化部分完成，等待人工验收”。",
+      "snippet": "AGENTS.md#L29"
+    },
+    {
+      "ruleId": "agents-contract-18",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "用户提供结果后从现有有效 session 继续，过期时重新预检，不为补验收证据无依据地重复 Apply。",
+      "snippet": "AGENTS.md#L30"
+    },
+    {
+      "ruleId": "agents-contract-19",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "`delivery summary` 是稳定交付索引；阻断用 `delivery explain --why-blocked`，清理只允许 `delivery cleanup --what-if`。",
+      "snippet": "AGENTS.md#L31"
+    },
+    {
+      "ruleId": "agents-contract-20",
+      "path": "AGENTS.md",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "fragment",
+      "fragment": "静态 summary 不会刷新；需要对照时使用 `delivery summary --session <id> --compare-summary <saved.json> --result <new.json>`。原文件、session 与证据保持只读；current 只证明观察时点内容一致。读取 `operationAssessments` 的 evaluated 与 scope，不把同步或发布结论泛化为对象 Apply，也不从源码可提交推断 PBL 可提交。",
+      "snippet": "AGENTS.md#L32"
+    },
+    {
+      "ruleId": "ignore-local",
+      "path": ".gitignore",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "ignore-directory",
+      "fragment": ".pbbridge/local/",
+      "snippet": ".gitignore",
+      "pattern": ".pbbridge/local/"
+    },
+    {
+      "ruleId": "ignore-evidence-supersession",
+      "path": ".gitignore",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "ignore-directory",
+      "fragment": ".pbbridge/evidence-supersession/",
+      "snippet": ".gitignore",
+      "pattern": ".pbbridge/evidence-supersession/"
+    },
+    {
+      "ruleId": "ignore-secrets",
+      "path": ".gitignore",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "ignore-directory",
+      "fragment": ".pbbridge/secrets/",
+      "snippet": ".gitignore",
+      "pattern": ".pbbridge/secrets/"
+    },
+    {
+      "ruleId": "ignore-cache",
+      "path": ".gitignore",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "ignore-directory",
+      "fragment": ".pbbridge/cache/",
+      "snippet": ".gitignore",
+      "pattern": ".pbbridge/cache/"
+    },
+    {
+      "ruleId": "ignore-delivery-v8-sessions",
+      "path": ".gitignore",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "ignore-directory",
+      "fragment": ".pbbridge/delivery-v8-sessions/",
+      "snippet": ".gitignore",
+      "pattern": ".pbbridge/delivery-v8-sessions/"
+    },
+    {
+      "ruleId": "binary-pbl",
+      "path": ".gitattributes",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "binary-attribute",
+      "fragment": "*.pbl -text",
+      "snippet": ".gitattributes",
+      "pattern": "*.pbl"
+    },
+    {
+      "ruleId": "binary-pbd",
+      "path": ".gitattributes",
+      "classification": "required",
+      "scope": "consumer-project",
+      "kind": "binary-attribute",
+      "fragment": "*.pbd -text",
+      "snippet": ".gitattributes",
+      "pattern": "*.pbd"
+    },
+    {
+      "ruleId": "lfs-extensions",
+      "path": ".gitattributes",
+      "classification": "recommended",
+      "scope": "consumer-project",
+      "kind": "lfs-advice",
+      "fragment": "filter=lfs",
+      "snippet": ".gitattributes"
+    }
+  ]
+}

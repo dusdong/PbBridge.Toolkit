@@ -1,24 +1,20 @@
 {
-  "toolkitVersion": "7.6.2",
-  "productVersion": "7.6.2",
-  "developmentOnly": true,
-  "candidatePreparation": true,
-  "sourceAdoption": "pending",
-  "qualification": "candidate-preparation-source-adoption-and-independent-qualification-pending",
+  "toolkitVersion": "7.7.0",
+  "productVersion": "7.7.0",
+  "developmentOnly": false,
+  "candidatePreparation": false,
+  "sourceAdoption": "existing-default",
+  "qualification": "requires-independent-release-qualification",
   "omittedRuntimes": null,
-  "externalProjectTemplateVersion": "7.6.2",
+  "externalProjectTemplateVersion": "7.7.0",
   "generatedAt": "2026-11-02T18:20:07.5961794+08:00",
-  "runtimeInput": {
-    "root": "runtime",
-    "inventorySha256": "e2242f58432c70e602e0c81ed1224d0b3f3865b7e22f0ac9fb48bb292a6a99ff",
-    "rebuilt": false
-  },
+  "runtimeInput": null,
   "runtime": {
     "cli": [
       {
         "platform": "win-x86",
         "executable": "runtime/cli/win-x86/PbBridge.Cli.exe",
-        "source": "runtime/cli/win-x86",
+        "source": "artifacts/publish/cli/7.7.0/win-x86-self-contained",
         "purpose": "PowerBuilder .pbl/.sr* 导出、校验、报告、差异与导入协作入口；不承担 PB IDE 编译"
       }
     ],
@@ -26,7 +22,7 @@
       {
         "platform": "win-x64",
         "executable": "runtime/ide/win-x64/SharpIDE.exe",
-        "source": "runtime/ide/win-x64",
+        "source": "Reference/SharpIDE/artifacts/publish-godot/win-x64",
         "purpose": "SharpIDE 宿主与 PBW 浏览入口"
       }
     ],
@@ -35,13 +31,13 @@
         "platform": "win-x86",
         "dll": "runtime/pbspy/win-x86/PBSpy.dll",
         "pb9Runtime": "runtime/pbspy/win-x86/PBSDK/PB090",
-        "source": "runtime/pbspy/win-x86",
+        "source": "reference-pbl/PBSpyORCA/PBSpyORCA",
         "purpose": "PB9 PBL 写回路径的 PBSpy 与 PBSDK 运行时；供 CLI 按 toolkit 相对路径自动探测"
       }
     ]
   },
   "runtimeContract": {
-    "cliDoctorContractVersion": "7.6.2",
+    "cliDoctorContractVersion": "7.7.0",
     "orcaCandidateDoctorRequired": true,
     "requiredDoctorFields": [
       "adapterFamily",
@@ -64,7 +60,7 @@
   "documents": [
     "CODEX-START.md",
     "docs/README.md",
-    "docs/7.6.2发布说明.md",
+    "docs/7.7.0发布说明.md",
     "docs/getting-started/README.md",
     "docs/getting-started/V8交付证据闭环使用手册.md",
     "docs/getting-started/V8迁移说明.md",
@@ -185,6 +181,7 @@
     "templates/external-project/agents-snippets/pbbridge-local-evidence.md",
     "templates/external-project/agents-snippets/history/v6/pbbridge-v6-delivery.md",
     "templates/external-project/template-manifest.json",
+    "templates/external-project/document-rules.json",
     "templates/external-project/managed-provenance.json",
     "templates/external-project/PbBridge.Wrapper.psm1",
     "templates/external-project/PbBridge.TemplateMigration.psm1",

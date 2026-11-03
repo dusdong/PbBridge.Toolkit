@@ -1,7 +1,7 @@
 {
   "schemaName": "pbbridge-workspace-config",
   "schemaVersion": 7,
-  "productVersion": "7.6.2",
+  "productVersion": "7.7.0",
   "id": "<workspace-id>",
   "pbwPath": "<repo-relative-pbw-path>",
   "stateRoot": ".pbbridge/workspaces/<workspace-id>/state",

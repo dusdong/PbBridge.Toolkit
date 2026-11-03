@@ -4,9 +4,10 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$script:ProductVersion = '7.6.2'
+$script:ProductVersion = '7.7.0'
 $script:NormalizationProfile = 'powershell-text-v1'
 $script:SupportedSourceProductVersions = @(
+    '7.6.2'
     '7.0.0'
     '7.0.1'
     '7.0.2'
@@ -1783,6 +1784,11 @@ function Invoke-PbBridgeTemplateMigration {
         })
     }
 
+    $documentFact = Get-PbBridgeDocumentRuleFact -ProjectRoot $projectRootFull -TemplateRoot $templateRoot -Manifest $manifest
+    foreach ($missing in @($documentFact.rules | Where-Object { $_.classification -eq 'required' -and -not $_.matched })) {
+        $manual.Add([pscustomobject]@{ file=$missing.path; code=$missing.code; ruleId=$missing.ruleId; snippet=$missing.snippet; scope=$missing.scope; message=$missing.message; line=$null; column=$null })
+    }
+
     foreach ($file in @($manifest.managedFiles | Where-Object { $_.mergeMode -eq 'overwrite-if-template-managed' })) {
         $templatePath = Join-Path $templateRoot ([string]$file.templatePath)
         $targetPath = Resolve-PbBridgePathInsideRoot -Root $projectRootFull -Path (Join-Path $projectRootFull ([string]$file.targetPath)) -ReasonCode 'managed-target-outside-project'
@@ -2140,6 +2146,7 @@ function Invoke-PbBridgeTemplateMigration {
             projectRawSha256 = if (Test-Path -LiteralPath $existingProjectConfigPath -PathType Leaf) { Get-PbBridgeSha256 -Path $existingProjectConfigPath } else { $null }
             workspaceRawSha256 = if (Test-Path -LiteralPath $existingWorkspaceConfigPath -PathType Leaf) { Get-PbBridgeSha256 -Path $existingWorkspaceConfigPath } else { $null }
         }
+        documentInputs = @($documentFact.inputs)
         configurationSha256 = $configurationSha256
         assets = @($assetClassifications.ToArray() | Sort-Object targetPath | ForEach-Object {
             [ordered]@{
@@ -2332,6 +2339,7 @@ function Invoke-PbBridgeTemplateMigration {
             inputs = @()
         }
         config = [ordered]@{ project = $projectConfig; workspace = $workspaceConfig }
+        documentInputs = @($documentFact.inputs)
         configurationSha256 = $configurationSha256
         migrationVerdict = if ($manual.Count -gt 0) { 'blocked' } elseif ($awaitingDecisions.Count -gt 0) { 'awaiting-decisions' } elseif ($hasPlannedChanges) { 'changes-planned' } else { 'already-current' }
         audit = [ordered]@{
@@ -2532,6 +2540,12 @@ function Invoke-PbBridgeTemplateMigration {
             throw 'blocked-incompatible-customization'
         }
 
+        $currentDocuments = Get-PbBridgeDocumentRuleFact -ProjectRoot $projectRootFull -TemplateRoot $templateRoot -Manifest $manifest
+        if ((Get-PbBridgeCanonicalHash -Value @($currentDocuments.inputs)) -ne (Get-PbBridgeCanonicalHash -Value @($documentFact.inputs))) {
+            $manual.Add([pscustomobject]@{ file='document-rules.json'; code='migration-plan-stale'; message='文档或规则在安装前变化；重新 Plan。'; line=$null; column=$null })
+            throw 'candidate-validation-failed'
+        }
+
         foreach ($file in $installFiles) {
             $target = Resolve-PbBridgePathInsideRoot -Root $projectRootFull -Path $file.targetPath -ReasonCode 'install-target-outside-project'
             $existed = Test-Path -LiteralPath $target -PathType Leaf
@@ -2686,12 +2700,87 @@ function Invoke-PbBridgeTemplateMigration {
     return [pscustomobject]$report
 }
 
-function Test-PbBridgeRequiredText {
-    param([string]$TargetPath, [string]$TemplatePath)
-    if (-not (Test-Path -LiteralPath $TargetPath -PathType Leaf)) { return $false }
-    $actual = @([IO.File]::ReadAllLines($TargetPath, [Text.Encoding]::UTF8) | ForEach-Object { $_.Trim() })
-    $required = @([IO.File]::ReadAllLines($TemplatePath, [Text.Encoding]::UTF8) | ForEach-Object { $_.Trim() } | Where-Object { $_ -and -not $_.StartsWith('#') -and -not $_.StartsWith('<!-- PbBridge-TemplateVersion:') })
-    return @($required | Where-Object { $_ -notin $actual }).Count -eq 0
+function Get-PbBridgeDocumentRuleFact {
+    param([string]$ProjectRoot, [string]$TemplateRoot, $Manifest)
+    # Legacy/minimal manifests without documents have no document obligations.
+    $documents = @($Manifest.managedFiles | Where-Object { [string]$_.targetPath -in @('AGENTS.md', '.gitignore', '.gitattributes') })
+    if ($documents.Count -eq 0) { return [pscustomobject]@{ rules=@(); inputs=@() } }
+    $rulesPath = Resolve-PbBridgePathInsideRoot -Root $TemplateRoot -Path (Join-Path $TemplateRoot ([string]$Manifest.documentRules)) -ReasonCode 'document-rules-outside-template'
+    $metadata = Get-Content -LiteralPath $rulesPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($metadata.schemaName -ne 'pbbridge-template-document-rules' -or $metadata.schemaVersion -ne 1) { throw 'document-rules-invalid' }
+    $inputs = @([ordered]@{ path='template/document-rules.json'; rawSha256=Get-PbBridgeSha256 -Path $rulesPath })
+    $facts = foreach ($document in $documents) {
+        $relative = [string]$document.targetPath
+        $target = Resolve-PbBridgePathInsideRoot -Root $ProjectRoot -Path (Join-Path $ProjectRoot $relative) -ReasonCode 'managed-target-outside-project'
+        $exists = Test-Path -LiteralPath $target -PathType Leaf
+        $inputs += [ordered]@{ path=$relative; rawSha256=if ($exists) { Get-PbBridgeSha256 -Path $target } else { $null } }
+        $lines = if ($exists) { @([IO.File]::ReadAllLines($target, [Text.Encoding]::UTF8) | ForEach-Object { $_.Trim() }) } else { @() }
+        foreach ($rule in @($metadata.rules | Where-Object path -eq $relative)) {
+            $matched = $false
+            switch ([string]$rule.kind) {
+                'fragment' {
+                    $matched = @($lines | Where-Object { ($_ -creplace '^(?:[0-9]+[.] |[-] )', '') -ceq [string]$rule.fragment }).Count -gt 0
+                }
+                'workspace-command-fragment' {
+                    # Only the workspace argument is variable; the surrounding contract
+                    # remains exact. Never infer equivalence from arbitrary prose.
+                    $expression = [regex]::Escape([string]$rule.fragment).Replace([regex]::Escape('--workspace <id>'), '--workspace (?:<id>|[A-Za-z0-9_.-]+|''[A-Za-z0-9_.-]+''|"[A-Za-z0-9_.-]+")')
+                    $matched = @($lines | Where-Object { ($_ -creplace '^(?:[0-9]+[.] |[-] )', '') -cmatch ('^' + $expression + '$') }).Count -gt 0
+                }
+                'lfs-advice' {
+                    $matched = @($lines | Where-Object { -not $_.StartsWith('#') -and $_ -cmatch '(?:^|\s)filter=lfs(?:\s|$)' }).Count -gt 0
+                }
+                'ignore-directory' {
+                    # Accept the declared directory or an enclosing directory. Reject any
+                    # negation under that namespace conservatively, including wildcard exceptions.
+                    $pattern = [string]$rule.pattern
+                    $matched = @($lines | Where-Object { $_.TrimStart('/') -ceq $pattern -or $_.TrimStart('/') -ceq '.pbbridge/' }).Count -gt 0
+                    $directory = $pattern.TrimEnd('/')
+                    if (@($lines | Where-Object {
+                        if (-not $_.StartsWith('!')) { return $false }
+                        $exception = $_.Substring(1).TrimStart('/')
+                        return $exception -eq '.pbbridge/' -or $exception -eq $directory -or
+                            $exception.StartsWith($directory + '/', [StringComparison]::Ordinal) -or
+                            $directory -like $exception.TrimEnd('/') -or ($directory + '/probe') -like $exception
+                    }).Count -gt 0) { $matched=$false }
+                }
+                'binary-attribute' {
+                    # Prove universal -text using only the consumer extension or a
+                    # universal pattern. Any later overlapping text assignment (even
+                    # a subset/unsupported glob) invalidates that proof. A subsequent
+                    # universal -text restores it; subset assignments cannot do so.
+                    $extension = ([string]$rule.pattern).Substring(2)
+                    $matched = $false
+                    foreach ($line in $lines) {
+                        if (-not $line -or $line.StartsWith('#')) { continue }
+                        $parts = @($line -split '\s+')
+                        if ($parts.Count -lt 2) { $matched=$false; continue }
+                        $pattern = $parts[0]
+                        $universal = $pattern -cin @([string]$rule.pattern, '*', '**/*')
+                        # A literal terminal extension can prove disjointness. Unknown
+                        # wildcard/quoted/macro syntax remains potentially overlapping.
+                        $disjoint = $pattern -cmatch '[.]([A-Za-z0-9]+)$' -and $Matches[1] -cne $extension
+                        if ($disjoint) { continue }
+                        foreach ($attribute in $parts[1..($parts.Count-1)]) {
+                            if ($attribute -ceq '-text' -or $attribute -ceq 'binary') {
+                                if ($universal) { $matched=$true }
+                            }
+                            elseif ($attribute -cin @('text','!text') -or $attribute.StartsWith('text=', [StringComparison]::Ordinal)) { $matched=$false }
+                            elseif ($attribute -cnotmatch '^[-!]?(?:filter|diff|merge|eol|working-tree-encoding|ident|export-ignore|export-subst)(?:=|$)') {
+                                # An unrecognized attribute may invoke a text-setting macro.
+                                $matched=$false
+                            }
+                        }
+                    }
+                }
+                default { throw "document-rule-kind-unsupported: $($rule.ruleId)" }
+            }
+            [pscustomobject]@{ path=$relative; ruleId=[string]$rule.ruleId; classification=[string]$rule.classification; scope=[string]$rule.scope;
+                matched=$matched; snippet=('templates/external-project/' + [string]$rule.snippet); code=if ($matched) { 'template-document-rule-matched' } else { 'template-document-rule-missing' };
+                message=if ($matched) { "规则 $($rule.ruleId) 已满足；适用范围 $($rule.scope)。" } else { "规则 $($rule.ruleId) 未满足；影响 $($rule.scope)。合并片段 $($rule.snippet) 后重新 Plan / upgrade-check。" } }
+        }
+    }
+    [pscustomobject]@{ rules=@($facts); inputs=@($inputs) }
 }
 
 function Get-PbBridgeTemplateUpgradeFact {
@@ -2714,15 +2803,7 @@ function Get-PbBridgeTemplateUpgradeFact {
                 ($fact.classification -eq 'managed-known-format-variant' -and $fact.matchedTemplateVersion -eq $script:ProductVersion);
             preserved = @($policy.files | Where-Object { [string]$_.path -eq [string]$file.targetPath }).Count -eq 1 }
     }
-    foreach ($file in @($manifest.managedFiles | Where-Object { [string]$_.targetPath -in @('AGENTS.md', '.gitignore', '.gitattributes') })) {
-        $target = Join-Path $ProjectRoot ([string]$file.targetPath)
-        $current = Test-PbBridgeRequiredText -TargetPath $target -TemplatePath (Join-Path $templateRoot ([string]$file.templatePath))
-        if (-not $current -and [string]$file.targetPath -eq 'AGENTS.md') {
-            $snippets = @(Get-ChildItem -LiteralPath (Join-Path $templateRoot 'agents-snippets') -Filter '*.md' -File)
-            $current = $snippets.Count -gt 0 -and @($snippets | Where-Object { -not (Test-PbBridgeRequiredText -TargetPath $target -TemplatePath $_.FullName) }).Count -eq 0
-        }
-        $assets += [pscustomobject]@{ path=[string]$file.targetPath; classification='managed-document-fragments'; current=$current; preserved=$false }
-    }
+    $documentFact = Get-PbBridgeDocumentRuleFact -ProjectRoot $ProjectRoot -TemplateRoot $templateRoot -Manifest $manifest
     $paths = @($manifest.managedFiles | ForEach-Object { Join-Path $ProjectRoot ([string]$_.targetPath) }) +
         @((Join-Path $ProjectRoot '.pbbridge/project.json'), (Join-Path $ProjectRoot ".pbbridge/workspaces/$WorkspaceId/workspace.json"))
     $workspaceConfig = if ($WorkspaceConfigurationPath) { Resolve-PbBridgePathInsideRoot -Root $ProjectRoot -Path $WorkspaceConfigurationPath -ReasonCode 'workspace-config-outside-project' } else { Join-Path $ProjectRoot ".pbbridge/workspaces/$WorkspaceId/workspace.json" }
@@ -2737,8 +2818,8 @@ function Get-PbBridgeTemplateUpgradeFact {
     $currentInputs = @((Join-Path $ProjectRoot '.pbbridge/project.json'), $workspaceConfig,
         (Join-Path $templateRoot 'template-manifest.json'), (Join-Path $templateRoot ([string]$manifest.provenanceRegistry))) +
         @($assets | ForEach-Object { Join-Path $ProjectRoot ([string]$_.path) })
-    [pscustomobject]@{ versions=@($versions); assets=@($assets); recovery=$recovery; policyIssues=@($policy.issues);
-        evidencePaths=@(($currentInputs + $recoveryEvidence.ToArray()) | Select-Object -Unique) }
+    [pscustomobject]@{ versions=@($versions); assets=@($assets); documentRules=@($documentFact.rules); recovery=$recovery; policyIssues=@($policy.issues);
+        evidencePaths=@(($currentInputs + @($documentFact.inputs | ForEach-Object { if ($_.path -eq 'template/document-rules.json') { Join-Path $templateRoot 'document-rules.json' } else { Join-Path $ProjectRoot $_.path } }) + $recoveryEvidence.ToArray()) | Select-Object -Unique) }
 }
 
 Export-ModuleMember -Function Invoke-PbBridgeTemplateMigration, Get-PbBridgeTemplateUpgradeFact
