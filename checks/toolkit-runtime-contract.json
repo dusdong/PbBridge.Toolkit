@@ -13,7 +13,7 @@
     "x86Status",
     "importSupportStatus"
   ],
-  "generatedAt": "2026-11-02T18:20:07.5961794+08:00",
+  "generatedAt": "2026-11-05T23:25:56.1035203+08:00",
   "cliPath": "runtime/cli/win-x86/PbBridge.Cli.exe",
   "evidence": {
     "cliDoctor": "checks/cli-doctor.txt",
@@ -33,45 +33,45 @@
         "isRequired": true,
         "isAvailable": true,
         "loadSource": "candidate-path",
-        "runtimeLocation": "external-runtime"
+        "toolkitRelativePath": "runtime/pbspy/win-x86/PBSpy.dll"
       },
       {
         "name": "pbvm90.dll",
         "isRequired": true,
         "isAvailable": true,
         "loadSource": "candidate-path",
-        "runtimeLocation": "external-runtime"
+        "toolkitRelativePath": "runtime/pbspy/win-x86/PBSDK/PB090/pbvm90.dll"
       },
       {
         "name": "pbcmp90.dll",
         "isRequired": true,
         "isAvailable": true,
         "loadSource": "candidate-path",
-        "runtimeLocation": "external-runtime"
+        "toolkitRelativePath": "runtime/pbspy/win-x86/PBSDK/PB090/pbcmp90.dll"
       },
       {
         "name": "pbdwe90.dll",
         "isRequired": true,
         "isAvailable": true,
         "loadSource": "candidate-path",
-        "runtimeLocation": "external-runtime"
+        "toolkitRelativePath": "runtime/pbspy/win-x86/PBSDK/PB090/pbdwe90.dll"
       },
       {
         "name": "pbcgr90.dll",
         "isRequired": true,
         "isAvailable": true,
         "loadSource": "candidate-path",
-        "runtimeLocation": "external-runtime"
+        "toolkitRelativePath": "runtime/pbspy/win-x86/PBSDK/PB090/pbcgr90.dll"
       },
       {
         "name": "libjcc.dll",
         "isRequired": true,
         "isAvailable": true,
         "loadSource": "candidate-path",
-        "runtimeLocation": "external-runtime"
+        "toolkitRelativePath": "runtime/pbspy/win-x86/PBSDK/PB090/libjcc.dll"
       }
     ],
     "evidenceScope": "portable-toolkit-runtime-summary",
-    "rawEvidenceSha256": "ed72f43e2b1ff740d41c29c65f8d9a752477c0e1c642101482f5edd860c59b52"
+    "rawEvidenceSha256": "985880153a14f2efa1ee7c02c532e4fa68b8ea15c695c3df166b8f3d12ff68de"
   }
 }
