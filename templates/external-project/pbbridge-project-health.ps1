@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.7.0
+# PbBridge-TemplateVersion: 7.7.1
 param(
     [string]$ProjectRoot = "",
     [string]$WorkspaceName = "",

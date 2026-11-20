@@ -22,13 +22,13 @@ description: 当用户遇到 .pbl Git 漂移、PBL_LFS_FILTER_MISMATCH、PowerBu
 缺少 remediation JSON 时，先建议运行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-drift-remediation.ps1
+pwsh -NoProfile -File .\scripts\pbbridge-pbl-drift-remediation.ps1
 ```
 
 同仓多 PBW 项目必须传入当前 PBW 的命名工作区：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-drift-remediation.ps1 -WorkspaceName kuaican
+pwsh -NoProfile -File .\scripts\pbbridge-pbl-drift-remediation.ps1 -WorkspaceName kuaican
 ```
 
 ## 分类规则

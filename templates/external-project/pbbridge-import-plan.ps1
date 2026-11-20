@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.7.0
+# PbBridge-TemplateVersion: 7.7.1
 param(
     [Alias('ProjectRoot')]
     [string]$RepoRoot = "",
@@ -318,96 +318,78 @@ function Get-GitSubmodulePaths {
         return @()
     }
 
-    $previousErrorActionPreference = $ErrorActionPreference
-    $ErrorActionPreference = 'Continue'
-    try {
-        $output = & git -C $RepoRoot config --file .gitmodules --get-regexp 'submodule\..*\.path' 2>&1
-        $exitCode = $LASTEXITCODE
-    }
-    finally {
-        $ErrorActionPreference = $previousErrorActionPreference
-    }
-    if ($exitCode -ne 0) {
+    $result = Invoke-PbBridgeNativeCommand -FilePath 'git' -Capture -StandardOutputEncoding ([Text.Encoding]::UTF8) -Arguments @(
+        '-C', $RepoRoot, 'config', '--file', '.gitmodules', '--null', '--get-regexp', '^submodule\..*\.path$')
+    if ($result.exitCode -ne 0) {
         return @()
     }
 
-    return @($output | ForEach-Object {
-        $parts = ([string]$_).Split(' ', 2, [System.StringSplitOptions]::RemoveEmptyEntries)
-        if ($parts.Count -eq 2) { $parts[1].Replace('\', '/').Trim('/') }
-    })
+    foreach ($entry in $result.stdout.Split([char]0)) {
+        # git config --null 以 LF 分隔键和值，以 NUL 结束记录。
+        $separator = $entry.IndexOf([char]10)
+        if ($separator -ge 0) {
+            $entry.Substring($separator + 1).Replace('\', '/').Trim('/')
+        }
+    }
 }
 
 function Add-GitStatusPblPaths {
     param(
-        [Parameter(Mandatory = $true)][object]$Paths,
-        [AllowEmptyCollection()][object[]]$StatusLines = @(),
+        [Parameter(Mandatory = $true)][AllowEmptyCollection()][System.Collections.Generic.List[string]]$Paths,
+        [string]$StatusText,
         [string]$PathPrefix = ""
     )
 
-    $pathList = $Paths -as [System.Collections.Generic.List[string]]
-    if ($null -eq $pathList) {
-        throw "Add-GitStatusPblPaths 需要 List[string] 类型的 Paths 参数。"
-    }
-
-    foreach ($line in @($StatusLines)) {
-        $text = [string]$line
-        if ($text.Length -lt 4) {
+    $fields = $StatusText.Split([char]0)
+    for ($index = 0; $index -lt $fields.Length; $index++) {
+        $record = $fields[$index]
+        if ($record.Length -lt 4) {
             continue
         }
 
-        $pathText = $text.Substring(3).Trim()
-        foreach ($candidate in @($pathText -split '\s+->\s+')) {
-            $candidatePath = $candidate.Trim('"')
+        $candidates = @($record.Substring(3))
+        if ($record.Substring(0, 2) -match '[RC]') {
+            # -z 格式先给出目标，再给出原路径。
+            $index++
+            $candidates += $fields[$index]
+        }
+        foreach ($candidatePath in $candidates) {
             if ($candidatePath.EndsWith('.pbl', [System.StringComparison]::OrdinalIgnoreCase)) {
-                $combinedPath = if ([string]::IsNullOrWhiteSpace($PathPrefix)) {
+                $combinedPath = if (-not $PathPrefix) {
                     $candidatePath
                 }
                 else {
-                    ($PathPrefix.Trim('/') + '/' + $candidatePath.Trim('/'))
+                    "$PathPrefix/$candidatePath"
                 }
-                $pathList.Add((ConvertTo-RepoRelativePblPath -PathValue $combinedPath))
+                $Paths.Add((ConvertTo-RepoRelativePblPath -PathValue $combinedPath))
             }
         }
     }
 }
 
-function Get-GitPblStatusPaths {
-    $previousErrorActionPreference = $ErrorActionPreference
-    $ErrorActionPreference = 'Continue'
-    try {
-        $output = & git -C $RepoRoot status --porcelain=v1 --untracked-files=all 2>&1
-        $exitCode = $LASTEXITCODE
-    }
-    finally {
-        $ErrorActionPreference = $previousErrorActionPreference
-    }
-    if ($exitCode -ne 0) {
-        throw "git status --porcelain 执行失败：$($output -join [Environment]::NewLine)"
-    }
+function Get-GitStatusText {
+    param([string]$RepositoryPath)
 
+    $result = Invoke-PbBridgeNativeCommand -FilePath 'git' -Capture -StandardOutputEncoding ([Text.Encoding]::UTF8) -Arguments @(
+        '-C', $RepositoryPath, 'status', '--porcelain=v1', '-z', '--untracked-files=all')
+    if ($result.exitCode -ne 0) {
+        throw ("git status 执行失败。仓库：{0}；退出码：{1}。stderr：{2}" -f $RepositoryPath, $result.exitCode, $result.stderr)
+    }
+    return $result.stdout
+}
+
+function Get-GitPblStatusPaths {
     $paths = [System.Collections.Generic.List[string]]::new()
-    Add-GitStatusPblPaths -Paths $paths -StatusLines @($output)
+    Add-GitStatusPblPaths -Paths $paths -StatusText (Get-GitStatusText -RepositoryPath $RepoRoot)
 
     foreach ($submodulePath in @(Get-GitSubmodulePaths)) {
         $submoduleFullPath = Join-Path $RepoRoot $submodulePath
-        if (-not (Test-Path -LiteralPath $submoduleFullPath -PathType Container)) {
+        # 取消初始化后目录可能仍存在，Git 会从中向上找到父仓库。
+        if (-not (Test-Path -LiteralPath (Join-Path $submoduleFullPath '.git'))) {
             continue
         }
 
-        $previousErrorActionPreference = $ErrorActionPreference
-        $ErrorActionPreference = 'Continue'
-        try {
-            $submoduleOutput = & git -C $submoduleFullPath status --porcelain=v1 --untracked-files=all 2>&1
-            $submoduleExitCode = $LASTEXITCODE
-        }
-        finally {
-            $ErrorActionPreference = $previousErrorActionPreference
-        }
-        if ($submoduleExitCode -ne 0) {
-            throw "git status --porcelain 执行失败：$($submoduleOutput -join [Environment]::NewLine)"
-        }
-
-        Add-GitStatusPblPaths -Paths $paths -StatusLines @($submoduleOutput) -PathPrefix $submodulePath
+        Add-GitStatusPblPaths -Paths $paths -StatusText (Get-GitStatusText -RepositoryPath $submoduleFullPath) -PathPrefix $submodulePath
     }
 
     return @($paths | Sort-Object -Unique)
@@ -460,19 +442,19 @@ function Invoke-SharedLibraryGate {
     }
 
     Write-Host "SharedLibraryGate: active plan 命中共享库路径，正在执行只读回灌门禁..."
-    $gateArgs = @(
-        '-ProjectRoot', $RepoRoot,
-        '-SharedLibraryConfigPath', $sharedLibraryConfigPath,
-        '-ParentOutputPath', $currentPath,
-        '-ResultJsonPath', $sharedLibraryGateResultJsonPath
-    )
+    $gateParameters = @{
+        ProjectRoot = $RepoRoot
+        SharedLibraryConfigPath = $sharedLibraryConfigPath
+        ParentOutputPath = $currentPath
+        ResultJsonPath = $sharedLibraryGateResultJsonPath
+    }
     if ($AllowDirtySubmodule.IsPresent) {
-        $gateArgs += '-AllowDirtySubmodule'
+        $gateParameters.AllowDirtySubmodule = $true
     }
     if ($AllowPointerUpdate.IsPresent) {
-        $gateArgs += '-AllowPointerUpdate'
+        $gateParameters.AllowPointerUpdate = $true
     }
-    & $sharedLibraryCheckScript @gateArgs
+    & $sharedLibraryCheckScript @gateParameters
     if ($LASTEXITCODE -ne 0) {
         throw "共享库回灌门禁阻断。ResultJsonPath=$sharedLibraryGateResultJsonPath"
     }

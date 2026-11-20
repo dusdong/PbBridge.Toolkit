@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.7.0
+# PbBridge-TemplateVersion: 7.7.1
 param(
     [string]$ProjectRoot = "",
     [string]$SharedLibraryPath,
@@ -277,6 +277,13 @@ $effectiveExcludeLibrary = if (@($ExcludeLibrary).Count -gt 0) { @($ExcludeLibra
 $sharedRelativePath = ConvertTo-RepoRelativePath -RepoRoot $projectRootFull -PathValue $sharedLibraryFullPath
 
 if ($effectiveEvidenceMode -eq "consumer") {
+    $workspaceResults = @(Get-ObjectPropertyValue -InputObject $configuredEntry -Name "workspaceResults")
+    if ($workspaceResults.Count -gt 1 -and
+        [string]::IsNullOrWhiteSpace($ParentOutputPath) -and
+        [string]::IsNullOrWhiteSpace($configuredParentOutputPath)) {
+        throw '共享库配置包含多个父项目工作区，请通过 -ParentOutputPath 指定本次父项目证据目录。'
+    }
+
     $parentManifestPath = Join-Path $parentOutputFullPath "manifest.json"
     $parentVerifyPath = Join-Path $parentOutputFullPath "verify.json"
     $parentReportPath = Join-Path $parentOutputFullPath "report.md"

@@ -18,19 +18,19 @@ description: 当用户在 PowerBuilder IDE 编译完成后，需要整理、预�
 先预览，不移动文件：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\move-pb-build-output.ps1 -WhatIf
+pwsh -NoProfile -File .\scripts\move-pb-build-output.ps1 -WhatIf
 ```
 
 用户确认预览结果后，再正式移动：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\move-pb-build-output.ps1
+pwsh -NoProfile -File .\scripts\move-pb-build-output.ps1
 ```
 
 需要审计结果时，使用：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\move-pb-build-output.ps1 -PassThru
+pwsh -NoProfile -File .\scripts\move-pb-build-output.ps1 -PassThru
 ```
 
 ## 移动边界

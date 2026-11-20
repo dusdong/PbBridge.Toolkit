@@ -17,14 +17,14 @@ pbbridge project health --workspace-name <name>
 包装脚本入口：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-project-health.ps1
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-project-health.ps1 -Compact
+pwsh -NoProfile -File .\scripts\pbbridge-project-health.ps1
+pwsh -NoProfile -File .\scripts\pbbridge-project-health.ps1 -Compact
 ```
 
 同仓多 PBW 项目必须使用当前 PBW 对应的命名工作区：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-project-health.ps1 -WorkspaceName kuaican
+pwsh -NoProfile -File .\scripts\pbbridge-project-health.ps1 -WorkspaceName kuaican
 ```
 
 如果用户明确要求刷新只读证据，优先使用：
@@ -37,7 +37,7 @@ pbbridge project health --refresh-readonly-evidence
 包装脚本仍可使用：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-project-health.ps1 -RefreshReadonlyEvidence
+pwsh -NoProfile -File .\scripts\pbbridge-project-health.ps1 -RefreshReadonlyEvidence
 ```
 
 2.11.0 起 `pbbridge workspace readonly-sync` 会执行 export、verify、report、source-hygiene 和 baseline refresh；这仍只是只读证据刷新，不代表可以 Apply、提交、推送或跳过 IDE 编译验收。

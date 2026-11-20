@@ -12,7 +12,7 @@
           "Ardalis.GuardClauses": "5.0.0",
           "Microsoft.Build.Locator": "1.10.12",
           "SharpIDE.MsBuildHost.Contracts": "1.0.0",
-          "StreamJsonRpc": "2.25.29"
+          "StreamJsonRpc": "2.26.10"
         },
         "runtime": {
           "SharpIDE.MsBuildHost.dll": {}
@@ -22,19 +22,21 @@
         "runtime": {
           "lib/net8.0/Ardalis.GuardClauses.dll": {
             "assemblyVersion": "5.0.0.0",
-            "fileVersion": "5.0.0.0"
+            "fileVersion": "5.0.0.0",
+            "localPath": "Ardalis.GuardClauses.dll"
           }
         }
       },
       "MessagePack/2.5.307": {
         "dependencies": {
           "MessagePack.Annotations": "2.5.307",
-          "Microsoft.NET.StringTools": "18.9.0-preview-26325-102"
+          "Microsoft.NET.StringTools": "18.10.0-1.26370.18"
         },
         "runtime": {
           "lib/net6.0/MessagePack.dll": {
             "assemblyVersion": "2.5.0.0",
-            "fileVersion": "2.5.307.27389"
+            "fileVersion": "2.5.307.27389",
+            "localPath": "MessagePack.dll"
           }
         }
       },
@@ -42,7 +44,8 @@
         "runtime": {
           "lib/netstandard2.0/MessagePack.Annotations.dll": {
             "assemblyVersion": "2.5.0.0",
-            "fileVersion": "2.5.307.27389"
+            "fileVersion": "2.5.307.27389",
+            "localPath": "MessagePack.Annotations.dll"
           }
         }
       },
@@ -50,15 +53,17 @@
         "runtime": {
           "lib/net8.0/Microsoft.Build.Locator.dll": {
             "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.10.12.43634"
+            "fileVersion": "1.10.12.43634",
+            "localPath": "Microsoft.Build.Locator.dll"
           }
         }
       },
-      "Microsoft.NET.StringTools/18.9.0-preview-26325-102": {
+      "Microsoft.NET.StringTools/18.10.0-1.26370.18": {
         "runtime": {
           "lib/net10.0/Microsoft.NET.StringTools.dll": {
             "assemblyVersion": "1.0.0.0",
-            "fileVersion": "18.9.0.32602"
+            "fileVersion": "18.10.0.37018",
+            "localPath": "Microsoft.NET.StringTools.dll"
           }
         }
       },
@@ -69,7 +74,8 @@
         "runtime": {
           "lib/net8.0/Microsoft.VisualStudio.Threading.dll": {
             "assemblyVersion": "17.14.0.0",
-            "fileVersion": "17.14.15.42505"
+            "fileVersion": "17.14.15.42505",
+            "localPath": "Microsoft.VisualStudio.Threading.dll"
           }
         }
       },
@@ -77,20 +83,22 @@
         "runtime": {
           "lib/net8.0/Microsoft.VisualStudio.Validation.dll": {
             "assemblyVersion": "17.13.0.0",
-            "fileVersion": "17.13.22.64880"
+            "fileVersion": "17.13.22.64880",
+            "localPath": "Microsoft.VisualStudio.Validation.dll"
           }
         }
       },
       "Nerdbank.MessagePack/1.2.4": {
         "dependencies": {
-          "Microsoft.NET.StringTools": "18.9.0-preview-26325-102",
+          "Microsoft.NET.StringTools": "18.10.0-1.26370.18",
           "Microsoft.VisualStudio.Validation": "17.13.22",
           "PolyType": "1.3.1"
         },
         "runtime": {
           "lib/net9.0/Nerdbank.MessagePack.dll": {
             "assemblyVersion": "1.2.0.0",
-            "fileVersion": "1.2.4.23144"
+            "fileVersion": "1.2.4.23144",
+            "localPath": "Nerdbank.MessagePack.dll"
           }
         }
       },
@@ -102,7 +110,8 @@
         "runtime": {
           "lib/net8.0/Nerdbank.Streams.dll": {
             "assemblyVersion": "2.13.0.0",
-            "fileVersion": "2.13.16.50458"
+            "fileVersion": "2.13.16.50458",
+            "localPath": "Nerdbank.Streams.dll"
           }
         }
       },
@@ -110,7 +119,8 @@
         "runtime": {
           "lib/net6.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "13.0.0.0",
-            "fileVersion": "13.0.3.27908"
+            "fileVersion": "13.0.3.27908",
+            "localPath": "Newtonsoft.Json.dll"
           }
         }
       },
@@ -118,11 +128,12 @@
         "runtime": {
           "lib/net10.0/PolyType.dll": {
             "assemblyVersion": "1.3.0.0",
-            "fileVersion": "1.3.1.43143"
+            "fileVersion": "1.3.1.43143",
+            "localPath": "PolyType.dll"
           }
         }
       },
-      "StreamJsonRpc/2.25.29": {
+      "StreamJsonRpc/2.26.10": {
         "dependencies": {
           "MessagePack": "2.5.307",
           "Microsoft.VisualStudio.Threading.Only": "17.14.15",
@@ -133,14 +144,15 @@
         },
         "runtime": {
           "lib/net9.0/StreamJsonRpc.dll": {
-            "assemblyVersion": "2.25.0.0",
-            "fileVersion": "2.25.29.13100"
+            "assemblyVersion": "2.26.0.0",
+            "fileVersion": "2.26.10.17340",
+            "localPath": "StreamJsonRpc.dll"
           }
         }
       },
       "SharpIDE.MsBuildHost.Contracts/1.0.0": {
         "dependencies": {
-          "StreamJsonRpc": "2.25.29"
+          "StreamJsonRpc": "2.26.10"
         },
         "runtime": {
           "SharpIDE.MsBuildHost.Contracts.dll": {
@@ -185,12 +197,12 @@
       "path": "microsoft.build.locator/1.10.12",
       "hashPath": "microsoft.build.locator.1.10.12.nupkg.sha512"
     },
-    "Microsoft.NET.StringTools/18.9.0-preview-26325-102": {
+    "Microsoft.NET.StringTools/18.10.0-1.26370.18": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-khSNj5Kkk09IZhf9X7iEgswbYu8z9AE5HmtStYM0ayqzk7/6TR/kI1Ug6kcI2ZpLjQKI9Dfz4ujivzp5K+gn1w==",
-      "path": "microsoft.net.stringtools/18.9.0-preview-26325-102",
-      "hashPath": "microsoft.net.stringtools.18.9.0-preview-26325-102.nupkg.sha512"
+      "sha512": "sha512-DFzevt3Bnfa1GbmDX8y2Wk5/aCZOKCEMnWqFZbKiATaNlOJpXKdTGe8GFvgcIpnKPx6QTUUbMK2gv7kWnx7z1Q==",
+      "path": "microsoft.net.stringtools/18.10.0-1.26370.18",
+      "hashPath": "microsoft.net.stringtools.18.10.0-1.26370.18.nupkg.sha512"
     },
     "Microsoft.VisualStudio.Threading.Only/17.14.15": {
       "type": "package",
@@ -234,12 +246,12 @@
       "path": "polytype/1.3.1",
       "hashPath": "polytype.1.3.1.nupkg.sha512"
     },
-    "StreamJsonRpc/2.25.29": {
+    "StreamJsonRpc/2.26.10": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ebP0ScWRtbd1EWayLRJ6bjM7aPwYZoJIIU1DApmn/cYl2dydR9f4p6Mj3eY77qzAywy6IbZWB9sJPSWeO5hmrg==",
-      "path": "streamjsonrpc/2.25.29",
-      "hashPath": "streamjsonrpc.2.25.29.nupkg.sha512"
+      "sha512": "sha512-RJbK3eUyK90fr9v72pBOmzARGJFf12EswZbWLqnylSTvAVjQ/wKWhMjTWCBqi5iXk/ao2PYQLSa79+ScyMO+/g==",
+      "path": "streamjsonrpc/2.26.10",
+      "hashPath": "streamjsonrpc.2.26.10.nupkg.sha512"
     },
     "SharpIDE.MsBuildHost.Contracts/1.0.0": {
       "type": "project",

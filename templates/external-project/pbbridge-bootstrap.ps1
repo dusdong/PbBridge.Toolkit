@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.7.0
+# PbBridge-TemplateVersion: 7.7.1
 param(
     [Alias('ProjectRoot')]
     [string]$RepoRoot = "",
@@ -31,13 +31,22 @@ function Invoke-CliJson {
         [Parameter(Mandatory = $true)][string]$Label
     )
 
-    $output = & $CliExe @Arguments 2>&1
-    $exitCode = $LASTEXITCODE
-    $text = (($output | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine).Trim()
-    if ($exitCode -ne 0) {
-        throw "$Label 失败，退出码：$exitCode。输出：$text"
+    $workingDirectory = $ExecutionContext.SessionState.Path.CurrentFileSystemLocation.ProviderPath
+    $result = Invoke-PbBridgeNativeCommand -FilePath $CliExe -Arguments $Arguments `
+        -WorkingDirectory $workingDirectory -CaptureStdout -StandardOutputEncoding ([Text.Encoding]::UTF8)
+    if ($result.exitCode -ne 0) {
+        $message = "$Label 失败，退出码：$($result.exitCode)。"
+        if (-not [string]::IsNullOrWhiteSpace($result.stdout)) {
+            $message += "输出：$($result.stdout.TrimEnd())"
+        }
+        [Console]::Error.WriteLine($message)
+        exit $result.exitCode
     }
 
+    $text = $result.stdout
+    if ([string]::IsNullOrWhiteSpace($text)) {
+        throw "$Label 输出不是有效 JSON。stdout 为空。"
+    }
     try {
         return $text | ConvertFrom-Json
     }

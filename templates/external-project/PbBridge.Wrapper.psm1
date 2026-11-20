@@ -129,12 +129,12 @@ function Assert-PbBridgeWorkspaceId {
 function Invoke-PbBridgeCliHelp {
     <#
     .SYNOPSIS 转发 CLI help。
-    .DESCRIPTION 解析受管 runtime 后流式执行指定 CLI help 参数并保留退出码。
+    .DESCRIPTION 在调用方控制台中执行指定 CLI help，把帮助交给 PowerShell success stream 并保留退出码。
     .PARAMETER ProjectRoot 外部项目根目录。
     .PARAMETER Arguments CLI 参数。
     .EXAMPLE Invoke-PbBridgeCliHelp -ProjectRoot '.' -Arguments @('doctor','--help')
-    .OUTPUTS None
-    .NOTES 该函数按 CLI 退出码结束 wrapper 进程。
+    .OUTPUTS System.String
+    .NOTES 该函数按 CLI 退出码结束 wrapper。
     #>
     [CmdletBinding()]
     param(
@@ -148,9 +148,8 @@ function Invoke-PbBridgeCliHelp {
 
     $root = Resolve-TemplateProjectRoot -ExplicitRoot $ProjectRoot
     $cliPath = Resolve-PbBridgeCliPath -ProjectRoot $root
-    $result = Invoke-PbBridgeNativeCommand -FilePath $cliPath -Arguments $Arguments -WorkingDirectory $root -Capture
-    if (-not [string]::IsNullOrEmpty($result.stdout)) { [Console]::Out.Write($result.stdout) }
-    if (-not [string]::IsNullOrEmpty($result.stderr)) { [Console]::Error.Write($result.stderr) }
+    $result = Invoke-PbBridgeNativeCommand -FilePath $cliPath -Arguments $Arguments -WorkingDirectory $root `
+        -CaptureStdout -UseCallerConsole -StandardOutputEncoding ([Console]::OutputEncoding)
     Complete-PbBridgeNativeCommand -Result $result
 }
 
@@ -241,6 +240,8 @@ function Invoke-PbBridgeNativeCommand {
     .PARAMETER WorkingDirectory 工作目录。
     .PARAMETER Capture 捕获 stdout/stderr，而不是直接流式传播。
     .PARAMETER CaptureStdout 仅捕获 stdout；stderr 继续实时写入继承句柄。
+    .PARAMETER UseCallerConsole 保留进程与调用方控制台的连接，使 CLI 帮助使用宿主代码页。
+    .PARAMETER StandardOutputEncoding 指定捕获 stdout 时的解码编码。省略时沿用进程默认编码。
     .EXAMPLE Invoke-PbBridgeNativeCommand -FilePath 'pwsh' -Arguments @('-NoProfile','-Command','exit 0')
     .OUTPUTS System.Management.Automation.PSCustomObject
     .NOTES 返回退出码，不解析业务 JSON。
@@ -263,15 +264,25 @@ function Invoke-PbBridgeNativeCommand {
         [switch]$Capture,
 
         [Parameter(ParameterSetName = 'CaptureStdout')]
-        [switch]$CaptureStdout
+        [switch]$CaptureStdout,
+
+        [Parameter(ParameterSetName = 'CaptureStdout')]
+        [switch]$UseCallerConsole,
+
+        [Parameter(ParameterSetName = 'CaptureAll')]
+        [Parameter(ParameterSetName = 'CaptureStdout')]
+        [Text.Encoding]$StandardOutputEncoding
     )
 
     $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
     $startInfo.FileName = $FilePath
     $startInfo.UseShellExecute = $false
-    $startInfo.CreateNoWindow = $true
+    $startInfo.CreateNoWindow = -not $UseCallerConsole.IsPresent
     $startInfo.RedirectStandardOutput = $Capture.IsPresent -or $CaptureStdout.IsPresent
     $startInfo.RedirectStandardError = $Capture.IsPresent
+    if ($PSBoundParameters.ContainsKey('StandardOutputEncoding')) {
+        $startInfo.StandardOutputEncoding = $StandardOutputEncoding
+    }
     if (-not [string]::IsNullOrWhiteSpace($WorkingDirectory)) {
         $startInfo.WorkingDirectory = [System.IO.Path]::GetFullPath($WorkingDirectory)
     }

@@ -7,7 +7,7 @@ description: Use when reading, explaining, writing, reviewing, refactoring, or m
 
 使用本技能处理 PowerBuilder 与 PowerScript 代码。优先保持旧工程风格，避免把 C#、JavaScript 或现代 Basic 习惯误套到 PowerScript。
 
-当前项目默认目标环境是 PowerBuilder 9.x。项目内 PowerScript 全文手册主要来自 PB Classic 12.5，只能作为语言参考；不能确认 PB9 支持的 API、属性、对象和运行时行为必须标为版本敏感。
+先确认实际 workspace 的 PowerBuilder 版本。PowerScript 全文手册主要来自 PB Classic 12.5，只能作为语言参考；对无法确认目标版本支持的 API、属性、对象和运行时行为标明需在目标版本验证。
 
 ## 使用流程
 
@@ -16,7 +16,7 @@ description: Use when reading, explaining, writing, reviewing, refactoring, or m
    - 语法、声明、事件、对象生命周期：读 `references/powerscript-速查.md`。
    - 保留字、运算符、声明参数、函数名：读对应 `references/powerscript-*.md`。
    - 本项目工程习惯、编码和迁移注意事项：读 `references/powerbuilder-项目约定.md`。
-2. 需要完整上下文时，再查项目内全文手册：
+2. 外部项目可直接使用本技能附带的 `references/`。只有在维护 `Powerbuilder.IDE` 父仓且需要完整上下文时，才在父仓根目录查阅：
    - `docs/reference/powerscript/manual/手法手册.md`
    - `docs/reference/powerscript/manual/附录-表格全集.md`
 3. 修改 `.sru/.srw` 前，先确认文件编码；PowerBuilder 旧源码常见 ANSI/GBK，避免无意改成 UTF-8 后破坏中文或二进制片段。
@@ -37,7 +37,7 @@ description: Use when reading, explaining, writing, reviewing, refactoring, or m
 
 ## 校验命令
 
-PowerScript 手册由本项目维护，不依赖外部仓库：
+以下命令仅在 `Powerbuilder.IDE` 父仓根目录运行，需要 npm 及父仓自带的手册校验工具。
 
 ```bash
 npm --prefix docs/reference/powerscript/tools/powerscript-manual run validate

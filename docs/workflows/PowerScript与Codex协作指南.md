@@ -17,22 +17,22 @@ PowerScript 资料的最终使用目标是：
 
 当任务涉及 `.sr*` 或 PowerScript 时，Codex 应按下面顺序读取：
 
-1. `CODEX-START.md`
-2. `skills/pbbridge-cli/SKILL.md`
-3. `skills/powerbuilder-powerscript/SKILL.md`
-4. `syntax/powerscript-language-summary.md`
-5. `syntax/powerscript-pb9-compatibility.md`
-6. 按任务读取 `skills/powerbuilder-powerscript/references/` 下的速查和示例
+1. [Codex 启动入口](../../CODEX-START.md)
+2. [PbBridge CLI 技能](../../skills/pbbridge-cli/SKILL.md)
+3. [PowerBuilder / PowerScript 技能](../../skills/powerbuilder-powerscript/SKILL.md)
+4. [PowerScript 速查](../../skills/powerbuilder-powerscript/references/powerscript-速查.md)
+5. [PowerScript PB9 兼容边界](../../skills/powerbuilder-powerscript/references/powerscript-pb9-兼容边界.md)
 
 如果任务是代码审查，再读取：
 
-1. `syntax/powerscript-review-checklist.md`
-2. `docs/workflows/AI协作完整性审查模板.md`
+1. [本指南的审查重点](#5-审查重点)
+2. [PowerScript 工作示例中的事务审查](../../skills/powerbuilder-powerscript/references/powerscript-示例.md)
+3. [AI 协作完整性审查模板](AI协作完整性审查模板.md)
 
 如果任务是迁移，再读取：
 
-1. `syntax/powerscript-migration-guide.md`
-2. `skills/powerbuilder-powerscript/references/powerscript-示例.md`
+1. [PowerScript 工作示例中的 C# / Avalonia 迁移](../../skills/powerbuilder-powerscript/references/powerscript-示例.md)
+2. [PowerBuilder 项目约定](../../skills/powerbuilder-powerscript/references/powerbuilder-项目约定.md)
 
 ## 3. 阅读真实 `.sr*`
 

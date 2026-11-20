@@ -2,14 +2,16 @@
 > 当前 toolkit 固定提供 `CLI win-x86 + IDE win-x64` 的 Windows 运行时组合；正式写回支持矩阵仍以父仓库事实源为准。
 # DataWindow 分类与 PB9 验收
 
+当前使用范围以7.7.0 发布说明（父仓 `docs/使用手册/93-7.7.0发布说明.md`，不随包分发）为准。下列 P13/P12/P04 是 7.6.0 的历史验收记录，不能作为 7.7.0 的完整 ERP、人工 IDE 或现场验收依据。
+
 ## PB760-P13：当前人工验收收口（2026-10-28）
 
-PB9 IDE构建：验收通过（所有者确认）；物业业务实际验收：验收通过（所有者确认）。两项以owner-attested记录，不再索要用户已豁免的路径/日志或session关联；其他11项自动化通过，包含P12实际数据库原件重核。3.4完成、任务12/12，formalAuthorization=false、publishable=false。本包没有重跑数据库或取得新的原生日志；详情及交接见[当前发布入口](93-7.6.0发布说明.md)。下文P12/P04仍为历史实测范围。
+PB9 IDE构建：验收通过（所有者确认）；物业业务实际验收：验收通过（所有者确认）。两项以owner-attested记录，不再索要用户已豁免的路径/日志或session关联；其他11项自动化通过，包含P12实际数据库原件重核。3.4完成、任务12/12，formalAuthorization=false、publishable=false。本包没有重跑数据库或取得新的原生日志；详情及交接见7.6.0 历史发布记录（父仓 `docs/使用手册/archive/releases/93-7.6.0发布说明.md`，不随包分发）。下文P12/P04仍为历史实测范围。
 ## 历史PB760-P12：新PB9数据库实证（2026-10-27）
 
 P04原件已由所有者清理，其历史缺失保持。P12在新独占schema执行PB9 x86/ODBC17实测：21项原断言及3项新增负向断言通过，参数化Retrieve返回id=2/label=p12-two，坏Create和坏列Retrieve均返回-1并保留原错误。新原件为`PB760-P12-20261027/native/run-04/native-results.txt`（CP936）；PBVM90来自不变候选，PBODB90来自已安装PB9 9.0.3.8836，32位驱动实际加载Hash另存。schema按对象ID、时间、token、元数据及内容核验清理；真实SQL反例证明错误ID/内容变化拒绝清理。
 
-新显式任务参数保留P04默认入口，详见[生产发布说明](11-生产发布说明.md)及[P12交接](../../.pbbridge/local/task-packages/PB760-P12-native-business-20261027/handoff/candidate-v01-handoff.md)。当前消费者11/13项通过，IDE与owner仍未验，3.4不勾选；71项组件测试不代替现场业务验收。下文旧包描述只保留历史覆盖。
+新显式任务参数保留P04默认入口，详见生产发布说明（父仓 `docs/使用手册/11-生产发布说明.md`，不随包分发）及P12 历史交接（当时路径为 `.pbbridge/local/task-packages/PB760-P12-native-business-20261027/handoff/candidate-v01-handoff.md`，本检出未保留；不作为当前操作前置）。当前消费者11/13项通过，IDE与owner仍未验，3.4不勾选；71项组件测试不代替现场业务验收。下文旧包描述只保留历史覆盖。
 
 `datawindow inspect` 与 `datawindow validate` 保留既有字段，并追加 `sourceDefinitionKind`、`parseCompleteness`、`classificationEvidence[]` 和 `populationUsage`。直接 `.srd` 与 object-key 输入共用解析。没有可信调用上下文时用法为 `unknown`；窗口没有 Retrieve、用户声明 memory-fill 或 SQL 为空，都不能豁免定义检查。
 
@@ -36,10 +38,13 @@ SQL Server / inline / mock profile 元数据检查与真实数据库执行分别
 
 V8 使用 `delivery close-loop ... --database-profile <json> [--database-profile-id <id>]` 显式请求；continue 从 preflight 恢复该选择，配置内容进入 freshness facts。显式数据库校验不复用离线缓存。逐项 check 与 blocked item 保留 `diagnosticField`，check 另保留归因和 evidence 路径。
 
-本包 PB9 样例使用 9.0.3.8836 x86，实际加载 `pbodb90.dll` 与 32 位 ODBC Driver 17。合成 external 实际 Create、InsertRow、SetItem、GetItem 与列类型检查成立；授权测试库中的唯一合成 schema 实际参数化 Retrieve 返回预期行，缺失列负例实际返回 -1。资源创建前确认不存在，结束后按归属检查删除，既有表元数据前后摘要相同。确切版本、模块哈希、输入、运行器失败历史及清理查询见本变更 证据索引（父仓 openspec/changes/archive/2026-10-30-fix-pbbridge-7-6-0-datawindow-validation/evidence-index.md）。
+本包 PB9 样例使用 9.0.3.8836 x86，实际加载 `pbodb90.dll` 与 32 位 ODBC Driver 17。合成 external 实际 Create、InsertRow、SetItem、GetItem 与列类型检查成立；授权测试库中的唯一合成 schema 实际参数化 Retrieve 返回预期行，缺失列负例实际返回 -1。资源创建前确认不存在，结束后按归属检查删除，既有表元数据前后摘要相同。确切版本、模块哈希、输入、运行器失败历史及清理查询见本变更 证据索引（父仓 `openspec/changes/archive/2026-10-30-fix-pbbridge-7-6-0-datawindow-validation/evidence-index.md`，不随包分发）。
 
 复跑需在本包输出根准备新的短目录；先构建 `scripts/pb9-datawindow-validation/DataWindowNative.csproj` 的 x86 工具，以新的唯一 schema 生成合成 PBL/EXE，再调用 `Invoke-NativeDataWindow.ps1`。脚本限定既定授权目标、加密凭据引用和新结果目录；其他环境须独立授权并调整边界。不可把旧目录当作可覆盖的模板。
 
 实际支持结论只覆盖冻结候选、合成样例及此授权测试对象；其他 PB9 驱动、PB IDE/Full Build、业务验收、正式消费项目、Toolkit Release、Git 交付和部署保持未验证或未执行。
 
 现有 DataWindow semantic diff 对没有 retrieve 的 external 仍可能输出 `retrieve:unknown` warning；本包未将该结果称为完整语义验证。写回反导另以整个源码文本仅统一行尾后的哈希逐对象核验，目标变更及四个非目标对象均有明确数量的证据。生产流程记录的 staging 可再生二进制清理与必需证据缺失分别记账，不回填原清理路径。
+
+
+[返回文档首页](../README.md)

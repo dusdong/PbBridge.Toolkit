@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.7.0
+# PbBridge-TemplateVersion: 7.7.1
 param(
     [string]$ProjectRoot = "",
     [string]$WorkspaceName = "",
@@ -64,8 +64,8 @@ function Get-ManagedWorkspaceNames {
 
     return @(Get-ChildItem -LiteralPath $workspacesRoot -Directory -ErrorAction SilentlyContinue |
         Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'workspace.json') -PathType Leaf } |
-        ForEach-Object { $_.Name.Trim().ToLowerInvariant() } |
-        Sort-Object -Unique)
+        ForEach-Object Name |
+        Sort-Object { $_.Trim().ToLowerInvariant() } -Unique)
 }
 
 function Read-JsonFile {
@@ -87,6 +87,41 @@ function Get-JsonProperty {
     }
 
     return $property.Value
+}
+
+function ConvertTo-ProjectPath {
+    param([string]$Root, [string]$FullPath)
+
+    $relative = [System.IO.Path]::GetRelativePath($Root, $FullPath).Replace('\', '/')
+    if ([System.IO.Path]::IsPathRooted($relative) -or $relative -eq '..' -or $relative.StartsWith('../')) {
+        return $FullPath.Replace('\', '/')
+    }
+    return $relative
+}
+
+function Get-WorkspaceEvidenceDirectory {
+    param([string]$Root, [string]$Name)
+
+    $workspaceRoot = Get-WorkspaceRoot -Root $Root -Name $Name
+    $registrationPath = Join-Path $workspaceRoot 'workspace.json'
+    if (Test-Path -LiteralPath $registrationPath -PathType Leaf) {
+        $registration = Read-JsonFile -Path $registrationPath
+        $registeredManifest = [string](Get-JsonProperty -Object $registration -Name 'manifestPath')
+        if (-not [string]::IsNullOrWhiteSpace($registeredManifest)) {
+            $registeredFullPath = Resolve-FullPath -BasePath $Root -PathValue $registeredManifest
+            $projectPath = ConvertTo-ProjectPath -Root $Root -FullPath $registeredFullPath
+            $registeredDirectory = [System.IO.Path]::GetDirectoryName($registeredFullPath)
+            if (-not [System.IO.Path]::IsPathRooted($projectPath) -and $registeredDirectory) {
+                $canonicalManifest = Join-Path $registeredDirectory 'manifest.json'
+                # 由平台的路径比较规则判断两个文件名是否等价。
+                if ([System.IO.Path]::GetRelativePath($canonicalManifest, $registeredFullPath) -ceq '.') {
+                    return $registeredDirectory
+                }
+            }
+        }
+    }
+
+    return Join-Path $workspaceRoot 'artifacts\pbbridge'
 }
 
 function ConvertTo-NormalizedPath {
@@ -201,9 +236,19 @@ function Test-ManifestCoversPath {
 }
 
 $repoRoot = Resolve-ProjectRoot -ExplicitRoot $ProjectRoot
-$workspaceRootName = if ([string]::IsNullOrWhiteSpace($WorkspaceName)) { 'default' } else { $WorkspaceName.Trim().ToLowerInvariant() }
-if ([string]::IsNullOrWhiteSpace($ParentArtifactsPath)) {
-    $ParentArtifactsPath = Join-Path (Get-WorkspaceRoot -Root $repoRoot -Name $workspaceRootName) 'artifacts\pbbridge'
+$managedWorkspaceNames = @(Get-ManagedWorkspaceNames -Root $repoRoot)
+$hasMultipleParentWorkspaces = $managedWorkspaceNames.Count -gt 1
+$parentArtifactsFullPath = if (-not [string]::IsNullOrWhiteSpace($ParentArtifactsPath)) {
+    Resolve-FullPath -BasePath $repoRoot -PathValue $ParentArtifactsPath
+}
+elseif (-not [string]::IsNullOrWhiteSpace($WorkspaceName)) {
+    $normalizedName = $WorkspaceName.Trim().ToLowerInvariant()
+    $registeredName = $managedWorkspaceNames | Where-Object { $_.Trim() -eq $normalizedName } | Select-Object -First 1
+    Get-WorkspaceEvidenceDirectory -Root $repoRoot -Name ($registeredName ?? $normalizedName)
+}
+elseif (-not $hasMultipleParentWorkspaces) {
+    $onlyWorkspace = if ($managedWorkspaceNames.Count -eq 1) { $managedWorkspaceNames[0] } else { 'default' }
+    Get-WorkspaceEvidenceDirectory -Root $repoRoot -Name $onlyWorkspace
 }
 if ([string]::IsNullOrWhiteSpace($ResultJsonPath)) {
     $ResultJsonPath = Join-Path $repoRoot '.pbbridge\shared-libraries.init.json'
@@ -212,12 +257,25 @@ if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
     $ConfigPath = Join-Path $repoRoot '.pbbridge\shared-libraries.json'
 }
 
-$parentArtifactsFullPath = Resolve-FullPath -BasePath $repoRoot -PathValue $ParentArtifactsPath
 $resultPath = Resolve-FullPath -BasePath $repoRoot -PathValue $ResultJsonPath
 $configFullPath = Resolve-FullPath -BasePath $repoRoot -PathValue $ConfigPath
-$manifestPath = Join-Path $parentArtifactsFullPath 'manifest.json'
-$manifest = if (Test-Path -LiteralPath $manifestPath -PathType Leaf) { Read-JsonFile -Path $manifestPath } else { $null }
-$managedWorkspaceNames = @(Get-ManagedWorkspaceNames -Root $repoRoot)
+if ([System.IO.Path]::GetRelativePath($configFullPath, $resultPath) -ceq '.') {
+    throw '初始化报告和正式配置必须使用不同路径，请分别指定 -ResultJsonPath 和 -ConfigPath。'
+}
+$manifestPath = if ($parentArtifactsFullPath) { Join-Path $parentArtifactsFullPath 'manifest.json' }
+$manifest = if ($manifestPath -and (Test-Path -LiteralPath $manifestPath -PathType Leaf)) { Read-JsonFile -Path $manifestPath }
+$parentOutputPath = if (-not $hasMultipleParentWorkspaces) {
+    ConvertTo-ProjectPath -Root $repoRoot -FullPath $parentArtifactsFullPath
+}
+$workspaceResults = if ($hasMultipleParentWorkspaces) {
+    foreach ($name in $managedWorkspaceNames) {
+        $workspaceId = $name.Trim().ToLowerInvariant()
+        [pscustomobject]@{
+            workspaceName = $workspaceId
+            resultJsonPath = ".pbbridge/workspaces/$workspaceId/state/shared-library-writeback-check.json"
+        }
+    }
+}
 $entries = [System.Collections.Generic.List[object]]::new()
 
 $candidatePaths = @(Get-GitmodulePaths -Root $repoRoot) + @(Get-CommonSharedLibraryPaths -Root $repoRoot) |
@@ -231,40 +289,49 @@ foreach ($path in @($candidatePaths)) {
     $pbw = @(Get-ChildItem -LiteralPath $fullPath -Filter '*.pbw' -File -ErrorAction SilentlyContinue | Select-Object -First 1)
     $pbt = @(Get-ChildItem -LiteralPath $fullPath -Filter '*.pbt' -File -ErrorAction SilentlyContinue | Select-Object -First 1)
     $hasWorkspace = @($pbw).Count -gt 0 -or @($pbt).Count -gt 0
-    $coveredByParent = Test-ManifestCoversPath -Manifest $manifest -RelativePath $path
+    $coveredByParent = if ($manifestPath) { Test-ManifestCoversPath -Manifest $manifest -RelativePath $path }
     $mode = if ($hasWorkspace) { 'self' } else { 'consumer' }
     $workspacePath = if (@($pbw).Count -gt 0) { $pbw[0].Name } elseif (@($pbt).Count -gt 0) { $pbt[0].Name } else { $null }
     $limitations = [System.Collections.Generic.List[string]]::new()
     $nextActions = [System.Collections.Generic.List[string]]::new()
+    if (-not $manifestPath) {
+        $limitations.Add('父项目有多个受管工作区，尚未选定并核对某一份父项目 manifest。') | Out-Null
+        $nextActions.Add('如需核对父项目 manifest，请传入 -WorkspaceName 或 -ParentArtifactsPath。') | Out-Null
+    }
     if (-not $hasWorkspace) {
         if ($coveredByParent) {
             $limitations.Add('未找到共享库独立 PBW/PBT；已按父项目 consumer evidence 草案处理。') | Out-Null
         }
-        else {
+        elseif ($manifestPath) {
             $limitations.Add('未找到共享库独立 PBW/PBT，父项目 manifest 也未覆盖该路径；仍按 consumer evidence 草案输出，需人工确认父项目 PBW/PBT 或 library-set 是否引用该共享库。') | Out-Null
+        }
+        else {
+            $limitations.Add('未找到共享库独立 PBW/PBT，已生成 consumer evidence 草案。') | Out-Null
         }
         $nextActions.Add('确认父项目 PBW/PBT、.pbbridge/library-set.json 或 readonly-sync 参数包含该共享库后，再将草案复制为 .pbbridge/shared-libraries.json。') | Out-Null
         $nextActions.Add("建议 readonly-sync 排除已有源码事实源的共享库：-ExcludeLibrary '$path/*'。") | Out-Null
     }
 
-    $workspaceResults = if ($managedWorkspaceNames.Count -gt 1) {
-        @($managedWorkspaceNames | ForEach-Object {
-            [pscustomobject]@{
-                workspaceName = $_
-                resultJsonPath = ".pbbridge/workspaces/$_/state/shared-library-writeback-check.json"
-            }
-        })
+    $sharedWorkspaceNames = @(Get-ManagedWorkspaceNames -Root $fullPath)
+    $sharedOutputPath = if ($sharedWorkspaceNames.Count -gt 1) {
+        $limitations.Add("共享库 $path 的受管工作区候选：$($sharedWorkspaceNames -join '、')。") | Out-Null
+        if ($hasWorkspace) {
+            $nextActions.Add("采用草案前，请为共享库 $path 填写所选工作区的 sharedOutputPath。") | Out-Null
+        }
     }
     else {
-        @()
+        $sharedWorkspace = if ($sharedWorkspaceNames.Count -eq 1) { $sharedWorkspaceNames[0] } else { 'default' }
+        $sharedArtifacts = Get-WorkspaceEvidenceDirectory -Root $fullPath -Name $sharedWorkspace
+        ConvertTo-ProjectPath -Root $repoRoot -FullPath $sharedArtifacts
     }
+    $libraryName = [System.IO.Path]::GetFileName($path.TrimEnd('/'))
     $entries.Add([pscustomobject]@{
-        name = [System.IO.Path]::GetFileName($path.TrimEnd('/'))
+        name = $libraryName
         path = $path
         evidenceMode = $mode
-        parentOutputPath = '.pbbridge/workspaces/default/artifacts/pbbridge'
-        sharedOutputPath = "$path/.pbbridge/workspaces/default/artifacts/pbbridge"
-        resultJsonPath = ".pbbridge/shared-library-writeback-check.$([System.IO.Path]::GetFileName($path.TrimEnd('/'))).json"
+        parentOutputPath = $parentOutputPath
+        sharedOutputPath = $sharedOutputPath
+        resultJsonPath = if (-not $hasMultipleParentWorkspaces) { ".pbbridge/shared-library-writeback-check.$libraryName.json" }
         workspaceResults = $workspaceResults
         workspacePath = $workspacePath
         sourceLayout = 'beside-pbl-src'
@@ -288,10 +355,10 @@ $config = [pscustomobject]@{
             name = $_.name
             path = $_.path
             evidenceMode = $_.evidenceMode
-            parentOutputPath = if ($managedWorkspaceNames.Count -gt 1) { $null } else { $_.parentOutputPath }
+            parentOutputPath = $_.parentOutputPath
             sharedOutputPath = $_.sharedOutputPath
-            resultJsonPath = if ($managedWorkspaceNames.Count -gt 1) { $null } else { $_.resultJsonPath }
-            workspaceResults = if ($managedWorkspaceNames.Count -gt 1) { $_.workspaceResults } else { $null }
+            resultJsonPath = $_.resultJsonPath
+            workspaceResults = $_.workspaceResults
             workspacePath = $_.workspacePath
             sourceLayout = $_.sourceLayout
             scanScope = $_.scanScope
@@ -317,6 +384,10 @@ New-Item -ItemType Directory -Path (Split-Path -Parent $resultPath) -Force | Out
 $result | ConvertTo-Json -Depth 16 | Set-Content -LiteralPath $resultPath -Encoding utf8
 
 if ($Apply.IsPresent) {
+    $librariesNeedingOutput = @($entries | Where-Object { $_.evidenceMode -eq 'self' -and -not $_.sharedOutputPath })
+    if ($librariesNeedingOutput.Count -gt 0) {
+        throw "请审查初始化草案并逐库填写 sharedOutputPath 后再采用：$($librariesNeedingOutput.path -join '、')。"
+    }
     if ((Test-Path -LiteralPath $configFullPath -PathType Leaf) -and -not $Force.IsPresent) {
         throw "共享库配置已存在：$configFullPath。请审查后使用 -Force 覆盖。"
     }

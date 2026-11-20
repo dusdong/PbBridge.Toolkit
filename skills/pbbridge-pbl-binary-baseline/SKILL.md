@@ -19,16 +19,16 @@ description: 当用户说明 .pbl 变化来自 PowerBuilder 编译选项、proje
 
 ## 标准命令
 
-单 PBW 或 default 工作区：
+在消费项目根目录用 PowerShell Core 7.4+ 执行。将登记的 workspace ID 与对应 PBW 一并传入。餐饮管理的单库示例使用 `canyin` 和 `CanYin.pbw`。
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-binary-baseline.ps1 -WorkspacePath CanYin.pbw -PblPath cy_ht.pbl -ReasonCode powerbuilder-compile-options -Reason "PowerBuilder IDE compile options baseline"
+pwsh -NoProfile -File .\scripts\pbbridge-pbl-binary-baseline.ps1 -WorkspaceName canyin -WorkspacePath CanYin.pbw -PblPath cy_ht.pbl -ReasonCode powerbuilder-compile-options -Reason "PowerBuilder IDE compile options baseline"
 ```
 
-同仓多 PBW 必须显式传 `-WorkspaceName`：
+快餐管理使用 `kuaican` 和 `KuaiCan.pbw`。有多个 PBL 时，在已启动的 PowerShell Core 7.4+ 会话中直接调用脚本并传入数组。
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-binary-baseline.ps1 -WorkspaceName kuaican -WorkspacePath KuaiCan.pbw -PblPath kc_ht.pbl,kc_lptprn.pbl,kc_qt.pbl -ReasonCode powerbuilder-compile-options -Reason "PowerBuilder IDE compile options baseline"
+& .\scripts\pbbridge-pbl-binary-baseline.ps1 -WorkspaceName kuaican -WorkspacePath KuaiCan.pbw -PblPath @('kc_ht.pbl', 'kc_lptprn.pbl', 'kc_qt.pbl') -ReasonCode powerbuilder-compile-options -Reason "PowerBuilder IDE compile options baseline"
 ```
 
 支持的 `ReasonCode`：
@@ -61,8 +61,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-binary-baseline.
 登记后运行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-drift-remediation.ps1 -WorkspaceName <name>
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-release-check.ps1 -WorkspaceName <name> -AllowBlockedResult
+pwsh -NoProfile -File .\scripts\pbbridge-pbl-drift-remediation.ps1 -WorkspaceName <name>
+pwsh -NoProfile -File .\scripts\pbbridge-release-check.ps1 -WorkspaceName <name> -AllowBlockedResult
 ```
 
 期望结果：

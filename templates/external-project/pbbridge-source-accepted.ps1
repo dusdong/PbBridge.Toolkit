@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.7.0
+# PbBridge-TemplateVersion: 7.7.1
 param(
     [Alias('ProjectRoot')]
     [string]$RepoRoot = "",
@@ -34,12 +34,19 @@ if (-not (Test-Path -LiteralPath $importScript -PathType Leaf)) {
     throw "未找到 pbbridge-import-plan.ps1：$importScript"
 }
 
-$argsList = @('-RepoRoot', $RepoRoot, '-WorkspaceName', $WorkspaceName, '-BaselineOutputPath', $BaselineOutputPath, '-CurrentOutputPath', $CurrentOutputPath, '-SourceEncoding', $SourceEncoding, '-SourceOnlyAccepted')
-if (-not [string]::IsNullOrWhiteSpace($PlanJsonPath)) { $argsList += @('-PlanJsonPath', $PlanJsonPath) }
-if (-not [string]::IsNullOrWhiteSpace($ObjectKey)) { $argsList += @('-ObjectKey', $ObjectKey) }
-if ($UseExistingPlan.IsPresent) { $argsList += '-UseExistingPlan' }
-if ($AllowDirtySubmodule.IsPresent) { $argsList += '-AllowDirtySubmodule' }
-if ($AllowPointerUpdate.IsPresent) { $argsList += '-AllowPointerUpdate' }
+$planParameters = @{
+    RepoRoot = $RepoRoot
+    WorkspaceName = $WorkspaceName
+    BaselineOutputPath = $BaselineOutputPath
+    CurrentOutputPath = $CurrentOutputPath
+    SourceEncoding = $SourceEncoding
+    SourceOnlyAccepted = $true
+}
+if (-not [string]::IsNullOrWhiteSpace($PlanJsonPath)) { $planParameters.PlanJsonPath = $PlanJsonPath }
+if (-not [string]::IsNullOrWhiteSpace($ObjectKey)) { $planParameters.ObjectKey = $ObjectKey }
+if ($UseExistingPlan.IsPresent) { $planParameters.UseExistingPlan = $true }
+if ($AllowDirtySubmodule.IsPresent) { $planParameters.AllowDirtySubmodule = $true }
+if ($AllowPointerUpdate.IsPresent) { $planParameters.AllowPointerUpdate = $true }
 
-& $importScript @argsList
+& $importScript @planParameters
 exit $LASTEXITCODE

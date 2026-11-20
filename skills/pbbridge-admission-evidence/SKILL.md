@@ -16,23 +16,23 @@ description: 当用户要采集、验证或解释 PBSpyORCA candidate 支持矩�
 
 ## 默认流程
 
-1. 先确认当前仓库和目标证据目录。
+1. 先确认证据目录。采集和验证脚本位于 Powerbuilder.IDE 父仓根目录的 scripts/ 下，使用 PowerShell Core 7.4+，可复现验证还需要真实 x86 PBSpy/PBSDK runner。外部项目从已有证据与项目健康结果读取 admissionLevel。
 2. 运行采集脚本：
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\collect-pbspy-x86-admission-evidence.ps1 -AllowUnavailable
+pwsh -NoProfile -File .\scripts\collect-pbspy-x86-admission-evidence.ps1 -AllowUnavailable
 ```
 
 3. 离线验证失败证据包：
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-pbspy-x86-admission-evidence.ps1 -EvidenceRoot .\artifacts\ci\pbspy-x86-admission -AllowFailureEvidence
+pwsh -NoProfile -File .\scripts\validate-pbspy-x86-admission-evidence.ps1 -EvidenceRoot .\artifacts\ci\pbspy-x86-admission -AllowFailureEvidence
 ```
 
 4. 在真实 x86 PBSpy/PBSDK runner 上验证可复现 workflow：
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\check-pbspy-x86-admission-smoke.ps1 -RequireWorkflow
+pwsh -NoProfile -File .\scripts\check-pbspy-x86-admission-smoke.ps1 -RequireWorkflow
 ```
 
 5. 读取 `validation.json` 与 `smoke-summary.json`，只按 `admissionLevel` 解释状态。

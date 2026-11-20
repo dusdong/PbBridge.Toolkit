@@ -1,6 +1,6 @@
 {
   "schemaName": "pbbridge-external-project-template",
-  "templateVersion": "7.7.0",
+  "templateVersion": "7.7.1",
   "provenanceRegistry": "managed-provenance.json",
   "documentRules": "document-rules.json",
   "managedFiles": [

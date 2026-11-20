@@ -1,20 +1,20 @@
 {
-  "toolkitVersion": "7.7.0",
-  "productVersion": "7.7.0",
+  "toolkitVersion": "7.7.1",
+  "productVersion": "7.7.1",
   "developmentOnly": false,
   "candidatePreparation": false,
   "sourceAdoption": "existing-default",
   "qualification": "requires-independent-release-qualification",
   "omittedRuntimes": null,
-  "externalProjectTemplateVersion": "7.7.0",
-  "generatedAt": "2026-11-05T23:25:56.1035203+08:00",
+  "externalProjectTemplateVersion": "7.7.1",
+  "generatedAt": "2026-11-21T06:33:55.2382966+08:00",
   "runtimeInput": null,
   "runtime": {
     "cli": [
       {
         "platform": "win-x86",
         "executable": "runtime/cli/win-x86/PbBridge.Cli.exe",
-        "source": "artifacts/publish/cli/7.7.0/win-x86-self-contained",
+        "source": "artifacts/publish/cli/7.7.1/win-x86-self-contained",
         "purpose": "PowerBuilder .pbl/.sr* 导出、校验、报告、差异与导入协作入口；不承担 PB IDE 编译"
       }
     ],
@@ -37,7 +37,7 @@
     ]
   },
   "runtimeContract": {
-    "cliDoctorContractVersion": "7.7.0",
+    "cliDoctorContractVersion": "7.7.1",
     "orcaCandidateDoctorRequired": true,
     "requiredDoctorFields": [
       "adapterFamily",
@@ -60,8 +60,9 @@
   "documents": [
     "CODEX-START.md",
     "docs/README.md",
-    "docs/7.7.0发布说明.md",
+    "docs/7.7.1发布说明.md",
     "docs/getting-started/README.md",
+    "docs/getting-started/第一次完成一次业务变更.md",
     "docs/getting-started/V8交付证据闭环使用手册.md",
     "docs/getting-started/V8迁移说明.md",
     "docs/getting-started/快速开始.md",
@@ -83,6 +84,7 @@
     "docs/reference/自动写回支持矩阵与准入说明.md",
     "docs/reference/project-health-blocked清理指引.md",
     "docs/reference/Toolkit问题反馈模板.md",
+    "docs/reference/业务变更交付视图.md",
     "docs/history/README.md",
     "docs/history/历史版本索引.md",
     "docs/history/v6/6.0.0发布说明.md",
@@ -121,23 +123,7 @@
     "docs/history/3.7.0发布说明.md",
     "docs/history/3.6.0发布说明.md",
     "docs/history/3.5.0发布说明.md",
-    "docs/history/3.4.0发布说明.md",
-    "docs/history/3.3.0发布说明.md",
-    "docs/history/3.2.0发布说明.md",
-    "docs/history/3.1.0发布说明.md",
-    "docs/history/3.0.0发布说明.md",
-    "docs/history/2.12.1发布说明.md",
-    "docs/history/2.12.0发布说明.md",
-    "docs/history/2.11.0发布说明.md",
-    "docs/history/2.10.0发布说明.md",
-    "docs/history/2.9.0发布说明.md",
-    "docs/history/2.8.0发布说明.md",
-    "docs/history/2.7.3发布说明.md",
-    "docs/history/2.7.2发布说明.md",
-    "docs/history/2.7.1发布说明.md",
-    "docs/history/2.7.0发布说明.md",
-    "docs/history/2.6.1发布说明.md",
-    "docs/history/2.6.0发布说明.md"
+    "docs/history/3.4.0发布说明.md"
   ],
   "skills": [
     "skills/pbbridge-cli/SKILL.md",
@@ -166,11 +152,7 @@
   "syntax": [
     "syntax/pb9-language-summary.md",
     "syntax/pb-object-types.md",
-    "syntax/pb-ai-boundaries.md",
-    "syntax/powerscript-language-summary.md",
-    "syntax/powerscript-pb9-compatibility.md",
-    "syntax/powerscript-review-checklist.md",
-    "syntax/powerscript-migration-guide.md"
+    "syntax/pb-ai-boundaries.md"
   ],
   "templates": [
     "templates/external-project/AGENTS.md",

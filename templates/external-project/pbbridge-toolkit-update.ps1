@@ -1,14 +1,14 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.7.0
+# PbBridge-TemplateVersion: 7.7.1
 <#
 .SYNOPSIS
 检查或更新外部项目使用的 Toolkit 快照。
 .DESCRIPTION
 普通快进沿用受控更新；无共同祖先时必须选择刚 fetch 的远端分支头、通过契约校验并显式确认，才允许 detached HEAD 切换。
 .PARAMETER TargetCommit
-目标提交，必须为本次 fetch 的官方 main 本身或祖先的 40 位 SHA；不得回退或丢弃本地分叉。
+目标提交，必须为 40 位 SHA。普通快进可选择本次 fetch 的官方分支头或其祖先；历史断代只能选择该分支头。
 .PARAMETER RecoveryPurpose
 CompleteQualification（默认）要求完整发布材料；HistoricalRecovery 使用 7.5.3 原 ZIP。
 InstalledCandidateRecovery 仅允许清洁 7.6.0 候选到 7.6.1 普通快进，须提供 ToolkitRoot 和树外 RecoveryExtractionRoot；禁止混入发布 record/receipt/artifact 参数。
@@ -477,21 +477,27 @@ try {
                     $nextActions += "确认 Toolkit 远端存在 $Branch 分支。"
                 }
                 else {
-                    $remoteCommit = $remoteHead.stdout
+                    $fetchedRemoteCommit = $remoteHead.stdout
+                    $remoteCommit = $fetchedRemoteCommit
+                    $historyRelation = Get-ToolkitHistoryRelation -ToolkitRoot $toolkitRootFull -LocalCommit $localCommit -RemoteCommit $fetchedRemoteCommit
                     if ($TargetCommit) {
                         if ($TargetCommit -notmatch '^[0-9a-fA-F]{40}$') { throw 'toolkit-target-commit-invalid' }
-                        $ancestor=Invoke-ToolkitGit -WorkingDirectory $toolkitRootFull -Arguments @('merge-base','--is-ancestor',$TargetCommit,$remoteCommit)
+                        $ancestor=Invoke-ToolkitGit -WorkingDirectory $toolkitRootFull -Arguments @('merge-base','--is-ancestor',$TargetCommit,$fetchedRemoteCommit)
                         if ($ancestor.exitCode -ne 0) { throw 'toolkit-target-not-fetched-main-ancestor' }
-                        $remoteCommit=$TargetCommit.ToLowerInvariant()
+                        if ($historyRelation -ne 'unrelated' -and $TargetCommit -ine $fetchedRemoteCommit) {
+                            $remoteCommit=$TargetCommit.ToLowerInvariant()
+                            $historyRelation = Get-ToolkitHistoryRelation -ToolkitRoot $toolkitRootFull -LocalCommit $localCommit -RemoteCommit $remoteCommit
+                        }
                     }
-                    $verifiedTargetCommit=$remoteCommit
+                    if ($historyRelation -ne 'unrelated' -or $TargetCommit -ieq $fetchedRemoteCommit) {
+                        $verifiedTargetCommit=$remoteCommit
+                    }
                     $targetValidation=Test-ToolkitTargetContract -ToolkitRoot $toolkitRootFull -Commit $remoteCommit
                     if (-not $targetValidation.valid) { throw $targetValidation.summaryText }
                     $remoteVersionResult = Invoke-ToolkitGit -WorkingDirectory $toolkitRootFull -Arguments @("show", ($remoteCommit + ":VERSION"))
                     if ($remoteVersionResult.exitCode -eq 0) {
                         $remoteVersion = $remoteVersionResult.stdout
                     }
-                    $historyRelation = Get-ToolkitHistoryRelation -ToolkitRoot $toolkitRootFull -LocalCommit $localCommit -RemoteCommit $remoteCommit
                     $previousBuild = Get-PbToolkitSnapshotIdentity -ToolkitPath $toolkitRootFull -Commit $localCommit
                     $targetBuild = Get-PbToolkitSnapshotIdentity -ToolkitPath $toolkitRootFull -Commit $remoteCommit
                     if ($RecoveryPurpose -ceq 'InstalledCandidateRecovery') {
@@ -580,8 +586,8 @@ try {
                             $issues += New-ToolkitUpdateIssue -Code "toolkit-target-commit-required" -Severity "error" -Message "历史断代升级必须显式提供刚获取的远端分支头 TargetCommit。"
                             $nextActions += "审查远端分支头后，以 -TargetCommit <40-hex> 重新运行预检。"
                         }
-                        elseif ($TargetCommit -notmatch '^[0-9a-fA-F]{40}$' -or -not $TargetCommit.Equals($remoteCommit, [StringComparison]::OrdinalIgnoreCase)) {
-                            $issues += New-ToolkitUpdateIssue -Code "toolkit-target-not-remote-head" -Severity "error" -Message "TargetCommit 必须精确等于本次 fetch 的 $Remote/$Branch 头 $remoteCommit。"
+                        elseif ($TargetCommit -ine $fetchedRemoteCommit) {
+                            $issues += New-ToolkitUpdateIssue -Code "toolkit-target-not-remote-head" -Severity "error" -Message "TargetCommit 必须精确等于本次 fetch 的 $Remote/$Branch 头 $fetchedRemoteCommit。"
                             $nextActions += "不要使用任意本地或历史 commit；重新读取本次结果的 remoteCommit。"
                         }
                         else {
@@ -635,8 +641,16 @@ try {
     }
 }
 catch {
-    $issues += New-ToolkitUpdateIssue -Code "toolkit-update-exception" -Severity "error" -Message $_.Exception.Message
-    $nextActions += "保留当前 Toolkit 工作区，排查异常后重新运行本脚本。"
+    $reason = $_.Exception.Message
+    if ($historyRelation -eq 'unrelated' -and $reason -cin @('toolkit-target-commit-invalid', 'toolkit-target-not-fetched-main-ancestor')) {
+        $issues += New-ToolkitUpdateIssue -Code "toolkit-history-discontinuity" -Severity "warning" -Message "本地 Toolkit HEAD 与刚获取的远端分支头没有共同祖先。"
+        $issues += New-ToolkitUpdateIssue -Code "toolkit-target-not-remote-head" -Severity "error" -Message "TargetCommit 必须精确等于本次 fetch 的 $Remote/$Branch 头 $fetchedRemoteCommit。($reason)"
+        $nextActions += "重新读取本次结果的 remoteCommit 并显式选择该提交。"
+    }
+    else {
+        $issues += New-ToolkitUpdateIssue -Code "toolkit-update-exception" -Severity "error" -Message $reason
+        $nextActions += "保留当前 Toolkit 工作区，排查异常后重新运行本脚本。"
+    }
 }
 
 $resultArguments = @{

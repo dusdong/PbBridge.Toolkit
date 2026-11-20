@@ -6,10 +6,10 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost/5.9.0-1.26325.102": {
+      "Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost/5.11.0-1.26418.2": {
         "dependencies": {
           "Microsoft.Build.Locator": "1.10.2",
-          "Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts": "5.9.0-1.26325.102"
+          "Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts": "5.11.0-1.26418.2"
         },
         "runtime": {
           "Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll": {}
@@ -65,18 +65,18 @@
           }
         }
       },
-      "Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts/5.9.0-1.26325.102": {
+      "Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts/5.11.0-1.26418.2": {
         "runtime": {
           "Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll": {
-            "assemblyVersion": "5.9.0.0",
-            "fileVersion": "5.900.26.32602"
+            "assemblyVersion": "5.11.0.0",
+            "fileVersion": "5.1100.26.41802"
           }
         }
       }
     }
   },
   "libraries": {
-    "Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost/5.9.0-1.26325.102": {
+    "Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost/5.11.0-1.26418.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -88,7 +88,7 @@
       "path": "microsoft.build.locator/1.10.2",
       "hashPath": "microsoft.build.locator.1.10.2.nupkg.sha512"
     },
-    "Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts/5.9.0-1.26325.102": {
+    "Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts/5.11.0-1.26418.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

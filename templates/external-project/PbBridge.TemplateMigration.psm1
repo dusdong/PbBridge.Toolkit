@@ -4,7 +4,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$script:ProductVersion = '7.7.0'
+$script:ProductVersion = '7.7.1'
 $script:NormalizationProfile = 'powershell-text-v1'
 $script:SupportedSourceProductVersions = @(
     '7.6.2'
@@ -30,6 +30,7 @@ $script:SupportedSourceProductVersions = @(
     '7.5.3'
     '7.6.0'
     '7.6.1'
+    '7.7.0'
     $script:ProductVersion
 ) | Select-Object -Unique
 $script:ApprovedMigrationBootstrapPatchHashes = @{
@@ -990,6 +991,31 @@ function Restore-PbBridgeMigration {
     return $errors.ToArray()
 }
 
+function Get-PbBridgeRecoveryObservation {
+    param($Entry)
+
+    $target = $null
+    try {
+        $target = Get-Item -LiteralPath $Entry.targetPath -Force
+    }
+    catch [System.Management.Automation.ItemNotFoundException] {
+        # 原先缺失的路径必须实际不存在，目录或悬空链接也属于占用。
+    }
+    $restoredHash = if ($null -ne $target -and -not $target.PSIsContainer -and
+        (Test-Path -LiteralPath $Entry.targetPath -PathType Leaf)) {
+        Get-PbBridgeSha256 -Path $Entry.targetPath
+    }
+    [ordered]@{
+        restoredRawSha256 = $restoredHash
+        matchesOriginal = if ([bool]$Entry.existed) {
+            [string]$Entry.originalSha256 -match '^[0-9a-fA-F]{64}$' -and $restoredHash -eq $Entry.originalSha256
+        }
+        else {
+            $null -eq $target
+        }
+    }
+}
+
 function Write-PbBridgeJsonFile {
     param(
         [Parameter(Mandatory = $true)][string]$Path,
@@ -1003,6 +1029,191 @@ function Write-PbBridgeJsonFile {
     }
     $json = $Value | ConvertTo-Json -Depth $Depth
     [System.IO.File]::WriteAllText($Path, $json + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false))
+}
+
+function Write-PbBridgeMigrationTerminalAudit {
+    param([string]$Path, $Value)
+
+    $temporaryPath = Join-Path ([IO.Path]::GetDirectoryName($Path)) ('.result.{0}.tmp' -f [guid]::NewGuid().ToString('N'))
+    try {
+        Write-PbBridgeJsonFile -Path $temporaryPath -Value $Value
+        [IO.File]::Move($temporaryPath, $Path, $true)
+    }
+    finally {
+        [IO.File]::Delete($temporaryPath)
+    }
+}
+
+function Resolve-PbBridgeReportProtectedRoot {
+    param([string]$Path)
+
+    $full = [IO.Path]::GetFullPath($Path)
+    $resolved = $null
+    # 保留已清理的路径后缀，并继续查找更上层目录联接或符号链接。
+    for ($current = $full; $current; $current = [IO.Path]::GetDirectoryName($current)) {
+        try { $item = Get-Item -LiteralPath $current -Force -ErrorAction Stop }
+        catch [System.Management.Automation.ItemNotFoundException] { continue }
+        if ($null -eq $resolved) {
+            $resolved = [IO.Path]::GetFullPath([IO.Path]::GetRelativePath($current, $full), $item.FullName)
+        }
+        if ($item.LinkTarget) {
+            $suffix = [IO.Path]::GetRelativePath($item.FullName, $resolved)
+            $target = Resolve-PbBridgeReportProtectedRoot ($item.ResolveLinkTarget($true).FullName)
+            return [IO.Path]::GetFullPath($suffix, $target)
+        }
+    }
+    return $resolved ?? $full
+}
+
+function Get-PbBridgeReportProtectedPaths {
+    param([string]$ProjectRoot, [string]$ToolkitRoot, $Manifest)
+
+    $migrationRoot = Join-Path $ProjectRoot '.pbbridge/local/migrations'
+    Resolve-PbBridgeReportProtectedRoot $ToolkitRoot
+    Join-Path $ProjectRoot '.pbbridge/PbBridge.Toolkit'
+    foreach ($relative in @('.pbbridge/project.json', '.pbbridge/migration-policy.json')) {
+        Join-Path $ProjectRoot $relative
+    }
+    Join-Path $MigrationRoot 'index.json'
+    Join-Path $MigrationRoot 'transactions'
+    foreach ($entry in (Get-PbBridgeMigrationIndex -MigrationRoot $MigrationRoot).entries) {
+        Resolve-PbBridgeReportProtectedRoot ([string]$entry.transactionRoot)
+    }
+    foreach ($section in @('managedFiles', 'configurationTemplates')) {
+        if ($Manifest.PSObject.Properties[$section]) {
+            foreach ($entry in $Manifest.$section) {
+                # workspace.json is checked for every workspace in the path check.
+                if ([string]$entry.targetPath -notlike '*<workspace-id>*') { Join-Path $ProjectRoot ([string]$entry.targetPath) }
+            }
+        }
+    }
+
+    $git = Get-Command git -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+    $PSNativeCommandUseErrorActionPreference = $false
+    foreach ($root in @($ProjectRoot, $ToolkitRoot)) {
+        if ($git -and [IO.Directory]::Exists($root)) {
+            $directories = & $git.Source -C $root rev-parse --path-format=absolute --git-dir --git-common-dir 2>$null
+            if ($LASTEXITCODE -eq 0) {
+                foreach ($directory in $directories) { Resolve-PbBridgeReportProtectedRoot $directory }
+                continue
+            }
+        }
+        if (Test-Path -LiteralPath (Join-Path $root '.git')) { throw "无法解析 Git 管理目录：$root" }
+    }
+}
+
+function Get-PbBridgeMigrationReportFile {
+    param([string]$Path, [string]$ProjectRoot, [string[]]$ProtectedPaths)
+
+    $relative = [IO.Path]::GetRelativePath($ProjectRoot, $Path).Replace('\', '/')
+    if ($relative -eq '..' -or $relative.StartsWith('../') -or [IO.Path]::IsPathRooted($relative)) {
+        throw "migration-output-outside-project: $Path"
+    }
+    if ([IO.Path]::GetExtension($Path) -ine '.json' -or $relative -match '(?:^|/)\.git(?:/|$)' -or
+        $relative -match '^\.pbbridge/workspaces/[^/]+/workspace\.json(?:/|$)' -or
+        ($IsWindows -and $relative -match '[:<>"|?*\x00-\x1f]|[. ](?:/|$)|(?:^|/)(?:CON|PRN|AUX|NUL|COM[1-9¹²³]|LPT[1-9¹²³])(?:[.]|/|$)')) {
+        throw '路径必须指向独立的普通 JSON 文件。'
+    }
+    if ($ProtectedPaths.Count -gt 0) {
+        # Get-Item 展开 Windows 短文件名，Git 返回的管理路径也可能使用长文件名。
+        $comparisonPath = Join-Path (Get-Item -LiteralPath $ProjectRoot -Force).FullName $relative
+        $separator = [IO.Path]::DirectorySeparatorChar
+        foreach ($protected in $ProtectedPaths) {
+            $full = [IO.Path]::GetFullPath($protected).TrimEnd('\', '/')
+            if ($comparisonPath.Equals($full, [StringComparison]::OrdinalIgnoreCase) -or
+                $comparisonPath.StartsWith($full + $separator, [StringComparison]::OrdinalIgnoreCase) -or
+                $full.StartsWith($comparisonPath + $separator, [StringComparison]::OrdinalIgnoreCase)) {
+                throw "路径与项目输入或审计位置重合：$full"
+            }
+        }
+    }
+
+    $file = $null
+    for ($current = $Path; $current; $current = [IO.Path]::GetDirectoryName($current)) {
+        # Get-Item can see a dangling link even when Test-Path reports it missing.
+        try { $item = Get-Item -LiteralPath $current -Force -ErrorAction Stop }
+        catch [System.Management.Automation.ItemNotFoundException] { continue }
+        if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -or $item.LinkType) {
+            throw "路径包含链接：$current"
+        }
+        if ($IsWindows -and $current.Length -gt $ProjectRoot.TrimEnd('\', '/').Length -and
+            [IO.Path]::GetFileName($current) -ine $item.Name) {
+            throw "路径包含文件系统别名：$current"
+        }
+        if ($current -eq $Path -and $item -is [IO.FileInfo] -and
+            ($IsWindows -or $item.UnixMode.StartsWith('-'))) {
+            $file = $item
+        }
+        elseif ($current -eq $Path -or $item -isnot [IO.DirectoryInfo]) {
+            throw "路径或父路径的类型无效：$current"
+        }
+    }
+    return $file
+}
+
+function Test-PbBridgeMigrationReportVersion {
+    param([Text.Json.JsonElement]$Version)
+
+    if ($Version.ValueKind -ne [Text.Json.JsonValueKind]::Number) { return $false }
+    # 版本值只有一个非零数字 8，并且该数字经指数调整后必须在个位。
+    $parts = $Version.GetRawText() -split '[eE]', 2
+    $digits = $parts[0].Replace('.', '')
+    if ($digits.Trim([char]'0') -cne '8') { return $false }
+    $point = $parts[0].IndexOf('.')
+    if ($point -lt 0) { $point = $digits.Length }
+    $exponent = 0
+    if ($parts.Count -eq 2 -and -not [int]::TryParse($parts[1], [Globalization.NumberStyles]::AllowLeadingSign,
+            [Globalization.CultureInfo]::InvariantCulture, [ref]$exponent)) { return $false }
+    return $exponent -eq ($digits.IndexOf('8') - $point + 1)
+}
+
+function Assert-PbBridgeExistingMigrationReport {
+    param([IO.Stream]$Stream)
+
+    $reader = [IO.StreamReader]::new($Stream, [Text.UTF8Encoding]::new($false, $true), $true, 1024, $true)
+    try { $json = [Text.Json.JsonDocument]::Parse($reader.ReadToEnd()) }
+    finally { $reader.Dispose() }
+    try {
+        $root = $json.RootElement
+        $schema = [Text.Json.JsonElement]::new()
+        $version = [Text.Json.JsonElement]::new()
+        if ($root.ValueKind -ne [Text.Json.JsonValueKind]::Object -or
+            -not $root.TryGetProperty('schemaName', [ref]$schema) -or
+            $schema.ValueKind -ne [Text.Json.JsonValueKind]::String -or $schema.GetString() -cne 'pbbridge-v7-template-migration' -or
+            -not $root.TryGetProperty('schemaVersion', [ref]$version) -or
+            -not (Test-PbBridgeMigrationReportVersion $version)) {
+            throw '已有文件必须为 pbbridge-v7-template-migration schemaVersion 8 报告。'
+        }
+    }
+    finally { $json.Dispose() }
+}
+
+function Write-PbBridgeMigrationReport {
+    param($Target, $Value)
+
+    $path = $Target.Path
+    try {
+        $bytes = [Text.Encoding]::UTF8.GetBytes(($Value | ConvertTo-Json -Depth 30) + [Environment]::NewLine)
+        $null = Get-PbBridgeMigrationReportFile -Path $path -ProjectRoot $Target.ProjectRoot -ProtectedPaths $Target.ProtectedPaths
+        $parent = [IO.Path]::GetDirectoryName($path)
+        if (-not $Target.Refresh -and -not [IO.Directory]::Exists($parent)) {
+            $null = [IO.Directory]::CreateDirectory($parent)
+            $null = Get-PbBridgeMigrationReportFile -Path $path -ProjectRoot $Target.ProjectRoot -ProtectedPaths $Target.ProtectedPaths
+        }
+        # 新目标如已被占用，CreateNew 会保留占用文件。刷新使用同一文件句柄检查并写入。
+        $mode = if ($Target.Refresh) { [IO.FileMode]::Open } else { [IO.FileMode]::CreateNew }
+        $stream = [IO.File]::Open($path, $mode, [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
+        try {
+            if ($Target.Refresh) {
+                Assert-PbBridgeExistingMigrationReport -Stream $stream
+                $stream.SetLength(0)
+                $stream.Position = 0
+            }
+            $stream.Write($bytes, 0, $bytes.Length)
+        }
+        finally { $stream.Dispose() }
+    }
+    catch { throw "migration-output-path-invalid: 导出失败 $path`: $($_.Exception.Message)" }
 }
 
 function Get-PbBridgeCanonicalHash {
@@ -1205,7 +1416,8 @@ function Resolve-PbBridgeTransactionForPlan {
     $index = Get-PbBridgeMigrationIndex -MigrationRoot $MigrationRoot
     $entry = @($index.entries | Where-Object { [string]$_.planHash -eq $PlanHash } | Sort-Object updatedAt -Descending | Where-Object {
         $resultPath = Join-Path ([string]$_.transactionRoot) 'result.json'
-        if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf)) { return $false }
+        if (-not (Test-Path -LiteralPath $resultPath -PathType Leaf) -or
+            (Test-Path -LiteralPath (Join-Path ([string]$_.transactionRoot) 'recovery-manifest.json'))) { return $false }
         $result = [IO.File]::ReadAllText($resultPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
         # Only an unexecuted plan can receive decisions and Apply. Terminal attempts
         # retain their original plan/result/recovery evidence even for the same hash.
@@ -1300,20 +1512,26 @@ function Get-PbBridgeUnresolvedRecovery {
     foreach ($entry in @($index.entries)) {
         $transactionRoot = [string]$entry.transactionRoot
         $resultPath = Join-Path $transactionRoot 'result.json'
+        $manifestPath = Join-Path $transactionRoot 'recovery-manifest.json'
         $hasResult = Test-Path -LiteralPath $resultPath -PathType Leaf
-        if (-not $hasResult -and
-            -not (Test-Path -LiteralPath (Join-Path $transactionRoot 'recovery-manifest.json') -PathType Leaf)) { continue }
+        $hasManifest = Test-Path -LiteralPath $manifestPath -PathType Leaf
+        if (-not $hasResult -and -not $hasManifest) { continue }
         try {
             $result = if ($hasResult) {
                 [System.IO.File]::ReadAllText($resultPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
             } else { [pscustomobject]@{ outcome = 'recovery-required' } }
-            if ([string]$result.outcome -in @('applied', 'applied-with-preserved-customizations', 'no-change')) { continue }
             $hasWrites = $result.PSObject.Properties.Name -contains 'actualWrites' -and @($result.actualWrites).Count -gt 0
-            if ([string]$result.outcome -ne 'recovery-required' -and
-                -not $hasWrites -and
-                -not (Test-Path -LiteralPath (Join-Path $transactionRoot 'recovery-manifest.json') -PathType Leaf)) { continue }
-            $manifestPath = Join-Path $transactionRoot 'recovery-manifest.json'
-            if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
+            if ([string]$result.outcome -ne 'recovery-required' -and -not $hasWrites -and -not $hasManifest) { continue }
+            # 旧结果可能缺少身份字段，此时继续按清单的作用域和实际字节判断。
+            $resultProperties = $result.PSObject.Properties
+            if ([string]$result.outcome -in @('applied', 'applied-with-preserved-customizations') -and
+                $resultProperties['phase'] -and [string]$result.phase -eq 'completed' -and
+                $resultProperties['migrationId'] -and [string]$result.migrationId -eq [string]$entry.migrationId -and
+                $resultProperties['planHash'] -and [string]$result.planHash -eq [string]$entry.planHash -and
+                $resultProperties['transaction'] -and $null -ne $result.transaction -and
+                $result.transaction.PSObject.Properties['installedValidated'] -and
+                $result.transaction.installedValidated -is [bool] -and $result.transaction.installedValidated) { continue }
+            if (-not $hasManifest) {
                 if ($null -ne $EvidencePaths) { $EvidencePaths.Add($resultPath); $EvidencePaths.Add($manifestPath) }
                 $unresolved.Add([pscustomobject]@{ migrationId = [string]$entry.migrationId; recoveryManifestPath = $manifestPath; targetPath = $null; reason = 'recovery-manifest-missing' })
                 continue
@@ -1331,13 +1549,7 @@ function Get-PbBridgeUnresolvedRecovery {
             if (Test-PbBridgeRecordedRollback -Result $result -Recovery $recovery) { continue }
             foreach ($recoveryEntry in @($recovery.entries)) {
                 $targetPath = [string]$recoveryEntry.targetPath
-                $exists = Test-Path -LiteralPath $targetPath -PathType Leaf
-                $resolved = if ([bool]$recoveryEntry.existed) {
-                    $exists -and (Get-PbBridgeSha256 -Path $targetPath) -eq [string]$recoveryEntry.originalSha256
-                }
-                else {
-                    -not $exists
-                }
+                $resolved = (Get-PbBridgeRecoveryObservation -Entry $recoveryEntry).matchesOriginal
                 if (-not $resolved) {
                     $resolved = Test-PbBridgeRecoverySuccessor -RecoveryEntry $recoveryEntry -FailedResult $result -IndexEntries @($index.entries) -FailedTransactionRoot $transactionRoot -EvidencePaths $EvidencePaths
                 }
@@ -1587,7 +1799,7 @@ function Invoke-PbBridgeMigrationDecision {
         [Parameter(Mandatory = $true)][string[]]$DecisionPath,
         [Parameter(Mandatory = $true)][string]$Reason,
         [string]$Actor = '',
-        [string]$OutputPath = ''
+        $ReportTarget
     )
 
     if ($PlanHash -notmatch '^[a-f0-9]{64}$') { throw "migration-plan-hash-invalid: $PlanHash" }
@@ -1684,10 +1896,7 @@ function Invoke-PbBridgeMigrationDecision {
         }
     }
     Write-PbBridgeJsonFile -Path $resultPath -Value $result
-    if (-not [string]::IsNullOrWhiteSpace($OutputPath)) {
-        $outputPathFull = Resolve-PbBridgePathInsideRoot -Root $projectRootFull -Path $OutputPath -ReasonCode 'migration-output-outside-project'
-        Write-PbBridgeJsonFile -Path $outputPathFull -Value $result
-    }
+    if ($null -ne $ReportTarget) { Write-PbBridgeMigrationReport -Target $ReportTarget -Value $result }
     return [pscustomobject]$result
 }
 
@@ -1718,6 +1927,35 @@ function Invoke-PbBridgeTemplateMigration {
 
     $projectRootFull = [System.IO.Path]::GetFullPath($ProjectRoot)
     $toolkitRootFull = [System.IO.Path]::GetFullPath($ToolkitRoot)
+    $migrationRoot = Join-Path $projectRootFull '.pbbridge\local\migrations'
+    $templateRoot = Join-Path $toolkitRootFull 'templates\external-project'
+    $templateManifestPath = Join-Path $templateRoot 'template-manifest.json'
+    $explicitReport = -not [string]::IsNullOrWhiteSpace($OutputPath)
+    $manifest = $null
+    if (-not $Decide -or $explicitReport) {
+        if (-not (Test-Path -LiteralPath $templateManifestPath -PathType Leaf)) { throw "template-manifest-not-found: $templateManifestPath" }
+        $manifest = Get-Content -LiteralPath $templateManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    }
+    $reportTarget = $null
+    if ($explicitReport) {
+        try {
+            $path = Resolve-PbBridgePathInsideRoot -Root $projectRootFull -Path $OutputPath -ReasonCode 'migration-output-outside-project'
+            $actualProjectRoot = (Get-Item -LiteralPath $projectRootFull -Force).FullName
+            $protected = @(Get-PbBridgeReportProtectedPaths -ProjectRoot $actualProjectRoot -ToolkitRoot $toolkitRootFull -Manifest $manifest)
+            $file = Get-PbBridgeMigrationReportFile -Path $path -ProjectRoot $projectRootFull -ProtectedPaths $protected
+            if ($null -ne $file) {
+                if ($file.IsReadOnly) { throw '已有报告为只读，无法刷新。' }
+                $stream = [IO.File]::Open($path, [IO.FileMode]::Open, [IO.FileAccess]::ReadWrite, [IO.FileShare]::None)
+                try { Assert-PbBridgeExistingMigrationReport -Stream $stream }
+                finally { $stream.Dispose() }
+            }
+            $reportTarget = @{ Path = $path; ProjectRoot = $projectRootFull; ProtectedPaths = $protected; Refresh = $null -ne $file }
+        }
+        catch {
+            if ($_.Exception.Message.StartsWith('migration-output-outside-project:')) { throw }
+            throw "migration-output-path-invalid: $OutputPath`: $($_.Exception.Message)"
+        }
+    }
     if ($Decide.IsPresent) {
         return Invoke-PbBridgeMigrationDecision `
             -ProjectRoot $projectRootFull `
@@ -1726,13 +1964,9 @@ function Invoke-PbBridgeTemplateMigration {
             -DecisionPath $DecisionPath `
             -Reason $Reason `
             -Actor $Actor `
-            -OutputPath $OutputPath
+            -ReportTarget $reportTarget
     }
     if ($WorkspaceId -notmatch '^[a-z0-9_-]+$') { throw "workspace-id-invalid: $WorkspaceId" }
-    $templateRoot = Join-Path $toolkitRootFull 'templates\external-project'
-    $templateManifestPath = Join-Path $templateRoot 'template-manifest.json'
-    if (-not (Test-Path -LiteralPath $templateManifestPath -PathType Leaf)) { throw "template-manifest-not-found: $templateManifestPath" }
-    $manifest = Get-Content -LiteralPath $templateManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
     $provenanceRegistry = $null
     $provenanceRegistryPath = $null
     if ($manifest.PSObject.Properties.Name -contains 'provenanceRegistry' -and
@@ -1749,11 +1983,14 @@ function Invoke-PbBridgeTemplateMigration {
     }
 
     $runId = [guid]::NewGuid().ToString('N')
-    $migrationRoot = Join-Path $projectRootFull '.pbbridge\local\migrations'
-    if ([string]::IsNullOrWhiteSpace($OutputPath)) {
-        $OutputPath = Join-Path $migrationRoot ("results\{0}-{1}.json" -f $WorkspaceId, $runId)
+    if ($null -eq $reportTarget) {
+        $reportTarget = @{
+            Path = Join-Path $migrationRoot ("results\{0}-{1}.json" -f $WorkspaceId, $runId)
+            ProjectRoot = $projectRootFull
+            ProtectedPaths = @()
+            Refresh = $false
+        }
     }
-    $outputPathFull = Resolve-PbBridgePathInsideRoot -Root $projectRootFull -Path $OutputPath -ReasonCode 'migration-output-outside-project'
     $transactionRoot = Join-Path $projectRootFull (".pbbridge\local\migrations\transactions\{0}" -f $runId)
     $stagingRoot = Join-Path $transactionRoot 'staging'
     $backupRoot = Join-Path $transactionRoot 'backup'
@@ -1967,7 +2204,7 @@ function Invoke-PbBridgeTemplateMigration {
         }
     }
     if (-not [string]::IsNullOrWhiteSpace($PbwPath)) {
-        $pbwFull = [System.IO.Path]::GetFullPath((Join-Path $projectRootFull $PbwPath))
+        $pbwFull = [System.IO.Path]::GetFullPath($PbwPath, $projectRootFull)
         Resolve-PbBridgePathInsideRoot -Root $projectRootFull -Path $pbwFull -ReasonCode 'pbw-path-outside-project' | Out-Null
         $PbwPath = $pbwFull.Substring($projectRootFull.TrimEnd('\', '/').Length).TrimStart('\', '/').Replace('\', '/')
     }
@@ -2395,7 +2632,7 @@ function Invoke-PbBridgeTemplateMigration {
 
     if (-not $Apply -or $manual.Count -gt 0 -or $awaitingDecisions.Count -gt 0 -or (-not $hasPlannedChanges)) {
         Write-PbBridgeJsonFile -Path $auditResultPath -Value $report
-        Write-PbBridgeJsonFile -Path $outputPathFull -Value $report
+        Write-PbBridgeMigrationReport -Target $reportTarget -Value $report
         return [pscustomobject]$report
     }
 
@@ -2427,11 +2664,12 @@ function Invoke-PbBridgeTemplateMigration {
             -PbwPath $PbwPath `
             -PlanHash $computedPlanHash
         Write-PbBridgeJsonFile -Path $auditResultPath -Value $report
-        Write-PbBridgeJsonFile -Path $outputPathFull -Value $report
+        Write-PbBridgeMigrationReport -Target $reportTarget -Value $report
         return [pscustomobject]$report
     }
 
     $recoveryEntries = New-Object System.Collections.Generic.List[object]
+    $recoveryPrepared = $false
     try {
         New-Item -ItemType Directory -Path $stagingRoot -Force | Out-Null
         New-Item -ItemType Directory -Path $backupRoot -Force | Out-Null
@@ -2572,6 +2810,7 @@ function Invoke-PbBridgeTemplateMigration {
             planHash = $computedPlanHash
             entries = $recoveryEntries.ToArray()
         } | ForEach-Object { Write-PbBridgeJsonFile -Path $recoveryManifestPath -Value $_ }
+        $recoveryPrepared = $true
 
         $commitIndex = 0
         foreach ($entry in $recoveryEntries) {
@@ -2647,24 +2886,51 @@ function Invoke-PbBridgeTemplateMigration {
         }
         else {
             $report.rollback.attempted = $recoveryEntries.Count -gt 0
-            $rollbackErrors = @(if ($FailureInjection -eq 'rollback-failure') {
-                'failure-injection-rollback-failed: 按 recovery manifest 手工恢复全部写入路径。'
+            $rollbackErrors = [Collections.Generic.List[string]]::new()
+            if ($FailureInjection -eq 'rollback-failure') {
+                $rollbackErrors.Add('failure-injection-rollback-failed: 按 recovery manifest 手工恢复全部写入路径。')
             }
             else {
-                Restore-PbBridgeMigration -Entries $recoveryEntries.ToArray()
-            })
-            $report.rollback.errors = $rollbackErrors
-            $report.rollback.succeeded = $rollbackErrors.Count -eq 0
-            $report.rollback.restoredFiles = @($recoveryEntries | ForEach-Object {
-                $existsAfterRecovery = Test-Path -LiteralPath $_.targetPath -PathType Leaf
-                $restoredRawSha256 = if ($existsAfterRecovery) { Get-PbBridgeSha256 -Path $_.targetPath } else { $null }
+                foreach ($errorMessage in @(Restore-PbBridgeMigration -Entries $recoveryEntries.ToArray())) {
+                    $rollbackErrors.Add($errorMessage)
+                }
+            }
+            $report.rollback.restoredFiles = @(foreach ($entry in $recoveryEntries) {
+                $restoredHash = $null
+                $matchesOriginal = $false
+                try {
+                    $observation = Get-PbBridgeRecoveryObservation -Entry $entry
+                    $restoredHash = $observation.restoredRawSha256
+                    $matchesOriginal = $observation.matchesOriginal
+                    if (-not $matchesOriginal) {
+                        $rollbackErrors.Add("rollback-original-state-mismatch: $($entry.targetRelativePath)")
+                    }
+                }
+                catch {
+                    $rollbackErrors.Add("rollback-verification-failed: $($entry.targetRelativePath): $($_.Exception.Message)")
+                }
                 [ordered]@{
-                    targetPath = [string]$_.targetRelativePath
-                    expectedRawSha256 = $_.originalSha256
-                    restoredRawSha256 = $restoredRawSha256
-                    matchesOriginal = if ([bool]$_.existed) { $restoredRawSha256 -eq $_.originalSha256 } else { -not $existsAfterRecovery }
+                    targetPath = [string]$entry.targetRelativePath
+                    expectedRawSha256 = $entry.originalSha256
+                    restoredRawSha256 = $restoredHash
+                    matchesOriginal = $matchesOriginal
                 }
             })
+            $report.outcome = 'rolled-back'
+            $report.rollback.succeeded = $rollbackErrors.Count -eq 0
+            if ($report.rollback.succeeded -and $recoveryPrepared) {
+                try {
+                    $recovery = [IO.File]::ReadAllText($recoveryManifestPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+                    if (-not (Test-PbBridgeRecordedRollback -Result $report -Recovery $recovery)) {
+                        throw '恢复清单与事务身份或逐项核验结果不符。'
+                    }
+                }
+                catch {
+                    $rollbackErrors.Add("rollback-manifest-verification-failed: $($_.Exception.Message)")
+                }
+            }
+            $report.rollback.errors = $rollbackErrors.ToArray()
+            $report.rollback.succeeded = $rollbackErrors.Count -eq 0
             $report.outcome = if ($rollbackErrors.Count -eq 0) { 'rolled-back' } else { 'recovery-required' }
             $report.migrationVerdict = if ($rollbackErrors.Count -eq 0) { 'failed-and-rolled-back' } else { 'recovery-required' }
         }
@@ -2677,7 +2943,24 @@ function Invoke-PbBridgeTemplateMigration {
         }
     }
 
+    $report.fieldMappings = $publicMappings
+    $report.manualMigrations = $manual.ToArray()
     if ($report.outcome -in @('applied', 'applied-with-preserved-customizations', 'no-change')) {
+        $report.transaction.cleanupStatus = 'pending'
+        try {
+            Write-PbBridgeMigrationTerminalAudit -Path $auditResultPath -Value $report
+            $committed = [IO.File]::ReadAllText($auditResultPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+            if ($committed.schemaName -cne $report.schemaName -or $committed.schemaVersion -ne $report.schemaVersion -or
+                $committed.migrationId -cne $runId -or $committed.planHash -cne $computedPlanHash -or
+                $committed.phase -cne $report.phase -or $committed.outcome -cne $report.outcome -or
+                $committed.transaction.installedValidated -isnot [bool] -or -not $committed.transaction.installedValidated) {
+                throw '读回的 result.json 与本次已验证安装不符。'
+            }
+        }
+        catch {
+            throw "migration-terminal-audit-commit-failed: $auditResultPath`: $($_.Exception.Message)"
+        }
+
         try {
             foreach ($ephemeralRoot in @($stagingRoot, $backupRoot)) {
                 if (Test-Path -LiteralPath $ephemeralRoot) {
@@ -2691,12 +2974,19 @@ function Invoke-PbBridgeTemplateMigration {
             $report.transaction.cleanupStatus = 'successful-transaction-retained'
             $report.transaction.cleanupError = $_.Exception.Message
         }
+        try {
+            Write-PbBridgeMigrationTerminalAudit -Path $auditResultPath -Value $report
+        }
+        catch {
+            $report.transaction.cleanupAuditError = $_.Exception.Message
+            [Console]::Error.WriteLine("migration-terminal-audit-cleanup-update-failed: $auditResultPath`: $($_.Exception.Message)")
+        }
+    }
+    else {
+        Write-PbBridgeMigrationTerminalAudit -Path $auditResultPath -Value $report
     }
 
-    $report.fieldMappings = $publicMappings
-    $report.manualMigrations = $manual.ToArray()
-    Write-PbBridgeJsonFile -Path $auditResultPath -Value $report
-    Write-PbBridgeJsonFile -Path $outputPathFull -Value $report
+    Write-PbBridgeMigrationReport -Target $reportTarget -Value $report
     return [pscustomobject]$report
 }
 

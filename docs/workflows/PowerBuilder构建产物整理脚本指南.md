@@ -16,6 +16,8 @@
 
 该模板是固定脚本，不要求日常传入路径参数。默认会按项目实际目录发现仓库根目录下现有的 `pb-*` 依赖 PB 子模块；如果项目依赖模块不使用 `pb-*` 命名，应在脚本顶部把固定目录发现规则调整为该项目自己的模块清单。
 
+项目已有定制的整理脚本时，请人工合并预检逻辑，保留项目自己的扫描和排除规则。
+
 ## 2. 安全边界
 
 脚本只处理：
@@ -42,13 +44,17 @@
 pwsh -NoProfile -File .\scripts\move-pb-build-output.ps1 -WhatIf
 ```
 
+例如，`pb-langchao/common.pbd` 与 `pb-jiudian/common.pbd` 都会移到 `bin/common.pbd`。在 Windows 上，文件名仅大小写不同也会指向同一目标。两个来源的字节相同时，脚本会按顺序移动；字节不同时，或有来源无法读取时，脚本会列出目标和该组所有来源，预览与正式执行均以非零退出。检查在创建 `bin/` 或移动文件前完成，原有文件保留原位置和内容。
+
+请核对两个模块的编译输出。确认应保留的来源后，处理冲突文件，再运行 `-WhatIf`。
+
 确认预览结果后再正式移动：
 
 ```powershell
 pwsh -NoProfile -File .\scripts\move-pb-build-output.ps1
 ```
 
-默认会覆盖 `bin/` 中已有的同名编译产物。需要审计结果时，可输出结构化结果：
+只有 `pb-langchao/common.pbd` 一个来源时，即使它与旧的 `bin/common.pbd` 内容不同，仍会用它更新旧产物。需要审计时，`-PassThru` 会为每次实际移动输出结构化结果：
 
 ```powershell
 pwsh -NoProfile -File .\scripts\move-pb-build-output.ps1 -PassThru

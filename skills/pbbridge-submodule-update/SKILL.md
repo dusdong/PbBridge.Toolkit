@@ -20,7 +20,7 @@ description: 当用户需要更新 PbBridge.Toolkit、pb-libs、pb-langchao 或�
 1. 在目标 submodule 中执行 fetch 或 pull 前，先报告当前分支、HEAD、远端和工作区状态。
 2. 拉取后记录旧 commit 与新 commit；不要把“已拉取子模块”说成“父仓库已提交更新”。
 3. 回到父仓库检查 `git status --short`，确认父仓库是否出现 submodule 指针变更。
-4. 如果更新的是 `PbBridge.Toolkit`，优先阅读新的 `CODEX-START.md`、`manifest.json` 和相关 `skills/*/SKILL.md`，确认流程或模板是否变化。
+4. 如果更新的是 `PbBridge.Toolkit`，优先阅读新的 `CODEX-START.md`、`manifest.json` 和相关 `skills/*/SKILL.md`，确认流程或模板是否变化。此处只读取当前包的一级技能目录。
 5. 如果更新的是 `pb-libs` 等共享库，必须把消费项目 baseline 理解为“当前 `.pbw/.pbt` + 当前 submodule commit”的集成快照。
 
 ## Toolkit 最新快照检查
@@ -28,13 +28,13 @@ description: 当用户需要更新 PbBridge.Toolkit、pb-libs、pb-langchao 或�
 `PbBridge.Toolkit` 子仓从官方 GitHub main 连续历史分发，保留既有历史和版本 tag。判断 Toolkit 是否有更新时，只比较本地 submodule `HEAD` 与远端 `github/main`：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-toolkit-update.ps1
+pwsh -NoProfile -File .\scripts\pbbridge-toolkit-update.ps1
 ```
 
 默认检查只写出 `.pbbridge/toolkit-update-check.json` 并提示 `current/outdated/blocked`，不会更新工作树、不会 stage、不会提交。需要更新到远端最新快照时显式运行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-toolkit-update.ps1 -Apply
+pwsh -NoProfile -File .\scripts\pbbridge-toolkit-update.ps1 -Apply
 ```
 
 `-Apply` 在工作区干净、原始 ZIP 恢复核验通过、目标 LFS OID/size/hash 与 checksum 验证完成后，checkout 绑定的精确目标 SHA，并后验实际字节；完成后必须回父项目提交 `.pbbridge/PbBridge.Toolkit` submodule 指针。显式 remote 别名须指向同一官方仓库。TargetCommit 可选 fetched main 或祖先，但拒绝回退/本地分叉；无共同祖先保留显式确认。WhatIf 不预取/切换。缓存匹配不证明独立 GitHub 下载。
@@ -58,14 +58,14 @@ FastReport 类案例：父项目可以发现 `Lib_FastReport.pbl:userobject:nvo_
 更新共享库 submodule 指针后，在消费项目根目录运行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-readonly-sync.ps1
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-check-shared-library-writeback.ps1 -SharedLibraryPath .\pb-libs -AllowPointerUpdate
+pwsh -NoProfile -File .\scripts\pbbridge-readonly-sync.ps1
+pwsh -NoProfile -File .\scripts\pbbridge-check-shared-library-writeback.ps1 -SharedLibraryPath .\pb-libs -AllowPointerUpdate
 ```
 
-若项目需要排除已有自己源码事实源的共享库，沿用项目既有参数，例如：
+需要排除已有源码事实源的共享库时，在已启动的 PowerShell Core 7.4+ 会话中传入数组，保留项目自己的排除规则。
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-readonly-sync.ps1 -ScanScope all-targets -ExcludeLibrary 'pb-libs/*','pb-langchao/*'
+& .\scripts\pbbridge-readonly-sync.ps1 -ScanScope all-targets -ExcludeLibrary @('pb-libs/*', 'pb-langchao/*')
 ```
 
 如果项目维护了 `.pbbridge/shared-libraries.json`，共享库检查脚本可以不传 `-SharedLibraryPath`，直接读取配置并输出聚合 JSON。配置必须显式列出共享库路径，不能让脚本隐式扫描全部 submodule：
@@ -88,7 +88,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-readonly-sync.ps1 -S
 缺少共享库配置时，2.8.0 起先运行初始化草案：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-init-shared-libraries.ps1
+pwsh -NoProfile -File .\scripts\pbbridge-init-shared-libraries.ps1
 ```
 
 草案会扫描 `.gitmodules`、共享库 `.pbw/.pbt` 和父项目 manifest：有独立 PBW/PBT 的共享库建议 `evidenceMode=self`，只有父项目 manifest 覆盖的共享库建议 `evidenceMode=consumer`。传 `-Apply` 写入 `.pbbridge/shared-libraries.json` 前必须人工复核；目标已存在时除非传 `-Force`，否则应保持失败。

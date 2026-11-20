@@ -191,15 +191,15 @@ description: 从 Codex / GitHub Copilot 的协作视角，审查当前工作区�
 
 这份文档版 skill 应与以下文档配合阅读：
 
-- [42-PbBridge.Cli协作模板](../workflows/PbBridge.Cli协作模板.md)
-- [41-Codex与Copilot协作指南](../workflows/Codex与Copilot协作指南.md)
-- 32-功能边界与适用范围（主仓 docs/使用手册/32-功能边界与适用范围.md）
-- 31-用户使用手册（主仓 docs/使用手册/31-用户使用手册.md）
+- [42-PbBridge.Cli协作模板](PbBridge.Cli协作模板.md)
+- [41-Codex与Copilot协作指南](Codex与Copilot协作指南.md)
+- 32-功能边界与适用范围（父仓 `docs/使用手册/32-功能边界与适用范围.md`，不随包分发）
+- [31-用户使用手册](../getting-started/第一次完成一次业务变更.md)
 
 其中：
 
 - `42-PbBridge.Cli协作模板.md` 负责讲“围绕 `PbBridge.Cli` 应该怎么实际使用”
-- `41-Codex与Copilot协作指南.md` 负责讲“怎么配合使用、怎么判断齐全度”
+- `41-Codex与Copilot协作指南.md` 负责讲当前协作操作；旧齐全度评估经历史索引追溯
 - 本文档负责给出“如果别的项目要落治理/审查型 skill，可以怎么写”的可复制正文
 
 ## 7. 一句话说明

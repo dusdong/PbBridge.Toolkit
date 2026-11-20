@@ -13,4 +13,5 @@
 2. CLI 会按 toolkit 相对路径自动探测 `runtime/pbspy/win-x86/`
 3. 如果外部项目替换或删除该目录，才需要额外配置 `PBSPY_HOME` 或 `PB_HOME`
 4. 该运行时不替代 PowerBuilder IDE 编译、调试和运行验收
-5. 对象 `CompileEntryImport -11` 只作为 PBSpy/PBSDK 写回限制诊断，不代表 ORCA candidate 已成为默认 PBL 写回器
+5. 对象返回 `CompileEntryImport -11` 时保留 DryRun / Apply 诊断；核对 PB9、PBSpy.dll、PBSDK、进程架构、编码和库列表准入证据后，可显式尝试 `--adapter orca` 的 PBSpyORCA candidate。该路径不作为默认写回器，也不提升为 supported。
+6. candidate 仍失败时交由 PowerBuilder IDE 处理；兜底后 re-export / verify / diff，并完成 IDE Regenerate / Full Build 和实际运行验收。

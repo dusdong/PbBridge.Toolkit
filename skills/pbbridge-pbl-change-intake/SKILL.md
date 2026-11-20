@@ -70,23 +70,23 @@ benchmark 的用途是比较同一 runner class、dataset、workload 与 measure
 ```powershell
 pbbridge performance dataset-generate --profile medium --repo-root .
 pbbridge performance benchmark --profile medium --cache-mode both --project-root <dataset-root> --workspace ws01 --dataset-manifest <dataset-root>/dataset-manifest.json --comparison-baseline <schema-v2-baseline.json> --redact-paths
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-performance-benchmark.ps1 -Profile real -CacheMode both -WorkspaceName canyin -DatasetManifest <real-dataset-manifest.json> -RedactPaths
+pbbridge performance benchmark --profile real --cache-mode both --project-root . --workspace canyin --dataset-manifest <real-dataset-manifest.json> --redact-paths
 ```
 
 外部项目仍可运行同名脚本，脚本只转调 Toolkit CLI runtime：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-change-intake.ps1
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-change-intake.ps1 -Compact
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-change-intake.ps1 -ProjectionOnly -RefreshLibrary app_main.pbl
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-change-intake.ps1 -Help
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-change-intake.ps1 -CliHelp
+pwsh -NoProfile -File .\scripts\pbbridge-pbl-change-intake.ps1
+pwsh -NoProfile -File .\scripts\pbbridge-pbl-change-intake.ps1 -Compact
+pwsh -NoProfile -File .\scripts\pbbridge-pbl-change-intake.ps1 -ProjectionOnly -RefreshLibrary app_main.pbl
+pwsh -NoProfile -File .\scripts\pbbridge-pbl-change-intake.ps1 -Help
+pwsh -NoProfile -File .\scripts\pbbridge-pbl-change-intake.ps1 -CliHelp
 ```
 
 同一仓库存在多个 PBW 时，使用命名工作区并直接传 PBW：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\pbbridge-pbl-change-intake.ps1 -WorkspaceName kuaican -WorkspacePath .\KuaiCan.pbw
+pwsh -NoProfile -File .\scripts\pbbridge-pbl-change-intake.ps1 -WorkspaceName kuaican -WorkspacePath .\KuaiCan.pbw
 ```
 
 默认 full intake 由 CLI/Core 按顺序执行 `pbl drift-remediation`、`workspace readonly-sync`、`release check`，输出单个 `pbbridge-v4-pbl-change-intake` JSON，固定使用 `schemaVersion=4`。`3.12.0` 起也可用 `--projection-only` / wrapper `-ProjectionOnly` 只刷新命中 PBL 的文本投影与 manifest；该模式必须同时指定 `--refresh-library` 或 `--refresh-object-key`，并会跳过 drift-remediation、verify、report、source-hygiene、baseline refresh、release-check 与仓库级 gate。3.8.0 起 stdout 默认只输出 `pbbridge-v3-compact-summary`，完整 facts 读取 `.pbbridge/pbl-change-intake.json`、指定 `--result` 文件或摘要里的 `resultJsonPath`；`--compact` 和 wrapper `-Compact` 仅作为兼容参数保留。

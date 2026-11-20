@@ -1,11 +1,11 @@
 {
   "schemaName": "pbbridge-toolkit-public-doctor-summary",
   "schemaVersion": 1,
-  "productVersion": "7.7.0",
+  "productVersion": "7.7.1",
   "cliPath": "runtime/cli/win-x86/PbBridge.Cli.exe",
   "status": "command-succeeded",
   "command": "doctor",
   "evidenceScope": "portable-summary-original-output-retained-privately",
-  "rawEvidenceSha256": "f51042c335eff8b511154b726223a0f6ea48340f65951627f69cb7da826dac06",
+  "rawEvidenceSha256": "3ee841840d4f83512d7c48181da195a3f3e53d33b0df26006e795267ac3736e0",
   "qualification": "not-full-release-qualification"
 }

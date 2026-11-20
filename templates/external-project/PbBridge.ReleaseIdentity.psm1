@@ -439,7 +439,7 @@ function Get-PbLocalToolkitCandidateIdentity {
     <# .SYNOPSIS Verifies actual isolated content without inventing a Toolkit commit or release qualification. #>
     [CmdletBinding()]
     param([Parameter(Mandatory)][string]$ToolkitPath,[Parameter(Mandatory)][string]$ExpectedProductVersion,
-        [string]$Commit,[string]$SnapshotRepositoryPath,[switch]$RestoredLfs,[switch]$DeferEntrypoint)
+        [string]$Commit,[string]$SnapshotRepositoryPath,[switch]$RestoredLfs,[switch]$DeferEntrypoint,[switch]$RequireFormalDistribution)
     if ([bool]$Commit -ne [bool]$SnapshotRepositoryPath -or ($Commit -and $Commit -cnotmatch '^[0-9a-f]{40}$')) { throw 'CANDIDATE_SNAPSHOT_PARAMETERS_INVALID' }
     $root = Assert-PbReleasePlainPath -Path $ToolkitPath -Recurse
     if ((Test-Path -LiteralPath (Join-Path $root '.git')) -and (-not $Commit -or [IO.Path]::GetFullPath($SnapshotRepositoryPath) -cne $root)) { throw 'CANDIDATE_GIT_METADATA_UNEXPECTED' }
@@ -454,7 +454,16 @@ function Get-PbLocalToolkitCandidateIdentity {
         (Get-Content -LiteralPath (Join-Path $root 'VERSION') -Raw -Encoding utf8).Trim())) {
         if ([string]$actual -cne $ExpectedProductVersion) { throw 'CANDIDATE_VERSION_MISMATCH' }
     }
-    if (-not $manifest.candidatePreparation -or -not $manifest.developmentOnly -or $manifest.sourceAdoption -cne 'pending' -or
+    if ($RequireFormalDistribution) {
+        if (-not $Commit -or -not $RestoredLfs -or
+            $manifest.candidatePreparation -isnot [bool] -or $manifest.candidatePreparation -or
+            $manifest.developmentOnly -isnot [bool] -or $manifest.developmentOnly -or
+            $manifest.sourceAdoption -cne 'existing-default' -or
+            $manifest.qualification -cne 'requires-independent-release-qualification' -or
+            $contract.candidatePreparation -isnot [bool] -or $contract.candidatePreparation -or
+            $contract.sourceAdoption -cne 'existing-default') { throw 'FORMAL_TOOLKIT_DISTRIBUTION_SCOPE_INVALID' }
+    }
+    elseif (-not $manifest.candidatePreparation -or -not $manifest.developmentOnly -or $manifest.sourceAdoption -cne 'pending' -or
         $manifest.qualification -cne 'candidate-preparation-source-adoption-and-independent-qualification-pending' -or
         -not $contract.candidatePreparation -or $contract.sourceAdoption -cne 'pending') { throw 'CANDIDATE_SCOPE_INVALID' }
     $files = @(Get-ChildItem -LiteralPath $root -Force | Where-Object Name -CNE '.git' | ForEach-Object {
@@ -464,6 +473,12 @@ function Get-PbLocalToolkitCandidateIdentity {
     })
     $paths=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
     foreach ($file in $files) { if (-not $paths.Add($file.path)) { throw 'CANDIDATE_FILE_CASE_COLLISION' } }
+    # Match PowerShell -CEQ (including Unicode equivalence). A null value marks
+    # ambiguity, reported only when its checksum line is read to preserve first errors.
+    $filesByPath = [Collections.Generic.Dictionary[string,object]]::new([StringComparer]::InvariantCulture)
+    foreach ($file in $files) {
+        if (-not $filesByPath.TryAdd($file.path, $file)) { $filesByPath[$file.path] = $null }
+    }
     $seen = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
     foreach ($line in Get-Content -LiteralPath (Join-Path $root 'checks/SHA256SUMS.txt') -Encoding utf8) {
         if (-not $line) { continue }
@@ -471,8 +486,8 @@ function Get-PbLocalToolkitCandidateIdentity {
         $hash=$Matches[1];$relative=$Matches[2]
         if ($relative -match '(^|/)\.\.?(/|$)|[\\:*?\x00-\x1f]' -or [IO.Path]::IsPathRooted($relative)) { throw 'CANDIDATE_CHECKSUM_PATH_INVALID' }
         if ($relative -ceq 'checks/SHA256SUMS.txt' -or -not $seen.Add($relative)) { throw 'CANDIDATE_CHECKSUM_SELF_REFERENCE_OR_DUPLICATE' }
-        $entry = @($files | Where-Object path -CEQ $relative)
-        if ($entry.Count -ne 1 -or $entry[0].sha256 -cne $hash) { throw "CANDIDATE_CHECKSUM_MISMATCH:$relative" }
+        $entry = $null
+        if (-not $filesByPath.TryGetValue($relative, [ref]$entry) -or $null -eq $entry -or $entry.sha256 -cne $hash) { throw "CANDIDATE_CHECKSUM_MISMATCH:$relative" }
     }
     foreach ($file in $files) {
         if ($file.path -ne 'checks/SHA256SUMS.txt' -and -not $seen.Contains($file.path)) { throw "CANDIDATE_CHECKSUM_COVERAGE_MISSING:$($file.path)" }
