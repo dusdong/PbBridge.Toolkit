@@ -1,7 +1,7 @@
 ﻿#requires -PSEdition Core
 #requires -Version 7.4
 
-# PbBridge-TemplateVersion: 7.7.1
+# PbBridge-TemplateVersion: 7.7.2
 param(
     [Alias('ProjectRoot')]
     [string]$RepoRoot = "",
@@ -125,10 +125,10 @@ if (-not $useDirectedPlan -and -not $UseExistingPlan.IsPresent -and -not (Test-P
 }
 
 function Read-JsonFile {
-    param([Parameter(Mandatory = $true)][string]$Path)
+    param([Parameter(Mandatory = $true)][string]$Path, [switch]$NoEnumerate)
 
     $resolvedPath = (Resolve-Path -LiteralPath $Path).Path
-    return [System.IO.File]::ReadAllText($resolvedPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+    return [System.IO.File]::ReadAllText($resolvedPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json -NoEnumerate:$NoEnumerate
 }
 
 function ConvertTo-NormalizedRelativePath {
@@ -156,14 +156,20 @@ function Test-IsUnderSharedLibraryPath {
         [string]$SharedLibraryPathValue
     )
 
-    $normalizedPath = ConvertTo-NormalizedRelativePath -PathValue $PathValue
-    $normalizedSharedPath = ConvertTo-NormalizedRelativePath -PathValue $SharedLibraryPathValue
-    if ([string]::IsNullOrWhiteSpace($normalizedPath) -or [string]::IsNullOrWhiteSpace($normalizedSharedPath)) {
+    if ([string]::IsNullOrWhiteSpace($PathValue) -or [string]::IsNullOrWhiteSpace($SharedLibraryPathValue)) {
         return $false
     }
 
+    $normalizedPath = Resolve-SharedLibraryPlanPath -PathValue $PathValue
+    $normalizedSharedPath = Resolve-SharedLibraryPlanPath -PathValue $SharedLibraryPathValue
     return $normalizedPath.Equals($normalizedSharedPath, [System.StringComparison]::OrdinalIgnoreCase) -or
         $normalizedPath.StartsWith($normalizedSharedPath + '/', [System.StringComparison]::OrdinalIgnoreCase)
+}
+
+function Resolve-SharedLibraryPlanPath {
+    param([string]$PathValue)
+
+    return [System.IO.Path]::GetFullPath($PathValue.Replace('\', '/'), $RepoRoot).Replace('\', '/').TrimEnd('/')
 }
 
 function Get-SharedLibraryConfigEntries {
@@ -220,6 +226,7 @@ function Get-ImportPlanSharedLibraryHits {
     }
 
     $hits = [System.Collections.Generic.List[string]]::new()
+    $repoPath = Resolve-SharedLibraryPlanPath -PathValue $RepoRoot
     $plan = Read-JsonFile -Path $PlanPath
     foreach ($step in @($plan.steps)) {
         $stepPaths = @(
@@ -231,7 +238,16 @@ function Get-ImportPlanSharedLibraryHits {
         foreach ($library in @($SharedLibraries)) {
             foreach ($stepPath in $stepPaths) {
                 if (Test-IsUnderSharedLibraryPath -PathValue $stepPath -SharedLibraryPathValue ([string]$library.path)) {
-                    $hits.Add((ConvertTo-NormalizedRelativePath -PathValue ([string]$library.path)))
+                    $sharedPath = Resolve-SharedLibraryPlanPath -PathValue ([string]$library.path)
+                    if ($sharedPath.Equals($repoPath, [System.StringComparison]::OrdinalIgnoreCase)) {
+                        $hits.Add('.')
+                    }
+                    elseif ($sharedPath.StartsWith($repoPath + '/', [System.StringComparison]::OrdinalIgnoreCase)) {
+                        $hits.Add($sharedPath.Substring($repoPath.Length + 1))
+                    }
+                    else {
+                        $hits.Add($sharedPath)
+                    }
                     break
                 }
             }
@@ -427,26 +443,42 @@ function Assert-NoUnexpectedPblStatus {
 function Invoke-SharedLibraryGate {
     param([Parameter(Mandatory = $true)][string]$PlanPath)
 
-    $sharedLibraries = @(Get-SharedLibraryConfigEntries)
-    if ($sharedLibraries.Count -eq 0) {
-        return
+    $configMissing = -not (Test-Path -LiteralPath $sharedLibraryConfigPath -PathType Leaf)
+    if ($configMissing) {
+        if (-not $Apply.IsPresent) {
+            return
+        }
+
+        Write-Host "SharedLibraryGate: 共享库配置缺失，正在执行只读 PB 共享库候选检查..."
+    }
+    else {
+        $sharedLibraries = @(Get-SharedLibraryConfigEntries)
+        if ($sharedLibraries.Count -eq 0) {
+            return
+        }
+
+        if (-not (Test-ImportPlanHitsSharedLibrary -PlanPath $PlanPath -SharedLibraries $sharedLibraries)) {
+            Write-Host "SharedLibraryGate: active plan 未命中共享库路径，跳过共享库回灌检查。"
+            return
+        }
+
+        Write-Host "SharedLibraryGate: active plan 命中共享库路径，正在执行只读回灌门禁..."
     }
 
-    if (-not (Test-ImportPlanHitsSharedLibrary -PlanPath $PlanPath -SharedLibraries $sharedLibraries)) {
-        Write-Host "SharedLibraryGate: active plan 未命中共享库路径，跳过共享库回灌检查。"
-        return
-    }
-
+    # 检查脚本或 CLI 可能先于结果落盘失败。
+    [System.IO.File]::Delete($sharedLibraryGateResultJsonPath)
     if (-not (Test-Path -LiteralPath $sharedLibraryCheckScript -PathType Leaf)) {
-        throw "active plan 命中共享库路径，但未找到共享库回灌检查脚本：$sharedLibraryCheckScript"
+        throw "未找到共享库回灌检查脚本：$sharedLibraryCheckScript"
     }
 
-    Write-Host "SharedLibraryGate: active plan 命中共享库路径，正在执行只读回灌门禁..."
     $gateParameters = @{
         ProjectRoot = $RepoRoot
         SharedLibraryConfigPath = $sharedLibraryConfigPath
         ParentOutputPath = $currentPath
         ResultJsonPath = $sharedLibraryGateResultJsonPath
+    }
+    if ($configMissing) {
+        $gateParameters.WorkspaceName = $workspaceRootName
     }
     if ($AllowDirtySubmodule.IsPresent) {
         $gateParameters.AllowDirtySubmodule = $true
@@ -455,14 +487,35 @@ function Invoke-SharedLibraryGate {
         $gateParameters.AllowPointerUpdate = $true
     }
     & $sharedLibraryCheckScript @gateParameters
-    if ($LASTEXITCODE -ne 0) {
-        throw "共享库回灌门禁阻断。ResultJsonPath=$sharedLibraryGateResultJsonPath"
+    $gateExitCode = $LASTEXITCODE
+    if ($gateExitCode -ne 0) {
+        if (Test-Path -LiteralPath $sharedLibraryGateResultJsonPath -PathType Leaf) {
+            throw "共享库回灌门禁阻断（退出码 $gateExitCode）。ResultJsonPath=$sharedLibraryGateResultJsonPath"
+        }
+        throw "共享库回灌检查失败（退出码 $gateExitCode），本次未生成报告。"
     }
 
-    $gate = Read-JsonFile -Path $sharedLibraryGateResultJsonPath
+    try {
+        $gate = Read-JsonFile -Path $sharedLibraryGateResultJsonPath -NoEnumerate
+    }
+    catch {
+        throw "无法读取本次共享库回灌门禁报告。ResultJsonPath=$sharedLibraryGateResultJsonPath。$($_.Exception.Message)"
+    }
+    if ($gate -isnot [System.Management.Automation.PSCustomObject]) {
+        throw "共享库回灌门禁阻断。报告必须是 JSON 对象。ResultJsonPath=$sharedLibraryGateResultJsonPath"
+    }
+    $blockedProperty = $gate.PSObject.Properties['blocked']
+    if ($null -eq $blockedProperty -or $blockedProperty.Value -isnot [bool]) {
+        throw "共享库回灌门禁阻断。报告缺少有效的 blocked 布尔值。ResultJsonPath=$sharedLibraryGateResultJsonPath"
+    }
+    if ($gate.blocked) {
+        throw "共享库回灌门禁阻断。ResultJsonPath=$sharedLibraryGateResultJsonPath"
+    }
     $gateLibraryCount = @($gate.sharedLibraries).Count
     Write-Host ("SharedLibraryGate: {0}; blocked={1}; libraries={2}; result={3}" -f $gate.summaryText, $gate.blocked, $gateLibraryCount, $sharedLibraryGateResultJsonPath)
-    Write-Host "SharedLibraryGate: 配置内共享库门禁已通过；专家链路 Apply/WriteBack 可继续，无需额外共享库写回授权。"
+    if (-not $configMissing) {
+        Write-Host "SharedLibraryGate: 配置内共享库门禁已通过；专家链路 Apply/WriteBack 可继续，无需额外共享库写回授权。"
+    }
 }
 
 if (-not (Test-Path -LiteralPath $currentPath -PathType Container)) {

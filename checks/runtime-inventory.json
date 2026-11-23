@@ -1,0 +1,3580 @@
+{
+  "files": [
+    {
+      "path": "runtime/cli/win-x86/PbBridge.Cli.exe",
+      "length": 33223168,
+      "sha256": "82d86740a50d7aebda252529f6a0f61f9be3f3bd493894ae6cabd33cde48b3d8"
+    },
+    {
+      "path": "runtime/cli/win-x86/performance-fixtures/pb9/erp_bfgl.pbl",
+      "length": 442368,
+      "sha256": "dff9e77faf5d5f523cf4804e13e8ce07e28b1578aa3b2f225374f7a00c8926ee"
+    },
+    {
+      "path": "runtime/cli/win-x86/performance-fixtures/pb9/w_help_bfzd.srw",
+      "length": 1381,
+      "sha256": "bc5b39aad7fe8763e79e08007fd9d97cc4622add574f756bf9754a3b06e2ad60"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Ardalis.GuardClauses.dll",
+      "length": 38912,
+      "sha256": "bd16970f801b3da23c938056c3a8db70de453ad1fdb1034aeba925ecaab7279e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/AsyncLock.dll",
+      "length": 16384,
+      "sha256": "de5f81a0449204dc1571c3ca1493caaa1fce1799a5f59c438f94005285191cee"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/AsyncReadProcess.Common.dll",
+      "length": 6656,
+      "sha256": "4b8d1da5c45f8340335821abecb8a0c249fd4ef53dfb60a234b4e10ce5a02c9e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/AsyncReadProcess.dll",
+      "length": 33792,
+      "sha256": "a3448782e8b88d33f3e044749edcf565f8fda63b1fabdc8fcca1f4d13c859aaa"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/AsyncReadProcess.Windows.dll",
+      "length": 228352,
+      "sha256": "d1b8fc6f204c4b4811e3370b14a5a2ed31a848b3fba0384e700040c12c2607a6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/BuildHost-netcore/Microsoft.Build.Locator.dll",
+      "length": 50720,
+      "sha256": "fcc85336217be226f90a5ddfa55151dc84fcb2a76fe242f5274535c6b878aa30"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json",
+      "length": 3542,
+      "sha256": "a0c4b6dc8c3c2e8d2d297177865f3b4ae6450b8cf13b304f77879b8266712dea"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll",
+      "length": 117544,
+      "sha256": "98d394704c7e660549814f7282aa5617e0546939a721f4645fe3a83ad37e6874"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json",
+      "length": 369,
+      "sha256": "7f19d83a3f514eebe09a06ec35e45613715b2430b1eb3c35f904740a9c6086b3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll",
+      "length": 53544,
+      "sha256": "cf7c60095ee4ed4d3dd1595b3bef442f94f80521c5cea78dbbd0743c4cf6c4d5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/CliWrap.dll",
+      "length": 478720,
+      "sha256": "36fa163fd3e6b80a0e897be38a4cf15bc8dd6eeb5fed99e26f7e9a6d097f077a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/clretwrc.dll",
+      "length": 317736,
+      "sha256": "f25a11d20b069b3bab1279cfef14d46c058bc2dfe8d2fe8fe8d74fefe52448a0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/clrgc.dll",
+      "length": 674600,
+      "sha256": "20a907670cdf3162d9b300914991d10ba28fc3c6b704377b58322c2886d9b8b3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/clrgcexp.dll",
+      "length": 712488,
+      "sha256": "b574745f1cebab1a7479b184a0299a5e284508f4095c7c0af72651de80461c53"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/clrjit.dll",
+      "length": 2096464,
+      "sha256": "22231ec740134103c575c7869b060b4ba2250b4ab9b5f964b93e94298b53a1e1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/coreclr.dll",
+      "length": 4613416,
+      "sha256": "a6988fc77326c245873986446de4f15218df929664750d333cb2d42486c071da"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/createdump.exe",
+      "length": 71512,
+      "sha256": "5161f24ccbe3af9ff224cab8d667f87920a58136dd045b054999e19ac29004f3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21288,
+      "sha256": "f1241b5d5e56a4f4a8c8d940b641c32ef33dcf0d6bd964dc7027d4d987a7464c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 48464,
+      "sha256": "044a363a68108a01dcdfe8dede30abe8715e4a8ab217b5813e8bbf8dda86d716"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 454440,
+      "sha256": "5c61a4b2d68b1b4aeca24b68e79f1fd5cb82e2fa510bc7693a19991e2c922e0e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 20816,
+      "sha256": "93041525b64c8736d075ee90b2050960bbd74bd740b2572f7c5de531a5cc5e75"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14632,
+      "sha256": "764c47f44e414b9b8512017a65281fc27d4153bdee4b8e79a0fd8f891b19621a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15696,
+      "sha256": "f7ce947026d491c22076af91bfe966e6a111534cba63f095698a119df52e0969"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 196392,
+      "sha256": "df0b6a7f8e246227094d8346dac53015c37dd265d440889fe33f9c1f6fe29e73"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16208,
+      "sha256": "3bc7a7e4148a2e5985aa81f8e1b33db7d5ca5d47bcaf791632f4e6e65e9bb634"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 144680,
+      "sha256": "2e17818648714a87803ab5901cfc65e677284216c2036906ea8b81bebe93c7d2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19240,
+      "sha256": "902fdda298c03284bcacd99092d6e693e062372d48b44cccd6353cdf1717c93a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19240,
+      "sha256": "9990edb1da2a14bc4d50df0f5c312568aef1c507d580492927f81f4e3619fbc0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.resources.dll",
+      "length": 41296,
+      "sha256": "bb07808fd018674a42607ffc27bcdceb66ae4dee6d67259080633d0abab8a102"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 17704,
+      "sha256": "61d8444981bee24e99040f480ad0a9660c8e05893c275298936cf4ac62fc7a55"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 40744,
+      "sha256": "4951c87b20b8744240a17e71bbcec737a903ddfa88b20effc99278c31193b0be"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 28032,
+      "sha256": "2d7c89df1b87585febea46b855c77e3d46f09a5b6af1345e66e7fc608ea8a0e3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16264,
+      "sha256": "d6b4fea1b0051ddceb4c5f50076cc5b771f94a95476f05003ffb9f0dcfbf1e4d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15144,
+      "sha256": "921281cbbab1eec5e0dddd67daa08768ad1c3d3691cfaa2380e14ce69c0558eb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 32040,
+      "sha256": "b5b88253046a35762496a83b9565e5aa8c428d59ab070fa25c4b86974639892d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 26920,
+      "sha256": "a5a901e8cb1f5b65ffa1b5db384368ba6aa586afe85c88cf544dab2ad0457453"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "20d4a017cb5251f3998fb42df27a0761e6c14fcbaa64b3b640a523c8d5f56316"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "70994e62c45ddc658dfd0c349caba7a959659d69b20207c64a9df60e883ee6d1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 25480,
+      "sha256": "fe9bfde3ccb75b47eaad6775c846333ed5c0bf6fd1f3c658048a039fc7f2ede2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16184,
+      "sha256": "177642e0789cd13baf8f85e48c0211796bae06bd36d333625f3c018f0f096de2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 19296,
+      "sha256": "795348dbc9487d3a90cd7c4b4aaf0a0edb88ab4a710f63df407b09f570fb99ba"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15712,
+      "sha256": "d5a78f32f531dee8c6b7308ad7f10e4c9355c23bcc704f336c97b929420a9aa3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/cs/StreamJsonRpc.resources.dll",
+      "length": 25952,
+      "sha256": "9963613f4d9238a35161405a34bf2aa7710e9e41db769b5da160a3b330630aea"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/dbgshim.dll",
+      "length": 143392,
+      "sha256": "4b5d67e6325322e863e5edee33d2f94b83ef1178885824b65c57f7917d4970f3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21840,
+      "sha256": "0a92084b41461d4fb6b300f9cc6ddfe60f0e02cf5e235f441dd1bbc4e9d40e26"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 48936,
+      "sha256": "b4e6830962086ca59f8de05c7ccb9069935dcb66224866d450f807777a47178e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 486184,
+      "sha256": "a661f924dbe4df73aef758eec13fa952f16010cad359832448617d73da6c856d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 21288,
+      "sha256": "27a4cd9050ff3b77bc5318c5c8557a82a438d0f01cf5fbf745111fb2ab12378f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14632,
+      "sha256": "7dc982780d198b37daa4bf453896134e0a438fc3a76b9ecc5a3769bf04689081"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "4fa95fced8bea5b297a6c88ff841efa5aca7b4d1954841f8c8340d6019104c76"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 207144,
+      "sha256": "f201775fdb55edb60c2b6df4eac08126b054a22e58a5d3710a069d1edc7202d5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16720,
+      "sha256": "69ef48ba26fecd7232ef0099e554381d825268bd4e8a5246d7c0cb2eb6220831"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 154920,
+      "sha256": "f69c2e645bf12fdb6ca877b1d3d44d37550e97b3e309ee58f767f8c45543864f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19240,
+      "sha256": "c5a5be58073a66966c526cc333ada69c96027128a1672a8883fcfd0d0968d3a4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19240,
+      "sha256": "059ef11f058e742e2a6e943faf9f6080157a9849d372d86113bd725d28412de0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.resources.dll",
+      "length": 42832,
+      "sha256": "cdb46412a68eff546aaf0a389626ab7508ae6aa6e496ad88833d5d3d35242749"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 18256,
+      "sha256": "ee9188641f40c636056dfe672c4bbd19c351bf388b57639317321d142c110d28"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 42280,
+      "sha256": "9eb67c895721fb63c698774f9021c2e40dfc57a9ee01e188b244e8a10a0b8b26"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 29064,
+      "sha256": "66db86364b5774d4b647d32f97b8ae06fa2a6108dc3640613c140150c2e117e2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16224,
+      "sha256": "09f8f05c90b569945131f2773a302ad2c757b9224d50d4ab2a47ebe7eff37e21"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15144,
+      "sha256": "57f7253d7a7828551a6679d4944168e0f9def43fa5ea686b19c4fec4f1b8ed98"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 33064,
+      "sha256": "18b6337c3646bc982de42ce0abc171ff6d435e725df35ffd284b72f5f70f8fb2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 27944,
+      "sha256": "3ec8aaa2e3e4449751934df41f9f5c9f82b813bab5c6bf34e9ff4c1f8e8e3dbc"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15184,
+      "sha256": "4c6f090190c83b3f758c5d5e24e913255f2decc505b228efba901974ffded5e4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "8294af7a1a71a58c8cf44d3275d025aec4146814f3041f62bd2875b58367eb9f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 25992,
+      "sha256": "698a8681756b9d7433d050772e95219ef0f57c47e8f46b4cf784f77214a26298"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16224,
+      "sha256": "82ca68ba1c5c09d690d72bbddc837591dc2f2bf70342c1f41943649a738a57d8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 19296,
+      "sha256": "81a9b5d1f376e06e8fdfa64978edaae0194851889868b989f9e8d71ad1e96558"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15712,
+      "sha256": "9865f680f838eb733bbfd1935b13f329eaaa446eef28648797ec67505562a258"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/de/StreamJsonRpc.resources.dll",
+      "length": 26976,
+      "sha256": "17d787c4aca5a86056f8680c1e369ea35467bb1678b6efeefd53b7e3c64621db"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21288,
+      "sha256": "08238d984035d4924dd3def0a91c3d0b100428ae9c6e568185643cf29f32d496"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 49488,
+      "sha256": "cec24ff153635075757e540d24663a0268eb0308c870aa81f2f071d3f4d01613"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 475432,
+      "sha256": "dfe98094e324d54f55fb4d99436cd4fbdfe57224785a0b0b055114066a757da2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 21288,
+      "sha256": "bc13da61722d56befc1b86d0269d9bd29c2662c908ee1ee224856e5cb86133e8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14632,
+      "sha256": "7b5210e69c9d0c2140033c56d1d78e6ba07665c3c14d940ee08c116deb54c2fb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "8cf83a9fee4f831386bc5f619a280277f936c617050449185a568f7305cc8443"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 204112,
+      "sha256": "4f2421b66b8e90858fbaa3e5644fb41a23f347f80fd4bf6f7b8dfdc0d8b86880"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16168,
+      "sha256": "d172bd411e3c55e7b2aaddadf36b23e7322d5646691b087a74407da96c6fefb4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 151336,
+      "sha256": "38ae97d894d687c3590f78d592b30cab6b3e6d4df9256c8bd027a0b155ca513a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19240,
+      "sha256": "a56902b6285cdb1c6a792243c8c29904d3c845373cc30dec258f965d59782e88"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19752,
+      "sha256": "9e9ccccd7a7fb0fed771827b65420448ece4428304827ee5859a19207b2959a0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.resources.dll",
+      "length": 42280,
+      "sha256": "2e3b5f11e98306ea4f0a345a6e8e51f45683c7ce6ddaa0235aeb14559111d750"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 17704,
+      "sha256": "07f5198a3ed76e5fd696c464c458983660512b0758d97be5ac6790d113279a7c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 41768,
+      "sha256": "2d67b70ffd04956c70ed74e9b4ddf390e143073185b0fbff37c6e90da9d4e420"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 29024,
+      "sha256": "27bc81947a4c181a7988770c0b34131e793c991e59fa081dc553bca4d7c60817"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16264,
+      "sha256": "1e7f9009ac5a37664fb3721bcafec43142bdd369f15f0d08c5020dbfe327a605"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15184,
+      "sha256": "06313cbdb3d161c4f4a0d6e36e5993903e5919d74696ef528be3c73f2bbf176a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 32552,
+      "sha256": "2945620aec36d81cbc9769434ed6cd0a0904fdbadfd0f3891caec06fbe79d12f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 27432,
+      "sha256": "850ad61e7a7d024ca8921554c4cfc49eeebfaa69e19f8e88d0fd999d18d45180"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "8c5350c0894a424a4b15f967074d78a895a3462443917a50a0de0aab3b0df538"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "309d714d81c996792686582098351a21075fcb874e0a26f6142619bed9d22c22"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 25992,
+      "sha256": "e12d05a5524628c9c9a37568e0a74b83d07f8ef22556f5a78ca6dd4eb313612c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16184,
+      "sha256": "058ab8192e31b1eae42f65c693a951259d4b41c0137c555654b48cd1182ec478"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 19296,
+      "sha256": "dd68dc06947e83f7e60f1855ac07d4a40786f8663ac452edeed21fd899c17481"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15712,
+      "sha256": "1616ac4530200fd6a7a5f185a9f3bff3fea2eb3cd66ef7fe6cc683a17c92c8fe"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/es/StreamJsonRpc.resources.dll",
+      "length": 26464,
+      "sha256": "29b900181380f2d353bb34a215a54401bfa999ee74a5529130e8e38004eb6a41"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/FileWatcherEx.dll",
+      "length": 27648,
+      "sha256": "abb0b7dc578f6be08b3657a68d3cb5857651cc5c3a2cd4974fa5d3034feefebc"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21800,
+      "sha256": "22e5cb530205fec6a6fd7a084de3821933144f41c2aca3bedeb15f7ee10d05c6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 49448,
+      "sha256": "ab8f11676f89fc97ce6560e5dd38f6962cecb8df3ddbcae20afb56c7cb3ccc8c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 489296,
+      "sha256": "3c298b5bc6acfe51129695bcef97e4126215d03a7e870328577352d9c984f630"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 21288,
+      "sha256": "e8b8c66f7fafeeeb4da4bdfec13f6e84c4d9c2b8b97b3514ff1d69c97d1e3fb3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14672,
+      "sha256": "cc58f28ef50e9e2edf1612ede0c4f0f0138167380bced06ef774b6cef60a359d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "2e4cc42f398c9e6bbe6dec97708ce77618ff66fbaa3bde2794dd549d8dabd476"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 211240,
+      "sha256": "3ec276aa39c869a0d102f7ea8ec324bdb02b2cbd96fd832675fee002e474e05b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16168,
+      "sha256": "ea76a002aa194350b23421619ed54e42685bce53d23ee73b74ef7b27952cb4bf"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 159016,
+      "sha256": "4d5e67a6b0e1bf736a147a34bac9dd21dbfb0830bfd5664a35842be02980cfbe"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19792,
+      "sha256": "a581e486290f002512b03cdc9244f2a371ee9675cc3c1f56faf43c6d92c0e2de"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19792,
+      "sha256": "8b76cdb4b1321f7a3da83b5c7624597690f7f46031131651e415c12c07903cd5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.resources.dll",
+      "length": 42792,
+      "sha256": "e29d38435965632282024d858466c6d66dedba092fa71aeba6a2e0065b2a420e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 18256,
+      "sha256": "aeca52f6ce06ba314534a8f65b4e5e6446c101a2ec75f6a083329618b1661dd8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 42832,
+      "sha256": "21a8ac079f4ba6d56a7c6cc2e92169cbf44199792186be5db352bd41976c4f4c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 29048,
+      "sha256": "cb5f8b1821155b0fc16dee9f0867bfffbe10ddee0888534c3fc553219aa58798"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16264,
+      "sha256": "2daf30eafcd4bae36783f333022212407552cc90aba2616141fa36c88d565d68"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15184,
+      "sha256": "c703ec3e87f10ae0ab4f76901d47c4f470bc09b642b80e0e30498476b384c93e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 33064,
+      "sha256": "5dc99e877e987ce183a72c451324ab4a07443a6706485700d7c55f46a07e4bf8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 27944,
+      "sha256": "5ba00fb45d83571affeba57ad5b25422b0f7f78c4cc8d93d3907aa53fd95a5da"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "2dd33d2dbdd37bd95b19bcdd6a889858b0b5de4bd387dec08efe090439cf21f7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "1ee93a500df1acda1c0383c7baa2b1340554a23bd1a7128a2fcd1e9a268e0294"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 26464,
+      "sha256": "39730cf71eee594606d600e1c61a1c7f24e26b216909794451880fc2634385b0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16184,
+      "sha256": "1637c927ffe98fe56eda7741a68b6729d18ccc0e3b9f62e8c428880e85f917c6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 19288,
+      "sha256": "058597d22d4f09f43d12107838e66b05e4d0a1ff4943dbfc6b83ac4912f8fde2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15712,
+      "sha256": "79e16af9c2ea6ee433f41d80f64d21edab1f4c9cd77a01ea93e2c2f87e64c010"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/fr/StreamJsonRpc.resources.dll",
+      "length": 26976,
+      "sha256": "bfc94ab7546196681ddb3165e6dcc0bbbb13c875fafcbb570abb2698ed84f61d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/git2-5853918.dll",
+      "length": 2012160,
+      "sha256": "45d0a0959f775776a499aa45119499aae8c512553f0c414b1ab43b6c9df73935"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/GodotServiceDefaults.dll",
+      "length": 6656,
+      "sha256": "d944c86538c37849414eb87a0cb170e80ed10932c7e96d70e64c4b2ee5d615ef"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/GodotSharp.dll",
+      "length": 5928960,
+      "sha256": "2afe2686aacfefac36da6601b59aeb05e560f06e4970cd5036100acd2ca4249d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/hostfxr.dll",
+      "length": 379688,
+      "sha256": "2c14e9b4a540d98971b60cbaffcdde4f22328bd24bf75b68aa9e6bee13c2ca25"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/hostpolicy.dll",
+      "length": 378664,
+      "sha256": "20405152b719ccb8d4e0361f3259db8875d8d4f3c97d1fbea4e1ca6cc6d21902"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Humanizer.dll",
+      "length": 355944,
+      "sha256": "d6853075547d7e303efd60354d911a2ff18edba582cda2fa59d91a2e5dcf9e98"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ICorDebugSharp.dll",
+      "length": 1143808,
+      "sha256": "563b95f1ac88c1a5fcb3ca6fdb634f2f3df1495dbc754813ccb0b9b0372dca7c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ICSharpCode.Decompiler.dll",
+      "length": 3040768,
+      "sha256": "434a63f1afb7bc1f58f9c91050be580a617ac7b0c6b45bd1731ed538708bce7a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21328,
+      "sha256": "7f84ff1effc1a25eba74d6c5cd5dee4f79a761deb5bbf929f24bffc615e48973"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 48936,
+      "sha256": "07f6a9ddd932989e53d88a2baeb5e175bbd28facde584754284b3ab1153607f9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 481616,
+      "sha256": "0bafd0145d74b66556684c0b459ddfd61dd4960a8d2ffbc0c4f19bce6102578c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 20776,
+      "sha256": "ba9ce1734d25c92d7ebe00824c3f26009daa718e1bad835287a2723230ffb2c8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14632,
+      "sha256": "6e3ca2acd6094ef66944dc11a2e20c9ce3c18c18e66fedf12f130a00b0d45a67"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "9cf5c5e6ceda11757923be83872788e57ffe79f38e1db28ad7abd56dc23f848e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 206120,
+      "sha256": "85c9e35568aa3c0632e601a4d17b31744411d644ad82e0e472b2612a283bdd4e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16208,
+      "sha256": "ee336d483aed4559cddfebbc7048abdff012d9efcc0d854ea121677b4975bd25"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 151336,
+      "sha256": "91e264d9e70d95edece728405176f402ab86869f8ca0e3c32ba50a5c3292ea45"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19280,
+      "sha256": "2597106a231dc3560647d53bdcfa92040c804c0214da14247018259e1c9c4355"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19752,
+      "sha256": "b1bcb6fd7848f36120d64da02ff34793285f82b738895ef15cb68bb58f74c9a6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.resources.dll",
+      "length": 42832,
+      "sha256": "d7ece4d7c9eee3a940939fd125c26efeb9e59708e64deec6629c3d257136064b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 18216,
+      "sha256": "96da5d61d9b9449f83d90a9892ce0f6bd7fca15ec8ce4e5600cea32c4981ac3b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 42280,
+      "sha256": "4a0a0b754b860a6b9d9c53c2c2259850d3c661d339052f96980d32511a6229de"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 29560,
+      "sha256": "03c7ef9330cb0b4c1c8dd1a457501a178ce5e2c45889d2e7a695774e9892d663"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16224,
+      "sha256": "7d6804da977597618d051cbf1df8e1df1a7ee0e2b27334c014d0ebf4f488f3f9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15144,
+      "sha256": "39cb407abf29e0c40f428b813be2a2377aeab972802df967cb54561cc19f2e3b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 32552,
+      "sha256": "c2fab1e54f4bb2702a60a2353303ccc06f62233f6de479f6d5e8a4ec88addac9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 27432,
+      "sha256": "0cf163658e1fbbe42e7b16d93be77e2ab5b1e3ef5dd2a9c1ca916123b63f5a23"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "b1aeb34274ce571bd7537e4bcafd312343b25581d7d08fc67a6584cba948e875"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "a2eb14b70541b4af9b8ba0825ad46548ce2cb863056e0c38eec1712ecedba55c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 25952,
+      "sha256": "51ec9872234149234b05db4a67602f10d60cadada1b4a4cfebe4f1a231935f06"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16224,
+      "sha256": "73105b40d11e20a9b92914d79969e1aac70d68d8149f6e932c8c7fd262d4baf2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 19296,
+      "sha256": "ad2f6362beac223f74a91841f090e441a566a8e4f7d8ebfa776f4ef24b252f95"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15712,
+      "sha256": "a011963d74a35c58f465122ab87bc8c64a2ae27a5ffd6e75557b88b4364a625c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/it/StreamJsonRpc.resources.dll",
+      "length": 26464,
+      "sha256": "e16b1f676ab79d96b329487a769320530d4b7210f58ce68810cea25f15b3b59d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21840,
+      "sha256": "0b5edbb2761f4bbb1682def87de07b85144bad4bae8e633a8719dc116ff4bea0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 50984,
+      "sha256": "dc66498d8e7b8ed78fb04248ac30ef1a35e92cc1f3168a53d0085ccee9a56a56"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 531240,
+      "sha256": "14e326cafdf48f6a13ffc876eb48fbb460182f9615e6c3982ebb9fc312f93004"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 21800,
+      "sha256": "f050976c16a68c92f3c79bcf8ede9d62a93c1b54503fd9ada90b51ac6603d29b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14632,
+      "sha256": "ee4bc11e1273a7336af2f00d90240c6a84c8055727436ee505cf2c8a08042300"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "a2b267914459a8d330f48cb87e117e26a1de1de482adfa8fff159004d0829bb5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 217384,
+      "sha256": "64352786fba42b23877a5cd5399d170caa1a13d3c9c307f2f810943ddc12aa82"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16720,
+      "sha256": "e3868013b644c8c14be368bfa313c21ad5ad82675d04eead57d25ab4b469258f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 167208,
+      "sha256": "2a4e6b080b943c53b4175d156a36192694d0e5cafce533a16ab36eeaf3d55ded"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19752,
+      "sha256": "8326ca384f523e02ccc68e6142e0287a178a44e1918cef44aefa41e6d292d053"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19752,
+      "sha256": "72c47247507f7bc3b22867b4d094c886a9ff82a221bb4fd8b1a2ac9ba583d1d0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.resources.dll",
+      "length": 45352,
+      "sha256": "a4802236ae8b01125691ad7ab2a40e246f98dc624d8eaef02d289aaeec6c1edb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 18216,
+      "sha256": "6abbeb783b9daf28907f4d311914f807ac2947ff52adbfa4ff909033ede89421"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 44880,
+      "sha256": "db14cb950cd0cac5de16ecf53c25bd8ffa12130a699f336a0598b2c2cf6eb976"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 31088,
+      "sha256": "abd0d2c0951dfab64e8401816d404e3b73e500170a8f134d2b5b62006739013e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16736,
+      "sha256": "15ffec0204bcb2eb623159fb49657989f5a49ab83768a2a6d8ce8d7fb059d357"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15184,
+      "sha256": "8cca795580b6f1784a812fd96091f0d03924b2ab7bbf0ae987c8bfd770eb291e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 34600,
+      "sha256": "141c794fabee30b4500d3b330b1d7303aacf4c80adf5ed96c95cc38f12366806"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 28968,
+      "sha256": "d46c9b80e29592786d8abcda71972b29b6eaf072a870d58a3b624667791a2e37"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "de65c278d85a847e320f2229f6979e547a7b2429e31b60336b097a12ed8f7ea1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 16168,
+      "sha256": "271161140b6d51999972acc877ccbcd25371f02a890b348f9abe25c0ee3f726c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 27480,
+      "sha256": "4bff450237418057b39dfaa28d25470403b64f5d96dd875f821d2d49ce1b3a1f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16696,
+      "sha256": "0d4c95981488335b097e09cfa3da16819c4446c5fb642cb0604e77f8564fcf71"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 19296,
+      "sha256": "1216baf2119913b4a9c63e73f9caf4d9fb66c63b5b1e85b8a5d97376e8ea63d6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15712,
+      "sha256": "06e09890e465109a97bfe803c2c47f9ea83d5000744c1ba9aceeaf704ca5949c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ja/StreamJsonRpc.resources.dll",
+      "length": 28512,
+      "sha256": "2805ba47c79c30af9a4260d00d7003e45d7dbf65d57dc8ae90b12aca7bf0dfe6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21800,
+      "sha256": "3a99eb72f9406085745855b24ff6fee54afca65d1e701917986dc72ef039f9ea"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 47912,
+      "sha256": "9062e7828470a36849b78a65efdbc75429570f28513790d91eb14e8f0b2e2fe6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 487208,
+      "sha256": "e70fa1a0e439f0e8487c2422befb7afcefd0d89f8725b887b84248dc84738dfa"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 21328,
+      "sha256": "d698019669378c2e8417dd643f1a1a9ff3ee15b4ada36fa52eed8e25f121f71f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14632,
+      "sha256": "859b13fbafeecadaca40551b8c7e977e5fcf3ce0c2a2d48320e1ca5901ff69fa"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "453f496c9fbc7c644e9086113f8183ef46dc1400e1a3a6b42142fdbbf9ff49e4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 202024,
+      "sha256": "3428ff3fb7b234b578c8914138b805bdb9ae71249b10a528eaa9b9ce11ae0d88"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16680,
+      "sha256": "e233c09aaf1c624de3e9671d738ccda040a13f525d3b6157901a7410f9b3b51a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 150864,
+      "sha256": "5e1d582b0bdeae65adac74f4b7fbb8bcbcc55a6338289edebf7393f5fd8ece8f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19240,
+      "sha256": "a52111a8af964955d698e4cba71eadb7872a42e2311a6821646c1e14c070edde"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19280,
+      "sha256": "01e983698d8072755d1c19f273c02f5fae6ab9bfc5bd0d06992e178576c3827f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.resources.dll",
+      "length": 42832,
+      "sha256": "048c03df8dd358e503c8cf0c8f219aa7b0069ba2c68a0c039e188d7b1a2c7786"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 18216,
+      "sha256": "de22e7daccc8ac9d5e2ec8fa580bccd5fad134c05358e843ef05a8f4029bf49b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 42280,
+      "sha256": "ef5bffae74e39a8e0bf7698f9f2450619786109fa2dfe29c8f13970005e7dd9d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 30072,
+      "sha256": "e3fbdd8987d908525e848697c1d052e28dddc823b5a32521b568e576577ec5f6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16736,
+      "sha256": "77f11d31563daf21da1863a8a459f3384dc6a7d9989bd03387eb1c7c4da41a97"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15144,
+      "sha256": "59a10fae37bfebda88b8bed9495d92e63f7f1bda8285b49cfce99727e8539037"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 33064,
+      "sha256": "10e31c8d96da8530a3d3d6fef18c8b1a4049aa19f20ca9bf96ada455c25b33c5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 27944,
+      "sha256": "966b62b3146312358ea2a1c61c53a4cfd4db74985b1917ef1a873e7b723e37de"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "c685bd60d9ccf3ae3913c57b70e32698ef7db36b4b7bf68ac60ab0b3906d0c24"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "19f097730821b03d31b2a66318cd3ddd7b3af755ff1ff3bdd9d614bbd73c24d4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 26456,
+      "sha256": "4c07cf97d27e184a63377cc455243cc72847bbe44d103af314021ca0895c338e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16184,
+      "sha256": "a8ce87a84c9d9673fb356ec63268ce53601738e3e39c41fb02643d4b09ff3e74"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 18824,
+      "sha256": "75df68120fdceb0a077c412892099fe46d991a9fb851970dfdff6252561ef216"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15752,
+      "sha256": "52cb88b6d84e4a06bc2fb89b311d8f574215783bba90db5a8b552f987aa38cc0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ko/StreamJsonRpc.resources.dll",
+      "length": 26976,
+      "sha256": "2526b2b9544cef1d0ea512b268c9331df6521bb1ffa9d432dff0cec80fdb002a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/LibGit2Sharp.dll",
+      "length": 514560,
+      "sha256": "86d84b0b82344d0089af06f7bb89246039185ef9228f1f811bbb53db6a361744"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/MessagePack.Annotations.dll",
+      "length": 34304,
+      "sha256": "7ecf18db7e98845d9f1c4108fee6dc01993b0781443444dd62058630381bfdf5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/MessagePack.dll",
+      "length": 397824,
+      "sha256": "ad9c0fad8b6cca8510a9cbd13f190e2bf1b30f1f643b9e2af65339c8122e9127"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.AspNetCore.Razor.Utilities.Shared.dll",
+      "length": 189224,
+      "sha256": "cdd8d5ffedd1688e4c1288a39dfe9bd790afc835d98cc1e4f6348ee33d453d30"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Bcl.AsyncInterfaces.dll",
+      "length": 20264,
+      "sha256": "e5c8c96fe1a2a7f09f161b75b973c33c24bb1386de2e4d210900738b13b18d8f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Build.Locator.dll",
+      "length": 50720,
+      "sha256": "450e5b712c7ce36da574c11c4b992887a4028ab5dffe7d57dd6de16c39fc6faa"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.CSharp.dll",
+      "length": 7092008,
+      "sha256": "4d9b1641f698564ddf7a1f3805cf246231230ea68aae75cfa02139a23298c072"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator.ExpressionCompiler.dll",
+      "length": 142848,
+      "sha256": "f56f04feb407ff8cf1d4e20c0a4931f8f6dd888ce7fc62ff4bd9f5d4e7fef606"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.CSharp.Features.dll",
+      "length": 2344744,
+      "sha256": "24e2fd4173f4ca71b1aec1091d09d2cf9f5fa5c65c8aa82be3fddf96417a4405"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.CSharp.Workspaces.dll",
+      "length": 1035560,
+      "sha256": "cf5bf1232f5419dc0ca1d472590abc4ae012ca84455e820bfa6af640fa141f43"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.dll",
+      "length": 3108648,
+      "sha256": "7df803ba4b932d061b29e4151e2dc8b920777451b7737086e16a53af9ed6b684"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Elfie.dll",
+      "length": 145840,
+      "sha256": "8ec0e18ac570157b3863f70035b644925d89996ad901f31ef918d2b0f7428941"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.ExpressionEvaluator.ExpressionCompiler.dll",
+      "length": 83968,
+      "sha256": "a750f79d39011834a426d8aeb4e865ca5288cf3240830bdb31fa5f2f249ffc00"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.dll",
+      "length": 18728,
+      "sha256": "fafa0d31326f772707d3a59810407bebd21a5b4a4f62e20e64e20c2e2a10d69d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.ExternalAccess.Copilot.dll",
+      "length": 20264,
+      "sha256": "dcab2091fa7112240b06fac6f82755aa717236f362789bac85c69975fe781262"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.ExternalAccess.Extensions.dll",
+      "length": 25424,
+      "sha256": "a3be575225cb04b2ff2f37ce0200fe4eb0157ba538a5d32f5f83a33da98101eb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.ExternalAccess.RazorCompiler.dll",
+      "length": 20816,
+      "sha256": "b86e020a684c33342194abe06c41b5c258ff46f421f19c8c5d7377d9fa555ac0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Features.dll",
+      "length": 5700392,
+      "sha256": "1936c9119a7b450f4e2ca3cdb7cbf7562a96ffb09cab9cacf44dc1b5e34e87c7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Features.ExternalAccess.dll",
+      "length": 100648,
+      "sha256": "d73d9572cabbb0f2cd3ca5d091f8c7224c272910eb0a5f0140b8b72137bd4dde"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.LanguageServer.ExternalAccess.dll",
+      "length": 75560,
+      "sha256": "b5b2cf05fc2da4195c4dc331ee280b211ae9f845bfa82f0129af5d04b07f1794"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.LanguageServer.Protocol.dll",
+      "length": 1295696,
+      "sha256": "39a149a6d1400a97e5ed0105116c1832c19c92f320dd93672878a8b47cfc30a4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Razor.Compiler.dll",
+      "length": 1515344,
+      "sha256": "70f80197ed2c683223594d60887f6c76b78344b933b420f698bc8c7761c87898"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Razor.Workspaces.dll",
+      "length": 1131304,
+      "sha256": "2707bdb3af8b970653adb8fde805434965d65305894b2d35c5e8e520949d4f3b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Remote.Razor.dll",
+      "length": 556840,
+      "sha256": "9cee2b758a8f726697f8797caff1af077d39f68133d1e3a2324b32f9423cc541"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Remote.ServiceHub.dll",
+      "length": 417576,
+      "sha256": "08feb80ab6c87bf35d03d7d22f832338dad470808d15466aad88e84fb6eac18c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Remote.Workspaces.dll",
+      "length": 220456,
+      "sha256": "0d2e91d11d33e50c1d57e001d14b5b4e96c2646acac2595ac9fce915a2d2b50e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Scripting.dll",
+      "length": 137512,
+      "sha256": "a795143052cac6ab6cb3ba8a91e40a8c15d59323505c3377234336e0626bb132"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Workspaces.dll",
+      "length": 4337448,
+      "sha256": "84d5b7e5c1f2f327143cdd5c3a247a1db94a401e7cc1b56dfc3b37a43955d650"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll",
+      "length": 53544,
+      "sha256": "cf7c60095ee4ed4d3dd1595b3bef442f94f80521c5cea78dbbd0743c4cf6c4d5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CodeAnalysis.Workspaces.MSBuild.dll",
+      "length": 148816,
+      "sha256": "af884a8c590136b35fd9b5e38d4c0bec7b09e86a466a2b40a67dac8bad47deb5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.CSharp.dll",
+      "length": 980776,
+      "sha256": "b48d497a3ec9ef5cf7fd1eeaf01e6f77673d8852c9c04a25b3b513b09e1f1c0b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Diagnostics.NETCore.Client.dll",
+      "length": 151064,
+      "sha256": "e2cc9e1f6c97b3c4ee45ebabaa92408eb9b2fc81cb08ceeb342fe48bf79db15f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.DiaSymReader.dll",
+      "length": 345384,
+      "sha256": "b954800a263122a383573c8698bb28629fb2af7fe3ef8a2621522a7fae979440"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.DiaSymReader.Native.amd64.dll",
+      "length": 2387256,
+      "sha256": "ad3e85687b8d2d2eb09d1f097fdf7095372dbb044db5b64179f2d4b8024fed2b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Configuration.Abstractions.dll",
+      "length": 28496,
+      "sha256": "7f6c40319b264b18060c1216fa02e3665ac486810a3c8d3133a23c9164cd7544"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Configuration.Binder.dll",
+      "length": 43344,
+      "sha256": "af2c49e574eda5ac57f822691115be6efc3e41ac138938d7d192a24f72a84b5d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Configuration.dll",
+      "length": 44880,
+      "sha256": "a725409e8645836161661dc584ba2e825f38f8c0fced35b0a8cb2f362050cb3b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Configuration.EnvironmentVariables.dll",
+      "length": 22288,
+      "sha256": "9971a5a6d7b0dc66f22fefa8f785bb8ec54100d8c44569fed2e70f8ab02298dd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+      "length": 65832,
+      "sha256": "6674a200ae49ee36af214cfaef4a511674d0a17828482e0f3eb5f1c21c241c75"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.DependencyInjection.dll",
+      "length": 95528,
+      "sha256": "913f764318b64e6167e2be5554496db490adf0d0e2d0bcab7e8bf69bfa8562c6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Diagnostics.Abstractions.dll",
+      "length": 31016,
+      "sha256": "13c0468501ca0efdb2ade8685fe4e77379faebd6778d82f6fb761b4b84052eeb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Diagnostics.dll",
+      "length": 36136,
+      "sha256": "518ae085cbf9ed498a83e942ef859fa05e2121222761fe4c422f612c7ca24fac"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.FileProviders.Abstractions.dll",
+      "length": 23864,
+      "sha256": "7ee935aadd8afe2f731d655ef54479ed6206e6d2aa52bfd1889cdf170b0f9399"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.FileSystemGlobbing.dll",
+      "length": 47952,
+      "sha256": "fbaeef3e8988c18bed5fee14179fa983233f8504f73e27156be4ea7146b96a75"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Hosting.Abstractions.dll",
+      "length": 54536,
+      "sha256": "89a4428a5d0feedde5aa0565509b9f4c6189efdcaf888cd1c2c3f979e32ccd7c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Http.dll",
+      "length": 92968,
+      "sha256": "4b6a81424d994bbbf70a2b24feaf7e1977f716081fa374fb872311f2e65401b9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Logging.Abstractions.dll",
+      "length": 66896,
+      "sha256": "1e28c2090e866ef94bf05c57a7ec934604ab1b69dc080e9af52d18284d6368ed"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Logging.Configuration.dll",
+      "length": 28496,
+      "sha256": "a9c88a84d0d988d1a07a2f9fb121d4dae23074dbda0c35de662b9d9905e56d9d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Logging.Console.dll",
+      "length": 76072,
+      "sha256": "87cfb75e9d0561980043e29cd3400336f73eda4806244f0a8fa74d6a8118f474"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Logging.dll",
+      "length": 51536,
+      "sha256": "845b9b3d9162628a3c9c6e3a62797ad6bc44d015e1482a614662a89e2b15236d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Options.ConfigurationExtensions.dll",
+      "length": 21840,
+      "sha256": "ec9ddfaa5e87b05f938f09b27a9a93a70a0bfcf0053a68300c526a7950fd8f97"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Options.dll",
+      "length": 65360,
+      "sha256": "24c2020f9a864e8fbac14ca31c7728a5a04602fa68f9c96b8846f54a767c6d04"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Extensions.Primitives.dll",
+      "length": 44840,
+      "sha256": "24e9693a50422334e826e9e0b2a693ed6006e3d63de5b3a9b60dae753130e105"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.NET.StringTools.dll",
+      "length": 33064,
+      "sha256": "42b78d36fb65754946763fb48937cedc30b3a7dcab2327989d868cb5aa393ee7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.ServiceHub.Client.dll",
+      "length": 659832,
+      "sha256": "dce7399a8c858af519489df161d85e096f3d5363c39cbc538870d9566fccbd21"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.ServiceHub.Framework.dll",
+      "length": 824160,
+      "sha256": "b927956cd0a6a3cc04189156474c33aac033f7252e29bea5840aeebe076e47d1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.TemplateEngine.Abstractions.dll",
+      "length": 56616,
+      "sha256": "23b401939f5855d2e9fd50778d72ddf87acf17184c0d6c65314fc8abe7aa430c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.TemplateEngine.Core.Contracts.dll",
+      "length": 21800,
+      "sha256": "c2e99323876dd926d7a726e621ebe87547c9bf221317602ae34ac74fc48f8999"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.TemplateEngine.Core.dll",
+      "length": 126760,
+      "sha256": "5c8810021c4a461b9d7ece0b9195d4b50f01cdae6c5fee0285b79be7af99ca67"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.TemplateEngine.Edge.dll",
+      "length": 301352,
+      "sha256": "047fd2aedf085bf8875618822137266bfea17f1abc12cf7c7ba43e4fab6d6fe6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.TemplateEngine.IDE.dll",
+      "length": 33104,
+      "sha256": "796abbbc9d3b07fa0f47c82b85e8427fcf05337581c636b1775ad930556b67b7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.dll",
+      "length": 270632,
+      "sha256": "0c3f6254564e0d3619af487459e482049c316bedaffcae45e5d01b9d38435e42"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.TemplateEngine.Utils.dll",
+      "length": 102184,
+      "sha256": "7d886d416b2c7556fd3495269b3108bd81d7e0a6ba76825d928b1fc2a3ba242e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.TemplateSearch.Common.dll",
+      "length": 82216,
+      "sha256": "c161d36400dbe9f3577e3998c52c5b8b6d6d96dfc48d427d1a0c5d6c3cba2140"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualBasic.Core.dll",
+      "length": 1193768,
+      "sha256": "c22b26a9b48eea35ea5411e97208d82b0d5b247701e2be676bf61a1db0952672"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualBasic.dll",
+      "length": 17232,
+      "sha256": "1af2d7c70e0c1e8829587d681e064b1df337b9fae69bfc954172490fb830367c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualStudio.Composition.dll",
+      "length": 351584,
+      "sha256": "16230bcf94b2b1f393e8ff42b94c0201fec745cf6f02f3cdf020f0b35a30b514"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualStudio.Debugger.Contracts.dll",
+      "length": 60728,
+      "sha256": "d47bec2254f5f35270e6dd6f200cf99b8e1dea6158b793d1db56cf0f382483fa"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualStudio.RemoteControl.dll",
+      "length": 47024,
+      "sha256": "eb198ce1d61f753bf77ea2b746310677b9a5eba026df0d89cca9ea1734206ac7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualStudio.RpcContracts.dll",
+      "length": 2626360,
+      "sha256": "3150bf782a69a9e6ae7f31051c83b6bc65a858d2e8fde38bff5eca00529daea0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualStudio.Shared.VSCodeDebugProtocol.dll",
+      "length": 373288,
+      "sha256": "651dbd8dae647b483f55478e1585b91e3c0840ff2a1cc9296e7dc8b0e63d9d83"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualStudio.SolutionPersistence.dll",
+      "length": 172072,
+      "sha256": "a1150f4a162d9c9992b6e99b2949e2de092017182264218b7b5666ceebbc16d4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualStudio.Telemetry.dll",
+      "length": 1058144,
+      "sha256": "0f1ebbae4458be32274b3bb08d85a6f86a1eb90f5994e7e8cd8420e310c2fca6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualStudio.Threading.dll",
+      "length": 449376,
+      "sha256": "13db0614f2e1ac657a9316e635681612afe7484d48a1b505d6e6e485181b3afa"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualStudio.Utilities.Internal.dll",
+      "length": 62384,
+      "sha256": "e4b978f120654b832721c34c4a6e623720b0beb148137c636bf022c2887d5201"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.VisualStudio.Validation.dll",
+      "length": 38240,
+      "sha256": "2f3a7b9e4f72c7dd41dfce02c7626a1e62aa1a33dda20a93b1c2247a0adbc5d8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Win32.Primitives.dll",
+      "length": 15696,
+      "sha256": "01e04c9bae28f15661d0da411e959e305ef6d0d78a28eb938b3322e0473e0018"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Microsoft.Win32.Registry.dll",
+      "length": 116560,
+      "sha256": "0d904208ba30d8808a4bbedd8e000bacf1a56417f6f725fc144f81a0c1d6097a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/mscordaccore_amd64_amd64_10.0.1526.53008.dll",
+      "length": 1356120,
+      "sha256": "3eb536b8bd054c0b4a19332d25ffc90787f307b0367bae4dc222417d8107d247"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/mscordaccore.dll",
+      "length": 1356120,
+      "sha256": "3eb536b8bd054c0b4a19332d25ffc90787f307b0367bae4dc222417d8107d247"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/mscordbi.dll",
+      "length": 1237384,
+      "sha256": "d3c09b90b6599b15c37c6172cdc6f2e61d63c7c72922a49e4703a0668f8f9af9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/mscorlib.dll",
+      "length": 59688,
+      "sha256": "3b72dd3231822316d3f4d649a7c6db115c7829e40978d564b543c4d34f5c5c16"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/mscorrc.dll",
+      "length": 133928,
+      "sha256": "41ee8d8da7be90058ac9cf3be848871a9b78f60fe6caf82777ea9776ac85f75c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/msquic.dll",
+      "length": 540480,
+      "sha256": "d363de7b6b08b3c68f0bc87ae74843cb152067a9ea589a265631895f41a0ca45"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Nerdbank.MessagePack.dll",
+      "length": 647680,
+      "sha256": "27de1ffca74636232eabf2826efd5804cde589b3f4f528ee5b72dc637013bfb3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Nerdbank.Streams.dll",
+      "length": 222048,
+      "sha256": "e5c90ffcb7a0bd0cedf51ac33e818b9f64045e9839b19701eb73460356631872"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/netstandard.dll",
+      "length": 100688,
+      "sha256": "6b7a22cce7004dea2d1747db1f150e2809afa7d41508b1b288f967ec1332f2f5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Newtonsoft.Json.dll",
+      "length": 723368,
+      "sha256": "a28c251dfe36d881e9e2462e171441b8b0ec156fe3f452602c9149b1b9efe05b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/NuGet.Common.dll",
+      "length": 107832,
+      "sha256": "c863232a273017d8a82a8bfe058c1ccc95322e2e5076b2138c78112ab63eca5b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/NuGet.Configuration.dll",
+      "length": 171832,
+      "sha256": "6566f9cc2a6db2052caab346a53ae89f178ded40c1384bc4441dbe2224d6a5ab"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/NuGet.Credentials.dll",
+      "length": 50208,
+      "sha256": "e37f398c01c5e16be04cfd48d7a3e3e224d793935d6d8ff15ec99abdc60de1ce"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/NuGet.DependencyResolver.Core.dll",
+      "length": 94008,
+      "sha256": "1063d0214bed8cc718a8fa71d8b398804429501b9a681ff01dd958a322a97a24"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/NuGet.Frameworks.dll",
+      "length": 123192,
+      "sha256": "52c4e004a50f6e0552ae73843cff4d68f05c94531287f8fa3da78283166b1949"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/NuGet.LibraryModel.dll",
+      "length": 52024,
+      "sha256": "0bba3e72a1af0d22f25ec9f329456afbf4d11922899fe0a021036fb2d1c073de"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/NuGet.Packaging.dll",
+      "length": 735032,
+      "sha256": "80fb5126f79664c8ad628f18041cb13d2c887b071edc9d8b353b14af24bc59d1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/NuGet.ProjectModel.dll",
+      "length": 240440,
+      "sha256": "af95942df4c58a4b1a62f52cf269f2dce8678c7d35fa0c6a83019ee9954d3c70"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/NuGet.Protocol.dll",
+      "length": 1148216,
+      "sha256": "a64543c57997a71dfc0de2453ab4934ee30a2ff0a574004b0e0a82733256ed20"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/NuGet.Versioning.dll",
+      "length": 62264,
+      "sha256": "fc2f75a7a5f3be9b4c3dcfc21644b871bb5a41ada8615c92d778713d2a310670"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ObservableCollections.dll",
+      "length": 148480,
+      "sha256": "f6269613334297f78a5715487642c4790bf8de2c868305ab75ce0b27c74795da"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ObservableCollections.R3.dll",
+      "length": 43008,
+      "sha256": "f9b26705f8eb7e1df4ded8b8ffdce6b9783262236667a3cb7284f2f3098a2980"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/Octokit.dll",
+      "length": 1399296,
+      "sha256": "6a48642d6ae464b43a6cb50292618af6c73ada8d726644e50d4fa44a1783f638"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/OpenTelemetry.Api.dll",
+      "length": 79872,
+      "sha256": "9c636063c335902c73f916c133de22fe8af476c68189080176443b0b82d4d399"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/OpenTelemetry.Api.ProviderBuilderExtensions.dll",
+      "length": 23552,
+      "sha256": "fcd57330a4a3252773a0c71b9a497ee7834f415210fa405151275f97575ed164"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/OpenTelemetry.dll",
+      "length": 264704,
+      "sha256": "a19a8b4d39a00dca043919473c0d5b46a174a4363d611c8dd237b8f2b3f8a5b8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
+      "length": 177664,
+      "sha256": "3297002036e73a2ea7385d9521464dee725bbbd6491e20c559498cbe81598a3c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/OpenTelemetry.Extensions.Hosting.dll",
+      "length": 10752,
+      "sha256": "97e52b88bfbad51767829ba834a3a35a63692170109c21a7103f5170c389d6f9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/OpenTelemetry.Instrumentation.Http.dll",
+      "length": 65536,
+      "sha256": "59f3101a607628c97b36dad84c0a0f2db5b3d9275ed3a8b78d4f177d68e4e1ea"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/OpenTelemetry.Instrumentation.Runtime.dll",
+      "length": 26112,
+      "sha256": "1e17b870f30ba7743a7591e39e4b272f360f7d7ce9020bfc8e71ffda4948e791"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/PbBridge.Adapter.PB9.dll",
+      "length": 114688,
+      "sha256": "9d7433ca21141e428ad4306a02b68bf05b23b99f55b7e96d6c8dae8da4379473"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/PbBridge.Core.dll",
+      "length": 9977344,
+      "sha256": "f3efba17191b25823cdd76b6129c22aa600c2a581886af5dfcda64ea5b29d3bc"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/PbBridge.Delivery.dll",
+      "length": 2080768,
+      "sha256": "13b7df1bf36031e153e8ef5c91d53dad961860f7ee0bdbae91c415c4af610893"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/PbBridge.SharpIDE.Extension.dll",
+      "length": 128000,
+      "sha256": "de6ea3022f7b3e2318bdb84f32c607f025a23af9db3dbf1b0788d276a28a496d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/PbBridge.SharpIDE.Host.deps.json",
+      "length": 220024,
+      "sha256": "8bbac9e1ac55f44a5810e4c47692753bce4f2b612c3b5c1e11f2076aeb20fddb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/PbBridge.SharpIDE.Host.dll",
+      "length": 1123328,
+      "sha256": "0297b35c205aa1d8f984e4ab256433e642ef1795a1b6633fc8deeea8438de14e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/PbBridge.SharpIDE.Host.runtimeconfig.json",
+      "length": 481,
+      "sha256": "21cbb1a634af7e31d7d19c98570a95a999ec2a5e6598f63b66217e7cfbc52d97"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21840,
+      "sha256": "f4dea2c0c3b53f62de3021193f8ab6cb43b609ab9a858f936460fdeee4069e32"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 48976,
+      "sha256": "82cdd8e6c94750d4fc3fe274dbb09e2091e9ad9a8e2f1d3529dd3c5e71e073ff"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 488744,
+      "sha256": "011775a903e5dad76735b9e97696ab3ef351d74ac30f1999dd62adec863183c0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 21288,
+      "sha256": "f824378c58205f595c8af39ce71654a20713135d33efe971b8955e8bdd15a81a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14672,
+      "sha256": "6d92b89ecce3517e0339329e024a48be395d1eebf34693d8310daa93006a9a4f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "5ab1bf8d6338b8be382b0f069ab388aa9e06b099a2a7c1273f72ca9e41d2d203"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 203560,
+      "sha256": "d5cbdac29022f3998114a0a963f75e3f3cedf9c3b281bfec3fdffb50bc07896f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16680,
+      "sha256": "308b7146b94f7d9c610827b54bfda94906f3321316f1931635be2eacf64d0d3c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 150312,
+      "sha256": "eadc7aa01d906bfc4b56a979fb4a7b57a524f55d390d07ea1aaaff77ddc8c6c2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19240,
+      "sha256": "2a0b5de83b7f6fa8eaa5ef3678f13b95fa35d4824cc8b260cf6a046f83add2f7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19752,
+      "sha256": "8029e32c5d61301724132168e264c080d9576bde971f6f1ae408ec06204c8510"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.resources.dll",
+      "length": 42832,
+      "sha256": "dfbcf0421a97bba9ccfb24a61285029e662fa2eb4096de47deb54024d105124a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 18256,
+      "sha256": "7d036cf5bf0e43e2a342372b322256182657e21e197d8d4e5171b418c819e121"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 42320,
+      "sha256": "8e52622aec8745e0740edcedfb9be7f6b4d15cabf6a9c58ecb549a0dc747883a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 29560,
+      "sha256": "dac7cb21565c40523f23e9978163eb3a8dde30fa6ec7614fe5fccc99ab54a290"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16776,
+      "sha256": "1a56eafcc4425e79afb2e2f323aab461daf4b91f65205ca620f030eb217ff26d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15144,
+      "sha256": "37742542a5ca251efcf758ac837c241251202160e7a8411a63a3bc602c6e1ffc"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 32592,
+      "sha256": "f12540cf6e9bcc0735d5aedfbd6cbae7d53f6af298e599297bc5b810347617c5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 27472,
+      "sha256": "c2071351c0617646f6f1b573920245a84f1a0910a9e9728b9751afcef48db364"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "062265a9073fb0d1b22baddd79af62e50c4f45a94bcf92db61e23799ff4f285b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "f8bdbd505f28874de1219776937f47c1bae21c29c64e396cf2f2b74bc1674921"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 25952,
+      "sha256": "b94cb52d1de4739994a6e6f14f1f30aad168408cea1b77725ef2ca7f5a30ef8b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16184,
+      "sha256": "692757592453b824aa56470ab11a4ed9694cb375c4bf85bd141121c45dbe3b7f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 19336,
+      "sha256": "a0c438b97941d398a2322e0494adee36565f60c69e54ccf88a3069f7a44d55e8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15712,
+      "sha256": "d3a1917d9424b53b1399212631b42e66bfc15ffedad6df4bb1b486bd72edab57"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pl/StreamJsonRpc.resources.dll",
+      "length": 26464,
+      "sha256": "8320e4f24975a9b06b4e4b5ce7fc04582b4c5866a37afd7a8336e78a09817e21"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/PolyType.dll",
+      "length": 323072,
+      "sha256": "33d30bc1baf80b85ad9b428a388d9999eaf20999d555a6e684aa758f4f679968"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21288,
+      "sha256": "10c07d3d487fcf93707a357cc8c016c0a2740f7717817542bccd803bbc97d0fb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 48424,
+      "sha256": "493ec88af46a43187b870b8b9403eb9da21c2dd0514268b158010d375760751a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 466728,
+      "sha256": "dad4e68cd039402ba4c6b51a62f48a9ad78201bbb4fe0f4b35b864d3c09c0f3b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 20816,
+      "sha256": "4ceb4cd17ae8279606f7378683a1cf5a9145e39ea9700cc37f97274e4f21d908"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14632,
+      "sha256": "80b296f4114bb07f98100dd81d184e97843ceb2cbc1c4d1341e2d3b2f9675ba8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "94df44df93e14dee52d0128f68867fc79f840d5733deba5495310518287aa67e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 202024,
+      "sha256": "8e2b9a8bc37b9fdaccf88b49ad63605eb4e9b051ec57e4f77766040a0cb3d6b9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16168,
+      "sha256": "856f5025ab41621e49f890adfcb2083034949d643f528a3ca1442d4384d474ff"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 149288,
+      "sha256": "1bf5bbb507bf0d35b1554dfa0b8b0d3b1cff0cba44b998ede622001027c6ea5c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19240,
+      "sha256": "89cf30036db4fd9adf18a9cbc308253ab81dfd3b2b87c73e21ad96b2e911a6d6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19792,
+      "sha256": "42b1aa6928ad557009a20afaab41e436f3771a1d6069d07465b28dccae4fdabc"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.resources.dll",
+      "length": 41768,
+      "sha256": "0ff40a8ab1f9e65b8129b02ebbee6d283495a1bdf08c5f95f4f31cb6bbab51a0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 17744,
+      "sha256": "29627759110dc673c315a57d63ebd95db9c358038a8c7fc7242e0ce33ec1b6f9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 41808,
+      "sha256": "2ad10596fcb492bf27ef8efd0e3492145f345ba6f147a2ee3696d67c34316bf6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 29040,
+      "sha256": "f9aca2b817d39efd5e01924efa1889a7c89b90f08e74995e346462e44fb9d0ce"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16264,
+      "sha256": "0c1e16ead0e5bb0e1f97f7d7966580c2855efb56569fa37c93a42aa758cfc1c8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15144,
+      "sha256": "82593470bed3b4236466f42b9caa50774e6efe2416e296db9e6015e3912ed1ec"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 32040,
+      "sha256": "fde414dcae8355a76731e671c3944817fddbd39bac80b2126800299a5c57601d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 26920,
+      "sha256": "9b859c636c7345693e88fd4f6b41dc9588650eeba2a1dbd1c317ccd6fe552870"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "42bba1a21036cb16d306384808087aa7cbeceda2c840e115cbb6c2146a3b6253"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "15fbe65e18194ed7063fc1dd30bfa3007013428484170f2f185378de3f5324db"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 25952,
+      "sha256": "e98a9100eb36734b714c1268fc74c6068901c4a14a886890fea0ffc93b5f5ee1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16184,
+      "sha256": "bb2ffa2b6705a5a9735e59d613ea2e0367a5c8f4890cf66caf8adc44f7677a57"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 19296,
+      "sha256": "177775ba300590b22341f7edf2d2cd1bf114766784ff8b7b1b4fb2f20f9a72e8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15752,
+      "sha256": "e403e721c25da3d26d4fc5a24ff1998e706dea125fa489b59243e649b034b1b0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/pt-BR/StreamJsonRpc.resources.dll",
+      "length": 26464,
+      "sha256": "8a979b0de2d1448e532e55026e303a6a6e45792e6dced97369b66d5d3a83e85d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/R3.dll",
+      "length": 599040,
+      "sha256": "69532ce5b422d2ef15569ac73a184b1fc4449e49311b07c928f29307b6bf1c6d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 22824,
+      "sha256": "e1ae14f6c9a2c5e5cc0c676cd99fb6f8d3c85edaa3df8df54b3e52d97b4c84a1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 57128,
+      "sha256": "cc5fce0608a17e601b65eb638154bf9b74eff9852b9337345c08a07159c38ad4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 641320,
+      "sha256": "c9268d4f84275cffb64d75ca2f76e71365d4ce55470d5a93d2998822fdff1d0e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 22824,
+      "sha256": "638148f2d477dff6a05c13d202be16ab7f8dfa9f4b61110b89f8fc9e076e3fa5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14672,
+      "sha256": "9dfc69582b457b7d50259867ff6ddf1d13e974abc04ae268de416b39018c8e83"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "31a1f42038c2279cc085bdef888d2d648f67845e92349b79e01ec3b6a8cc56fb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 268072,
+      "sha256": "9206c248600d23ad81bf9684a3bbf965ebb973858d6ec8457548cbf4674d7a94"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 17192,
+      "sha256": "c42276af080f5a679d363b0ce16b2ae0f680ef870aa17ddc87c3836a037d50cb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 219432,
+      "sha256": "664edb0b7c8bfa0b29b7f4b6ca1a5ad5653d6e1eabd8233b6c8fb3aac5b8c15f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 20264,
+      "sha256": "b1118e47bb01198f7dcf01b9dbd41d56a308cc90050b80b99c278f1f0f60c68d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 20264,
+      "sha256": "d6fc2c6e6d2eff95e9bc82e9b2b50d05ebab5a61016d66bbb8c39f8ecb00bd24"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.resources.dll",
+      "length": 51496,
+      "sha256": "2b5c1f4fd79f72d5255f714a8c64ed329174841de0892f4cf53663564d38654b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 19280,
+      "sha256": "8f5a86c1cdc9496c64628f4f60debc5c12ae70a9e7ef85a021200e0c60ed1db3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 47400,
+      "sha256": "214a06a315727c376aae6294eb137b9bd3fbafa6ccdf782c0c766cba8a394f39"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 33144,
+      "sha256": "db398a1dc459654c7a7d4d282a024ce5c86c1ea8a9f610175148d2d18e716670"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 17288,
+      "sha256": "698ee586ee11966fb344170b3f5200fe17846d8426a1860d8403de032e7ec1b8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15184,
+      "sha256": "4717ef2fcc43a9e919a8c0a45bd84d59561cf9a3e5ac3717d61803c4934bfd66"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 36648,
+      "sha256": "d88bea8e9f2d1322b9bb41a5f18fb1bf4362d826245657dade3cb41b2b0b2d7e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 31016,
+      "sha256": "a84c3b3bca8c73161bbd21dbe63e353491cad3cf1dcd76757477bfa9cf6e6fc4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "3d00f20099fd324f20295d87e8577256b101ab208052f8447865a1e436ca6584"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 16208,
+      "sha256": "078545284adc8678a486b5b8898c87b22d8dfc95ec1d4d66b01e8c5d39b78001"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 29024,
+      "sha256": "9a1136d7679270497384483114e6705ce071d6623365d33e316b00e45e35313e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16696,
+      "sha256": "eaefa9f02a4b67fa9d7424bcc379f085f3bdc8cedb06a5cbe6059a2083992a21"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 20320,
+      "sha256": "86660f0766a11d402d94d1b4d3c76c9e4e82a655a5ea04b87a7d77fa72deb4ce"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15712,
+      "sha256": "76647014505beaeb89122a52d4026e63b5bb65e9bc6e01590b1f335eb6845c2c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ru/StreamJsonRpc.resources.dll",
+      "length": 30048,
+      "sha256": "8fa0db76841903f71ef34a0acfbce480492390ea259650d4eb9cd968eb3307cd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpDbg.Application.dll",
+      "length": 66560,
+      "sha256": "5fb88fee7e48b9f9d5a9f8a24de3e493d41c9beaece073a2aa89cddd71594324"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpDbg.Infrastructure.dll",
+      "length": 450560,
+      "sha256": "f51bdd5497ae3bbffe791d20bfece121160c3570f56cbf40f679dd551a02cebf"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpDbg.InMemory.dll",
+      "length": 6656,
+      "sha256": "352687f7e51a35226dc061c3599bfdb7173803cc33f09194ec3f2375bdd8bc69"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIDE.Application.dll",
+      "length": 805376,
+      "sha256": "df8e9d987aab97259a0802d8ecfa73846095358a922258ec11b50ab53370f157"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIDE.Application.exe",
+      "length": 162816,
+      "sha256": "a536f47adbc6e2b0d51369265e3616ad8ec2cc5ab6fe181f7f1f5eede4d943c2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIDE.Application.runtimeconfig.json",
+      "length": 342,
+      "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIDE.Extensibility.dll",
+      "length": 37376,
+      "sha256": "d6de153ac4312c5e3ff3c63e0ef3e05f79ce1b342a90e3ad94efb82a9ceb425b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIDE.Godot.Extensibility.dll",
+      "length": 29184,
+      "sha256": "b4367a4728b29813eb17475e8d328787ecb0dccd5532d25c5efdba882d19e29f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIDE.MsBuildHost.Contracts.dll",
+      "length": 41984,
+      "sha256": "bc8bce718c120e01708cb2a2066fdde08596d0ab9a99c3c6deae03e8a49cb2d6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/Ardalis.GuardClauses.dll",
+      "length": 38912,
+      "sha256": "bd16970f801b3da23c938056c3a8db70de453ad1fdb1034aeba925ecaab7279e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/MessagePack.Annotations.dll",
+      "length": 34304,
+      "sha256": "7ecf18db7e98845d9f1c4108fee6dc01993b0781443444dd62058630381bfdf5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/MessagePack.dll",
+      "length": 397824,
+      "sha256": "ad9c0fad8b6cca8510a9cbd13f190e2bf1b30f1f643b9e2af65339c8122e9127"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/Microsoft.Build.Locator.dll",
+      "length": 50720,
+      "sha256": "450e5b712c7ce36da574c11c4b992887a4028ab5dffe7d57dd6de16c39fc6faa"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/Microsoft.NET.StringTools.dll",
+      "length": 33064,
+      "sha256": "42b78d36fb65754946763fb48937cedc30b3a7dcab2327989d868cb5aa393ee7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/Microsoft.VisualStudio.Threading.dll",
+      "length": 441888,
+      "sha256": "138e3548e487152de355b81303ae98e1bb52a31fe5c9107fa81a15f66404f426"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/Microsoft.VisualStudio.Validation.dll",
+      "length": 37392,
+      "sha256": "59cd5e953cce597847e515a73a1c0975cd5a6b94921a7b91e81045fa9922f57c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/Nerdbank.MessagePack.dll",
+      "length": 641024,
+      "sha256": "fc086ce3623a9a3f9213159d438c642d225046e371489e8e7f126d4c62f188fa"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/Nerdbank.Streams.dll",
+      "length": 222048,
+      "sha256": "e5c90ffcb7a0bd0cedf51ac33e818b9f64045e9839b19701eb73460356631872"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/Newtonsoft.Json.dll",
+      "length": 712464,
+      "sha256": "22c649f75fce5be7c7ccda8880473b634ef69ecf33f5d1ab8ad892caf47d5a07"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/PolyType.dll",
+      "length": 323072,
+      "sha256": "33d30bc1baf80b85ad9b428a388d9999eaf20999d555a6e684aa758f4f679968"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/SharpIDE.MsBuildHost.Contracts.dll",
+      "length": 41984,
+      "sha256": "bc8bce718c120e01708cb2a2066fdde08596d0ab9a99c3c6deae03e8a49cb2d6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/SharpIDE.MsBuildHost.deps.json",
+      "length": 9552,
+      "sha256": "d52716d77e4d8d341d468feb29f7be2c88043c07004779338ec9b6a449e58860"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/SharpIDE.MsBuildHost.dll",
+      "length": 37376,
+      "sha256": "06d4b81c428da1d34f82d31291c93560f1430e254e7479bf0d244b0b75879232"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/SharpIDE.MsBuildHost.runtimeconfig.json",
+      "length": 377,
+      "sha256": "f769b0d6f9c3e5fa0d5b6d5946d8e6ac17ac1e4c6070bc17e8b4445b9cce5d54"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/SharpIdeMsBuildHost/StreamJsonRpc.dll",
+      "length": 648544,
+      "sha256": "39ccb7ed680c227e80753aa8ec9f4c6c5fcbcf710085e3109d350f17b9555b68"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/StreamJsonRpc.dll",
+      "length": 648544,
+      "sha256": "39ccb7ed680c227e80753aa8ec9f4c6c5fcbcf710085e3109d350f17b9555b68"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.AppContext.dll",
+      "length": 15144,
+      "sha256": "5824233c5a6129f5741e1e0bd14f60a58a38600bac384dc8b3cd09f969d67543"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Buffers.dll",
+      "length": 15144,
+      "sha256": "b569db17c9a66433310a3b71a86157f025ae573f60d4bb4e20e5d1c3cac94896"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.CodeDom.dll",
+      "length": 184656,
+      "sha256": "455ef209be2a45cd70176c53163ec6a4a3fd29a69b5bbe09ed67e060e3a858da"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Collections.Concurrent.dll",
+      "length": 231208,
+      "sha256": "00dcf6500d5a0796ec5878e5cff60f15bba20bae3c6d574e0a194e4c2089839c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Collections.dll",
+      "length": 296744,
+      "sha256": "07dedb131e9d8707a8025669f2b394ce512be868817fd47bc107dc9e8e4645d3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Collections.Immutable.dll",
+      "length": 976680,
+      "sha256": "9bf7f6c680bbb73d4412a3319368ddb8e7b58c6a6358802b738e3c2cdc5574d2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Collections.NonGeneric.dll",
+      "length": 104272,
+      "sha256": "61bb3ddb69a1649ab3a77d5c9680532e41cf0596d347fdb9e43cb4729b2a6cdd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Collections.Specialized.dll",
+      "length": 104272,
+      "sha256": "1340913256353e85e0032196d5ba93507a190cd252686ffc19d5a5fc6afbb3d4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ComponentModel.Annotations.dll",
+      "length": 198480,
+      "sha256": "b3321a78a4d201096915ef125dd71579e88ae7e91dc8717245710f2dd2588476"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ComponentModel.Composition.dll",
+      "length": 296232,
+      "sha256": "92596520f265de856858e53e338f6d3fcc775333c4139463431f85b87eb56655"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ComponentModel.DataAnnotations.dll",
+      "length": 16680,
+      "sha256": "0b47479c27b050e90cc0c232561781f71a85df75686758eff459890e73045d81"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ComponentModel.dll",
+      "length": 30504,
+      "sha256": "e6a85ff45d7ea39b809610331d1350275515ff840bc2cec5a4d352f76a000f8f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ComponentModel.EventBasedAsync.dll",
+      "length": 46888,
+      "sha256": "0debe0eb6a38fb8f92ec7b58df01c742abb300ac71679e17a6bd42a9740499f2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ComponentModel.Primitives.dll",
+      "length": 79656,
+      "sha256": "088544116f6c6fc7c2d06ed33d580a0143fcea73c1f14aa9b83e54d441f6e2ec"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ComponentModel.TypeConverter.dll",
+      "length": 767824,
+      "sha256": "cb58d0133e1db4e85ff6502a55ac80160b7f06bef147b3970d01926075d0b588"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Composition.AttributedModel.dll",
+      "length": 19792,
+      "sha256": "d0ef488dd9cacd1f3a2a4704a0dd29a9dee8c66266de07288a5c53279ced2263"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Composition.Convention.dll",
+      "length": 54056,
+      "sha256": "26db3a8ae3a95d749ad22e871a315e33dd090f04515f988704fa64b8319af181"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Composition.Hosting.dll",
+      "length": 55632,
+      "sha256": "73004eb0e2da3cb8da304fd46f67dc210644909b54b4364ab0c8e31a8b777a04"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Composition.Runtime.dll",
+      "length": 26960,
+      "sha256": "4a141b124c1a190735dce0bfef4324edd8743ee8658c1b3f9fe501bdb1263a7e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Composition.TypedParts.dll",
+      "length": 65320,
+      "sha256": "c7a1725e4a76c0a137eef1fba6eef9ddb03a52d9073029fee1ae58d17bcc07e2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Configuration.ConfigurationManager.dll",
+      "length": 444200,
+      "sha256": "e02bfa6af9a15dbe62b93da7f6360d0478a4cb6e0bb1c7e24d16b2a7234808db"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Configuration.dll",
+      "length": 19240,
+      "sha256": "1f7c4f09bd5eebb988c7f6b16db293260a7ffdaf30e407ee44d1e492e83ae78f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Console.dll",
+      "length": 169808,
+      "sha256": "e406f27a12fabb43798d5b32238ab1c34ee10739102c150eee50bc646a51e042"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Core.dll",
+      "length": 23336,
+      "sha256": "7828fa13325f9b97ddd8d8e6dcb1cc54de1afc5fb2dc69a29f86ca686fb8e04c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Data.Common.dll",
+      "length": 2770768,
+      "sha256": "92f99d39c9df497047c2a1a5ed126a5025e79d03908170be6dc6505453a27a1d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Data.DataSetExtensions.dll",
+      "length": 15656,
+      "sha256": "f7dec6629d252f03e1c90e0a2ead24e482a2a24914101710391aba6dc8a453c7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Data.dll",
+      "length": 25424,
+      "sha256": "5f1d2575f0a94826b2cc722be1548929a2756a5d9f8009c3e2235da400fddd9f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.Contracts.dll",
+      "length": 16208,
+      "sha256": "7d564319c9c214c9b0c023fa3152242a1cb57b1ba1859a4b04dadc78c332d51e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.Debug.dll",
+      "length": 15656,
+      "sha256": "54340793a5d2f86aedc1573f0c438bb53ff810c13ad839362fe153a560acb9bc"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.DiagnosticSource.dll",
+      "length": 501584,
+      "sha256": "8048c2af87406c3573d09c78696171ca6f3bb155fac3f7684e01406bba61e700"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.EventLog.dll",
+      "length": 176464,
+      "sha256": "e4a0bb00ca9d5cf3c54cff629680f54ff4a23cd93339899ec481d1cb4fe92518"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.EventLog.Messages.dll",
+      "length": 800552,
+      "sha256": "d61a4474c6002ff132b4e7dccf7d92fee24928722c77c2d258b5f4464dd7392a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.FileVersionInfo.dll",
+      "length": 46888,
+      "sha256": "16257d9fd42996b0e12e7a0a2da8dcebaf05cc75ca6cf33e591790a10a69598a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.PerformanceCounter.dll",
+      "length": 134288,
+      "sha256": "e94e52fbabc42153a7dbd32e1aa4390e569716dada4eb21729c5920c4d55d027"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.Process.dll",
+      "length": 329552,
+      "sha256": "126bd07fb3a59d1880d1d5ac11ade6e161932535eb5104550c4eba1d0abbfef0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.StackTrace.dll",
+      "length": 46888,
+      "sha256": "d1e815e1fa1aebdb63bab5c1878ddba84dd4c0e837545ff83d593620e054cca4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.TextWriterTraceListener.dll",
+      "length": 67368,
+      "sha256": "a2cc28d05d8b7a2f0d224b6c9a77d9a546d69029aad266a1a6ef33c4dde33f4f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.Tools.dll",
+      "length": 15144,
+      "sha256": "a39e302a28f1f35cd9cd975c52358c7796330080920ddc4dcd3b336760b769fc"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.TraceSource.dll",
+      "length": 141096,
+      "sha256": "b2663087d8cf28ca42851a67213a44b6d608f5676e2e0dda0b1da14f371da723"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Diagnostics.Tracing.dll",
+      "length": 16168,
+      "sha256": "a6dccae8d2c8ecddbc6c53d70f58daec02b45431edb4affd74d9626cfe073d07"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.dll",
+      "length": 50472,
+      "sha256": "22226debb0d6601d54f69ca122fd65af07bb869a6f8cb3141374bce0705e859d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Drawing.dll",
+      "length": 20264,
+      "sha256": "76163a1b4918236bf2041036e76d83d75e0405a7a7022168121d21b3aa80e30d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Drawing.Primitives.dll",
+      "length": 132904,
+      "sha256": "f86fecb7b6d545d57f4584f1c6dd499a747c760afc408b5d4f33a0a22813257f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Dynamic.Runtime.dll",
+      "length": 16168,
+      "sha256": "02b2c3fd58f793718fd4a0707993b3cfac272541166ada7b0373902fe5fc6384"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Formats.Asn1.dll",
+      "length": 239440,
+      "sha256": "dddde5e0942e6ed249f905d5d58bba797756477fe3424c94bd60abb73e95bc8f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Formats.Tar.dll",
+      "length": 288552,
+      "sha256": "0a49e083ed13e4dde812dc870e26f87e1e86a1b0592a661ed498ee49a274c2f3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Globalization.Calendars.dll",
+      "length": 15656,
+      "sha256": "d169ed333b4bab2d6f9ba6a0fc9e4f1a8301e97e9c265a46d949ea5651080c0d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Globalization.dll",
+      "length": 15696,
+      "sha256": "bdeb8d26d917976915190c6213907967b5a2ce83b7c575b67a71d121993dfd24"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Globalization.Extensions.dll",
+      "length": 15144,
+      "sha256": "4a5ff15607bb3af1016a471eb2e3e93b94ab60da4b862de5de9aea27fb1ddf8a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.Compression.Brotli.dll",
+      "length": 83792,
+      "sha256": "4453592a0674b86b0cd41bf3e021b22b3e118b7598926d5df4676da1a8ce24e6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.Compression.dll",
+      "length": 419664,
+      "sha256": "8637cdee8cb539b4dc492b775805c6611b3a21226f13faa91babbb427e931fcf"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.Compression.FileSystem.dll",
+      "length": 15144,
+      "sha256": "889ecc7a7c5b44071aab2826fd6d6b8dad8b88ea04119870a3e4f2caaae95009"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.Compression.Native.dll",
+      "length": 937256,
+      "sha256": "68d68e5aad37470310f2b723afeda6447cf53746ad8e3ffabf44cda8cdcda6bd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.Compression.ZipFile.dll",
+      "length": 100176,
+      "sha256": "5534bfe9bccfb28357b85bb4b9f8692a25aeff40c03951813f55621f333bc5b4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.dll",
+      "length": 15656,
+      "sha256": "2699ce957e080e2fa5f87cfedfc0d469475fd8d1ada1f5db09c48a085c2282e3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.FileSystem.AccessControl.dll",
+      "length": 104232,
+      "sha256": "c692a48ab5d7ef5389af22fbeafaf44a7a495eac4d0e9d18f5cedd8a691818b8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.FileSystem.dll",
+      "length": 15656,
+      "sha256": "b2b09f39e7cb61dddb3658d95a4feb62498d25a9a477a1e11f5faf36d829a19b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.FileSystem.DriveInfo.dll",
+      "length": 55080,
+      "sha256": "b590790f7378243adeb02003911506491a9b76dc3d2b01acd5b7dc485a0c76bb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.FileSystem.Primitives.dll",
+      "length": 15144,
+      "sha256": "0602e2f6227d8a0842bba942fb84c9a68331266802c449af9e11aeb45f9193fe"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.FileSystem.Watcher.dll",
+      "length": 87848,
+      "sha256": "0ffc38c087054451077a66e4c7f3c5b35869ef7911b5cc1598e7939ef3879a07"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.IsolatedStorage.dll",
+      "length": 87848,
+      "sha256": "aac0d8b2736ec46166bef6f2796b6f621af686552326f3e7e73921b7792989dd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.MemoryMappedFiles.dll",
+      "length": 83792,
+      "sha256": "eb75d6a39e2babc14f70c12b1dbcdb57fb8763bd79d038c80b21182689b70f50"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.Pipelines.dll",
+      "length": 190288,
+      "sha256": "876f3ff1e05892226c1f0363468cdfda8f023b21400ee6177a56a1405914e1aa"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.Pipes.AccessControl.dll",
+      "length": 15656,
+      "sha256": "e34322b26ea5aca715c6f92c3177556a02083e82d561ea90f37a12caaebe90d3"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.Pipes.dll",
+      "length": 165672,
+      "sha256": "ad25ec1fd00def55631c6ec891b3bd270b80ce1754f90d4190f2caea28b8b842"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.IO.UnmanagedMemoryStream.dll",
+      "length": 15696,
+      "sha256": "e3b1ba5a4ff28ee788f1e88dfbb50762135a7c29f0adb93dbac9ac5284dec769"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Linq.AsyncEnumerable.dll",
+      "length": 1292072,
+      "sha256": "e4a6fcc5bfc7d9b9038e3a2d26e17aa9244b7b6a25b10c4ce3cf205689661040"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Linq.dll",
+      "length": 698152,
+      "sha256": "dc992ba1c1bac514d14cc923c154a6466be5a250c2b02c220f8f5d63074718e9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Linq.Expressions.dll",
+      "length": 3639080,
+      "sha256": "a4fcbd909bb6fdd8a058c06f23bd149a9dfb0b9462c2f757dbbc1da9dfd583e4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Linq.Parallel.dll",
+      "length": 776016,
+      "sha256": "adea4cf143f5da17a6d34bbd786deb47ec299dd6010f844dc9d53c386f4740d4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Linq.Queryable.dll",
+      "length": 182056,
+      "sha256": "600e77c705bf8550dbf0d1c3965020046424537362c3f76234feaeb12cc69844"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Management.dll",
+      "length": 314192,
+      "sha256": "5b117ffaa406309771a0f1487ee643d20fe72365c4554fb16e08cf883f9f237b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Memory.dll",
+      "length": 161576,
+      "sha256": "ad367e1b7b733aa840cd6595ead967acb9fd9969cf644e06689bf2e841b515a0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.dll",
+      "length": 17192,
+      "sha256": "9966e1605fda50d083beaa307bcdb9daf0d8b7bae84771265d8c44534748ffd8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.Http.dll",
+      "length": 1746728,
+      "sha256": "2db574037fe8cb2465043d080677d64c2b0ac0e4bb3944e6b6e84218c65d691c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.Http.Json.dll",
+      "length": 128808,
+      "sha256": "354c0900786b9614bd89130888542b2098b1968ebb1a3bf838c82bbc0fb0211f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.HttpListener.dll",
+      "length": 534312,
+      "sha256": "3ff234307783f345d9b11946bf1b8cdcac1f761e58526563d96392acb2612ff7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.Mail.dll",
+      "length": 481104,
+      "sha256": "be2372646d6bf42afef16f9fe5c3514577ca8aa99b3d667fe7c808a5999cab9a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.NameResolution.dll",
+      "length": 124712,
+      "sha256": "7bbeba9120a3ece73bd39fa2539750695f37815c8c6411c190cd20d3493bfdca"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.NetworkInformation.dll",
+      "length": 157480,
+      "sha256": "499f0d2788382e9e628c3c82f57bf0dd8e86d7cc00b70765bca5153315eaa10f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.Ping.dll",
+      "length": 91944,
+      "sha256": "ce93405cf2004efc69da60f2eba371bf6461631e8d37365209f74516dd917113"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.Primitives.dll",
+      "length": 210768,
+      "sha256": "607bcbf14bebe5643257d26d67968e16cbe6b02180e7ff8d337b428aaa80d52b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.Quic.dll",
+      "length": 358184,
+      "sha256": "01f534df790ac9e11cf79e0e69c42cfc2dfab44c3da8c87d7d4af69188ff9307"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.Requests.dll",
+      "length": 374568,
+      "sha256": "83586745515c0fd0e5d48248871fd9f7225657de5595c8b48e4d6a88bf4efeec"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.Security.dll",
+      "length": 665384,
+      "sha256": "5ca4924950689ade61055daec5fd99d9f617acafabdd5b21c09e4329195909a7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.ServerSentEvents.dll",
+      "length": 83752,
+      "sha256": "324b0f8d305c967adccce3f126bf470e8aaa0a62d84695f71feb700f741d0abf"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.ServicePoint.dll",
+      "length": 15144,
+      "sha256": "678104fe7e696b9b182734ed4bbde61f23e8466c942a68baa9f9e504781aa978"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.Sockets.dll",
+      "length": 530216,
+      "sha256": "6ee2e8c007d307d94dcdb9b1864c0894ca1621c51f43d2683981cac4f7823b7e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.WebClient.dll",
+      "length": 165672,
+      "sha256": "6d34f1715cbbb24445b88d3fa62bde425835471b72b04a6a20e2f96dc356a96f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.WebHeaderCollection.dll",
+      "length": 63312,
+      "sha256": "31e1ee3ad85465b84e818a903e0e87ab86b7b9c8943fea7136e13884f555cf8f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.WebProxy.dll",
+      "length": 42792,
+      "sha256": "3e0fff6d5a0f0fcd6fac449ec6f81ab4bbb65bf4d1844097264de03c6a9e12b5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.WebSockets.Client.dll",
+      "length": 104232,
+      "sha256": "3929ecbf7fe9730aa09087ce1b0b95f7ad488700ed297a7b1db9bcdffd379eb7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Net.WebSockets.dll",
+      "length": 243496,
+      "sha256": "e53874d48acec015893a570bbf02502905985fa66ca75b4f5f864eff219f5f87"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Numerics.dll",
+      "length": 15144,
+      "sha256": "da30ddc2fbfed6382c9a029f4ab19eca96a60ce36bda432f2feb5e209ccd2457"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Numerics.Vectors.dll",
+      "length": 15696,
+      "sha256": "1a2e6f7979950300c1bd28a8ea82d37bbf361d83fb2265b1577513b0d6df9633"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ObjectModel.dll",
+      "length": 79656,
+      "sha256": "e10ee7ce6c29fb120f6609c74ab7d15732bc9eecca99e2341d955799f6a33216"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Private.CoreLib.dll",
+      "length": 16033576,
+      "sha256": "983f5c8957437aa38fcd239606e60dc2a4a6f551605311591a72e5b285eae957"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Private.DataContractSerialization.dll",
+      "length": 2062120,
+      "sha256": "708714c803ec517c49f88a367e973e4c8a9b818d1a040f67d0a99ca1863e50fb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Private.Uri.dll",
+      "length": 255824,
+      "sha256": "e13e63bee843aab6b4d21a4913001e9233397fa0c499b9131a63b75feacf3d5e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Private.Xml.dll",
+      "length": 7788368,
+      "sha256": "e821f3686bc217ca44fe3a41c1b1c87ed4074651c8a95640b7b7bc567ab029fc"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Private.Xml.Linq.dll",
+      "length": 390952,
+      "sha256": "18c4e66a11ddc87ad9783439fe8097658acbc363e637b64ce65ec3574e84b057"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Reflection.DispatchProxy.dll",
+      "length": 75560,
+      "sha256": "aa7216f50f0729958763cb49931e74369c689c22618a0ebac4f92c7df5b1ed52"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Reflection.dll",
+      "length": 16168,
+      "sha256": "9aa8acb636611ba2324bedd4dd9650bc9e7a1f016cf7acc4c2a69051c0cbed4b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Reflection.Emit.dll",
+      "length": 309032,
+      "sha256": "98ecc074b2e42194daabc81ddafb55a7b3552ea18e8218442301beee0d5556e1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Reflection.Emit.ILGeneration.dll",
+      "length": 15656,
+      "sha256": "04b1bf369e833d65c35ea84ecea7f69d125df2c5a224962b95ac43372790bd1a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Reflection.Emit.Lightweight.dll",
+      "length": 15696,
+      "sha256": "70d3e152e9c235b5d2945ebc8ad1df3c06a815677097a9df9cb192c33e4b1c38"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Reflection.Extensions.dll",
+      "length": 15184,
+      "sha256": "1acbc49deb1a9410cfa6b357c1f2e185e8183584cf4ab237961ddd7a561a0efb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Reflection.Metadata.dll",
+      "length": 1156904,
+      "sha256": "4130c090aa1ed9a026ea6473be258b9e07dcb05097836ac569853272679a5c97"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Reflection.Primitives.dll",
+      "length": 15656,
+      "sha256": "8b2327ca2dffb76764610d6dcde98416df67f18891aea728e1259cfc001e73a9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Reflection.TypeExtensions.dll",
+      "length": 42792,
+      "sha256": "380e0b37748c77a120f42ef91453099520bc45af1b0c65b0d3fa6b88f0fa4738"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Resources.Reader.dll",
+      "length": 15144,
+      "sha256": "c72a47e82365921b09a61f1ca72b722e4d28683d085035937dbfce32ba4503e2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Resources.ResourceManager.dll",
+      "length": 15656,
+      "sha256": "41b34aa003a48c68fba186cd7b5ea4f68e8f6ce4418bd5a68a158a79ad58293c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Resources.Writer.dll",
+      "length": 51024,
+      "sha256": "f4dd1d6fc7f69848f36ff753727331b10d49a5f58d089e18e5d0c10eaf5a0afa"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.CompilerServices.Unsafe.dll",
+      "length": 15144,
+      "sha256": "0c2a4e77f62bc47e73ee4868364d7de3013cc41b42f71989f601c0cfb2ef8c8d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.CompilerServices.VisualC.dll",
+      "length": 30504,
+      "sha256": "3ed2279decba500727a9cb1d810c08148bda497975efdc5db21d636b4b78f9ef"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.dll",
+      "length": 44880,
+      "sha256": "d610a5690ab8f3ab8329c06517694c51aec0e31cd4d7e375584ddcff7c844751"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.Extensions.dll",
+      "length": 17704,
+      "sha256": "95b093657b594177ef20472048c926bb9ae39feae5783d6c630f56183937c433"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.Handles.dll",
+      "length": 15656,
+      "sha256": "ddedbbb02981acde482bd310b3b48fe9a7003dec68d0cc4b9bcc3663f187a2a8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.InteropServices.dll",
+      "length": 112424,
+      "sha256": "5ab8804e4fbd1a5a54afd9e674af544642b73916e25ee672e7b99adc3161adfc"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.InteropServices.JavaScript.dll",
+      "length": 51024,
+      "sha256": "ac07e7df59a35bf4ee5ef78502ce187a1880b83612a7bac427f78255c172d35c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.InteropServices.RuntimeInformation.dll",
+      "length": 15696,
+      "sha256": "499c566f61b78a68d0f48ebb3a6d431c4f3875a1067943d903eab1e7d43fedc0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.Intrinsics.dll",
+      "length": 17232,
+      "sha256": "422f93053057449c08daa91b49f2eb7503fa4ccc1462ef5556cfe0e1fa5b0003"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.Loader.dll",
+      "length": 15656,
+      "sha256": "20660ce31358fe64b0a44aa0bb08022e1081f7d8e1c24a27673e74123000908e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.Numerics.dll",
+      "length": 354128,
+      "sha256": "53b5bf64fd79c665adc58607116d33c4b2be3ae12e22360267e263e695886e57"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.Serialization.dll",
+      "length": 17192,
+      "sha256": "20c4a3e000268704d5a9fa72e10ddec5a462f2ed5ecd18e24d53c0b6929d15ed"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.Serialization.Formatters.dll",
+      "length": 124752,
+      "sha256": "771bc4a61a546cd4a24332fa9161a94d2e55fa08600f8bf9250f6eb08a9afb77"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.Serialization.Json.dll",
+      "length": 15696,
+      "sha256": "025a34f5dbff2489bd101924aca35a01bfa1f9d842598e2e041b6edb8ff6845d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.Serialization.Primitives.dll",
+      "length": 38696,
+      "sha256": "acf3de0f2562fc05d70627944453443b1a9396a1d0a6ed598beeac35ca266057"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Runtime.Serialization.Xml.dll",
+      "length": 16720,
+      "sha256": "347900ebbba53a24797599363bf10070580fc970a9a6ce8d84dc95f416febfea"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.AccessControl.dll",
+      "length": 227152,
+      "sha256": "2081ed669eec7431786a8529506f60d2c2ed3b83523eea0d4fd627dac29e2f4a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Claims.dll",
+      "length": 100176,
+      "sha256": "bc239918decbbd1e90f16c30f0182507342a5b0a82dc2d095e9b365ae0a391ab"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Cryptography.Algorithms.dll",
+      "length": 17192,
+      "sha256": "bfebcc7308e202b1971d621883574a203ecab74ae992a152dd4071ed08fa00d7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Cryptography.Cng.dll",
+      "length": 16208,
+      "sha256": "a238bc58dabf109aa46685cd4aa3d18a8cc35f4b1e3788710465f2afe5813c9c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Cryptography.Csp.dll",
+      "length": 16208,
+      "sha256": "3737f8ea4d0a41d83e3e2d860e74b3ca2aab7349f9a265577b0f66faaa6ef109"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Cryptography.dll",
+      "length": 2549584,
+      "sha256": "bea35c3eaf37895b32ff2b90d4b077d61732a7bcc7c9178aa441719d72503be0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Cryptography.Encoding.dll",
+      "length": 15656,
+      "sha256": "75b36584506dbd64b68e0d60a2189f70f03262d620cdf26b394b0abc97fe52fd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Cryptography.OpenSsl.dll",
+      "length": 15656,
+      "sha256": "dc856022ebdec7f030817c7a6a5fcda06aefaa7e2c7b4cd83d8525db476d9823"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Cryptography.Pkcs.dll",
+      "length": 342352,
+      "sha256": "af14ca7e101cfbfb47f977aca1515f0e70e0b1e2f8b0e8d93c485e414ba9cd8c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Cryptography.Primitives.dll",
+      "length": 15656,
+      "sha256": "2d4f209f4b2f7bc0af1e7fb39c99349f6ad081689e89028a8dce1d580e1f39d9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Cryptography.ProtectedData.dll",
+      "length": 39760,
+      "sha256": "13243b72b164865d604b99bf32dd5201212029deeb00af72b4f20b6cf60e4d48"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Cryptography.X509Certificates.dll",
+      "length": 16680,
+      "sha256": "6fe5848bafd502672fd206e4208b64e1aca84627427e131e33167b0795309207"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.dll",
+      "length": 18216,
+      "sha256": "4887e93d7fbf6c6f0909579400ef892d42896a2123cc1a0c702f7c555e9e9d98"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Permissions.dll",
+      "length": 118096,
+      "sha256": "6d75c51446b3892091fe203cc3a732a67ae5a6f23b5f5fa5aeedf0b4e331c5dd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Principal.dll",
+      "length": 15144,
+      "sha256": "089428925c94b2cd5a5faede9bf7799ffa144e899a1e56f1c2c05159660da580"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.Principal.Windows.dll",
+      "length": 177960,
+      "sha256": "6d8813fb7478e09d1411e48143d05306a11c88e2d7b48ced68b527c3e3bc97db"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Security.SecureString.dll",
+      "length": 15656,
+      "sha256": "f51d458bde0a367ebec626cc1c2247a374f5145170fd5df9fd501426f2cc2c4b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ServiceModel.Web.dll",
+      "length": 16680,
+      "sha256": "9af5e984adf9989a462618c55de79429563ee20f583e40ad9d001f5022d0b4bd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ServiceProcess.dll",
+      "length": 15656,
+      "sha256": "e40fc253a50bee22e6e20e1af1140bdeb5e92f4459f0427bc8a05a0e81e74821"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Text.Encoding.CodePages.dll",
+      "length": 861992,
+      "sha256": "372a3490aa5e4f6a56625a34615597590475e75588dbf27a20202ce5c12ae998"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Text.Encoding.dll",
+      "length": 15696,
+      "sha256": "677fef60be9acb153be1ccaac221ecc93c358231d21cbfd69c98ae98fa71929b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Text.Encoding.Extensions.dll",
+      "length": 15656,
+      "sha256": "3fc0097ce6e2d9f30f180ec390213593b778c04668bb882f860157ba7f6e956d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Text.Encodings.Web.dll",
+      "length": 124752,
+      "sha256": "34236c5ddbadbd3f96d0aaeb20e4525e88534fc28f1ca0b016d83848529f1167"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Text.Json.dll",
+      "length": 1890088,
+      "sha256": "24556d153c5c00af2f5722a36aaf76939849676bca64fce21ad9b30ecc1a7f64"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Text.RegularExpressions.dll",
+      "length": 1034024,
+      "sha256": "19cc43f776292f988fe33abb15fe5cdd1f0540e97a2ec631161c9207e30da6ef"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.AccessControl.dll",
+      "length": 75600,
+      "sha256": "cf3cd1099d2bf0d14d2663413efa99ef35ed934d3515be1c7264df58ff79c1e2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.Channels.dll",
+      "length": 157520,
+      "sha256": "91748936a96442fad345cceda65225708729950e3e19ab1259522f24f70bdc5a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.dll",
+      "length": 83752,
+      "sha256": "ebaa9bd6123c18b401b0a6606d5be5275a4bb3fe73ff623698c07df256dd5e3e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.Overlapped.dll",
+      "length": 15656,
+      "sha256": "3042c32bb00bc3f4c182b29b39043b8bfe519dbc15ae31f1b7a57b8231958a58"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.Tasks.Dataflow.dll",
+      "length": 472872,
+      "sha256": "e17e81e9395f0620f8f19653a4e10cabdc968bfc2b4f8f0bfbfa729a1042537a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.Tasks.dll",
+      "length": 16720,
+      "sha256": "f0bb5a82e4f78a07499688319ba0bf5078758dddd5c6007028d65a18baeff45e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.Tasks.Extensions.dll",
+      "length": 15656,
+      "sha256": "c5273c4e16be5914a4975a7fe8c63d5db054931fe9bbb8fcef249e83ed246eb0"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.Tasks.Parallel.dll",
+      "length": 132904,
+      "sha256": "52aaf2bb3024068f062e92db12b6913b5c9ad3b92122b1ac0370fe0f40f06753"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.Thread.dll",
+      "length": 15656,
+      "sha256": "cd8833667e8f837040194ee9cca2e3e047c50a897e1514f59049c9d95e354a42"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.ThreadPool.dll",
+      "length": 15656,
+      "sha256": "5d6b7a66161bca76c646c3ef954386bddef60070317d7381bd1f3cae3b6ed4cb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Threading.Timer.dll",
+      "length": 15184,
+      "sha256": "af0370e66f201115b9cc2bc774ee6e54858647381ed55bb72e44095478d03a44"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Transactions.dll",
+      "length": 16680,
+      "sha256": "32c9035d0d0425ac81823e0dcf390da9873af970d0c2856f584ac2470d806550"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Transactions.Local.dll",
+      "length": 640808,
+      "sha256": "2d43ff58649a8b680a95731321a172473381a54fb18bd78063702ecd1804df6f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.ValueTuple.dll",
+      "length": 15656,
+      "sha256": "e6ec3e8c2013a3387978258aa60e947b46ef1d0bdb97d26f860609e696e1365e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Web.dll",
+      "length": 15144,
+      "sha256": "86c80fb864eecf77cd27c40bba62c5385e44bb689c4fc3c123769ecf4d77efc2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Web.HttpUtility.dll",
+      "length": 63312,
+      "sha256": "a8228332990bae9ea580dc61cab15ac7a9d3ba02fc0ca66d88658fc9a60a1299"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Windows.dll",
+      "length": 15656,
+      "sha256": "32dcb5c5f2dbd85b744ff708f39e3a703f5a75e96bb715569452601de11f1b4f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Windows.Extensions.dll",
+      "length": 76072,
+      "sha256": "082530bbe71def71216be2453a73d03caa7694ec70b0e69d9d37ae046839437b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Xml.dll",
+      "length": 23376,
+      "sha256": "28f10f4ffad07b173af6114e74c5f57e8e02accb59850ef22abc4c6351ef349e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Xml.Linq.dll",
+      "length": 15656,
+      "sha256": "dac823176f31b117dbac2ad9576f59607425eca50c73d02331ac3bc4852bb32e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Xml.ReaderWriter.dll",
+      "length": 21800,
+      "sha256": "2c0d73ceb380f0bf0e2620dd3c270d926c903dc563a5e8879333eaae5f57bd49"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Xml.Serialization.dll",
+      "length": 16168,
+      "sha256": "3db5344fc841410d44647dd5a1fef3b1d543501d59ded9ebbc96be2372913191"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Xml.XDocument.dll",
+      "length": 15656,
+      "sha256": "30651001959f0b6dfccd4432cbcfd0d07da0c5948d8914a109f108a9517d3b8b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Xml.XmlDocument.dll",
+      "length": 15656,
+      "sha256": "dd70d2a5487da1fd127582dce7f9981dcba248d50683052055643dc9e321126b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Xml.XmlSerializer.dll",
+      "length": 17704,
+      "sha256": "d7a56b018cd7419e83b60aecbc5ab01a1bbcc2b17f6c29e31e1cec8d3b1c08f8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Xml.XPath.dll",
+      "length": 15656,
+      "sha256": "eadca97de5fb0750e725c7e1f02ba20636fce6e0f8417e67d72f0a66e709a86f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/System.Xml.XPath.XDocument.dll",
+      "length": 30504,
+      "sha256": "2dffedf3b83ab6c74f09eb71e0af6abc577d9df70545a09297546d2ad9c75eff"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21288,
+      "sha256": "302df42af463a6b900272a29654486cb9bf3c30c63380624cd2ac2feb934e4d9"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 47912,
+      "sha256": "ebf5a4bf74ed088331fd4a625bddce70133c6f34c6348a21b37606be7ffddc06"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 462632,
+      "sha256": "94399e6549842ed0402aed1cfa1667825b5b3b7981814c5b22ebb3d2490faa70"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 20816,
+      "sha256": "3b41d39cdf4f94ab25bde1c14dbd64edd5357d3e372b3fc5686671a9c7638af8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14632,
+      "sha256": "a53555be56141adf588025f5b3ef45c42896f93171d33f420f4384a02c019367"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "43e6affd770ad444021a7c88ccaf41495501bc9b4dc344a9596909204e58c9eb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 197928,
+      "sha256": "0041827d792d7060bb4887221c585ef10ca39af67282869f35e5f60c4939625a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16208,
+      "sha256": "67356e5c90bcea996e3c3b99a0ecc403d043a9e50b526264bb30caf03904ea34"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 148816,
+      "sha256": "94c32563749c08810648cd6a93df0b005844994c898f6cc421b85072b0e9b34d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19240,
+      "sha256": "7033205eed65bee697bdc853256c5e9cae0e9e154576992b021717195d1c6417"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19280,
+      "sha256": "f6a10e95a800bb41a234eefba5e68a837bbce168245b861ea6efc49f053ccc64"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.resources.dll",
+      "length": 41296,
+      "sha256": "037d4321a65df076c41fb78c598cfb0fb0f7357ffeda1479f0467efac3906adc"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 17704,
+      "sha256": "c05744327da53b61896c4673152fdc64cd36fb653e24f0cd0c230ff4752ccb3e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 41256,
+      "sha256": "b26a1db52ec3ed988f79546f58d35721174533fb6013ada59908818e67de182f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 28544,
+      "sha256": "53f0470a9780fee01c20e9fae64b5b439e8453da6355987407aa086e14b9d9c5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16224,
+      "sha256": "d174d254e43892f1323a176af1aa75909e7e1b2b594cdec1cbd0e686fe8566f8"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15184,
+      "sha256": "019671291f58e71a43659abffa78839ab4767c2f0e488fc786353019efedfe49"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 32080,
+      "sha256": "a1b393ccd50f326e1efec35b0c663a13ac99fcb8aeee85ae2ff3ce05d933bf79"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 26960,
+      "sha256": "ce34dc77b2c2c5636430e48f56c73cc68be603832130d9dd47df2ee73fced0e2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "b931eeeb398060fb555ed9d7368e36dabef6d06912c0308fae46b4a8b4301227"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "e17e3600060c1e4e14749976548318bbdb78f3e4f7f001f5c26583e04f22820f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 25952,
+      "sha256": "d5a2039d5ea9c4fadbf4456cd6c24039f0ce8119f17071672591f70085aba282"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 16184,
+      "sha256": "a35d16dbfd768d4925b8f0c3a59eeb6baae3e64fefb1b1eb9c55d213484db62e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 18784,
+      "sha256": "d58c3680a114ff45270ad64c7339ed3628d8f6fe3422507f38390dbc6c1eac39"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15712,
+      "sha256": "d2ea17b1f8018413925252541d43eae3fdfb7fda815337e174070806289c7e47"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/tr/StreamJsonRpc.resources.dll",
+      "length": 25952,
+      "sha256": "2e0e650b82d6c158946974d063550b08fad1985f3b2c03d60d5122f2f6c30fba"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/WindowsBase.dll",
+      "length": 16168,
+      "sha256": "79d27fe8e5f0b9eef211809d683141a7fbe1af2d920ca7e37456e9870856821e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 21328,
+      "sha256": "c3a8c8dbf95f324743d89de9bd3f41f43c2625f5848fdaba1c1bc13abee64451"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 45864,
+      "sha256": "5a56ebe04acebc44db50483323a8f090f355ff6a8d8eb18f0dccd683e239ff83"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 411944,
+      "sha256": "aaa5bef23590dd9430606792af2b687bfe2997eeef578dd2f99ea48bd81c966a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 20304,
+      "sha256": "87f396316df201250620962200afda9ebbcff11fb81ab5861c64e9c5311886f7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14672,
+      "sha256": "33bd318314a7c14c1be3dc71048dca2f41840b531cbd86d258b198e9d2349e19"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "7aa5db24ac89859fb2d840a6f2e56be2eb76d40b1ad69561dccb3d358e5770fb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 176936,
+      "sha256": "92be118c6d3185a0c5a8421c467b4ab6bf27efc54845847e5c7067307e153fc5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16208,
+      "sha256": "d53b0fb99b225c465fec6baf1c4675856e1a1aa3dc85ecf0eeafb423e4cc75dd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 125776,
+      "sha256": "48d5328c2fa9f44e08bc544cc2dd4fdf01eafb35d52b15e2c1ccc9457fa10557"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 19240,
+      "sha256": "1a4a015fa45ca21dc2c7a82674310638dc8a16d37dc8bda58574804691a985ca"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19240,
+      "sha256": "e2f4e8ea030af632d7e060b0ad0f084d29bbf97a1cd82289171fef88e1e6c786"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.resources.dll",
+      "length": 38696,
+      "sha256": "62ccde1986197543b3dc0b3603b4f10fdba522ffa84a856327451f3ef876fc90"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 17704,
+      "sha256": "5d2c412b359d29c09aa1b85a596df5735a1f322c231453ce0109618cb3d9281a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 39248,
+      "sha256": "49db3805a466c05538ecf123ca6ccf88d9c956d3acc6a577dd625d66b3b2ffdd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 27528,
+      "sha256": "b2c9d3e505a1445a49ae08c920070388f8d4868ebaca987770f9d541d8ca0a91"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16224,
+      "sha256": "9590326e3204512518717d7d4b67a4918e899444223358529bb54caf9247ea42"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15144,
+      "sha256": "e06abb42009cd0356941afa1ec425c4e31b802eb14800f38fe58e3e80d83f5be"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 29992,
+      "sha256": "ac0911300b495860438b3e0c481c96149e2c6f29e97fc849410d4d60927d77c4"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 25936,
+      "sha256": "3e670afdf5522b3b14e923511b3b8c0be5223ce0b5cda845b1e2ef0c913fd223"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "a8a215b44e5728209623b5eddcb4ed781443e81d58b7d4248b86600ebded0ee1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "056bad39ed0da8e4a2564e7461529f98222c5c250bcb3d860dee03c51685e2d1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 24416,
+      "sha256": "38487b5c931f7cac96a17c90710f93603d8fb47fa50bea76b843d78f20ab6cd2"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 15712,
+      "sha256": "337a82c3381fd3242c93e8634827563a4fbc92f656ac54acc27eea146e248e46"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 17760,
+      "sha256": "c2a4bc661cdacc39a0362e10366814dec791896097ed57a7a9484895534cdaf5"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15712,
+      "sha256": "48dd7b0ea63c843655006536f15243deb4946897e4688cb682ad8f372c0d613f"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hans/StreamJsonRpc.resources.dll",
+      "length": 24968,
+      "sha256": "3de1daaaf6eb020560be74a1d1e165e183299f0dbe8a1d6555f9f8fc6f3629a6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.AspNetCore.Razor.Utilities.Shared.resources.dll",
+      "length": 20776,
+      "sha256": "eacbb587ae8899771218d4edd1d055ec031d04c86b52119a91969d5e744f8e63"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.CSharp.Features.resources.dll",
+      "length": 45864,
+      "sha256": "8a3d07089e6275521e750b4a56bc46dad852b82448c8f3fec1d9e0f7b2c79d41"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "length": 411432,
+      "sha256": "c5509174af04e28dd0d73784985d12a1413c07ba5cb507d324a742fa5c9dc3cf"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll",
+      "length": 20264,
+      "sha256": "4c55201d64d5b1e08e344f876a0c62e97a740a736c11cc5eb9bde71e87012124"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.resources.dll",
+      "length": 14632,
+      "sha256": "af9ceca539db5d9ed93b5e9a0526e71dbe4bbb96bcf1d91c119c2c09dfe1d1b7"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.ExternalAccess.Extensions.resources.dll",
+      "length": 15656,
+      "sha256": "1268136f3e94c5c96ec4284b46e66ad1e00903b730fcee64a83b0e05aa79e387"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.Features.resources.dll",
+      "length": 178472,
+      "sha256": "ae218aeb90eb882938c490e963cca2fc24e3910002847b38f8df6422d975997a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.LanguageServer.Protocol.resources.dll",
+      "length": 16168,
+      "sha256": "1231c8027de3ce849fd3e5da4b1607589e015898da85d0fc6605e1ed692fc03c"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.Razor.Workspaces.resources.dll",
+      "length": 126760,
+      "sha256": "1d45443e9fff437239ccf7e7142e4495d6497a3fa1a04345426d3b0132f359dd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.Remote.Razor.resources.dll",
+      "length": 18720,
+      "sha256": "80c15ad184a1d29ad1eb0b68b59ef7000bebf88282f268142fa3f898f1ff9f69"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.Remote.Workspaces.resources.dll",
+      "length": 19280,
+      "sha256": "c287ba67850c4e5dbba701c1d803014c85a04afa7735af621ff8764bba6364af"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.resources.dll",
+      "length": 38696,
+      "sha256": "f7826e77799db6de7e885e6f343b58212ff3e562af549126c84e7befa9d77bbd"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.Scripting.resources.dll",
+      "length": 17704,
+      "sha256": "d4c89eb6f2fa0a85e5d41157f713b239301256cdb829940db97e38b11de47032"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.CodeAnalysis.Workspaces.resources.dll",
+      "length": 39248,
+      "sha256": "659b6b9d6cdc376956c13531305f13f19b28036f56726e310738091cbce6b2cb"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.ServiceHub.Client.resources.dll",
+      "length": 27512,
+      "sha256": "c6c9794d5bfd91636207fc2d4eb81a0c0fbdaacc4ca0703169a992dbf23058c6"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.ServiceHub.Framework.resources.dll",
+      "length": 16224,
+      "sha256": "6e81562c38575ac4f80fc14e812c52049728b407ae66c7fd1edb29d9fab3e9ef"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.TemplateEngine.Core.resources.dll",
+      "length": 15144,
+      "sha256": "c865ecf65f237b0e355a5f034bde23506eff3b954d8b4174db728ed8cf680e0e"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.TemplateEngine.Edge.resources.dll",
+      "length": 29992,
+      "sha256": "faa682cf22ea9f43af434fed685ea33f3f4b4d000095132566bc556c7c8186fe"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.TemplateEngine.Orchestrator.RunnableProjects.resources.dll",
+      "length": 25896,
+      "sha256": "5b8e69d6ab27aa2f335d79d11d799af96eb05411c969706aafaab814f336f309"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.TemplateEngine.Utils.resources.dll",
+      "length": 15144,
+      "sha256": "8e875fa3fb26b0f6cfb050c4ff7d9f1b0cde8a9722df7eb23a0f90c0ecea9fef"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.TemplateSearch.Common.resources.dll",
+      "length": 15656,
+      "sha256": "acf206dda777bf9cae6ba93fd2c9389c3975ff1006bb7287b445181e6e5e04a1"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.VisualStudio.Composition.resources.dll",
+      "length": 24408,
+      "sha256": "279b5c8d19b17507bd24ea9486a9bd7e8c0e116967fef07552aed33fdf5e7267"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.VisualStudio.RpcContracts.resources.dll",
+      "length": 15672,
+      "sha256": "41d9e3cdcc4bacd13d5c1e4d091b72253be2dd44aa9600a3905cc5705e24b06a"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.VisualStudio.Threading.resources.dll",
+      "length": 18312,
+      "sha256": "962c53f71b214c3b134e5240446b35e2274ed4762cde12efad28ac7a51f5f56d"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/Microsoft.VisualStudio.Validation.resources.dll",
+      "length": 15752,
+      "sha256": "6291697a4b50f4fa54aba7d4d4d608a15d626487dafcff181966c1dc35f30e22"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/zh-Hant/StreamJsonRpc.resources.dll",
+      "length": 24928,
+      "sha256": "308ae36f769434e61877de55a77a0cd947fbff20260c7215dda33071d134711b"
+    },
+    {
+      "path": "runtime/ide/win-x64/data_PbBridge.SharpIDE.Host_windows_x86_64/ZLinq.dll",
+      "length": 257024,
+      "sha256": "ebe9be643e23772b2955ce45cedfde654881cdf449ad54573592feb02542cc8e"
+    },
+    {
+      "path": "runtime/ide/win-x64/libgodot-xterm.windows.template_release.x86_64.dll",
+      "length": 1003008,
+      "sha256": "ca361abceda58b4c7fd701689bda89eedb78c25f7f0a886d25e62cb254af3cff"
+    },
+    {
+      "path": "runtime/ide/win-x64/SharpIDE.exe",
+      "length": 110995184,
+      "sha256": "813bfd4c95be46b98c280543d6daeeb10bdf78a3c15114dad85e3f35789c5634"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/libjcc.dll",
+      "length": 335360,
+      "sha256": "6cad6a36b95e202140bbcc22eeb8c3ada8b316b57a8ba047a3c4aa603c31b911"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbapl90.dll",
+      "length": 117248,
+      "sha256": "a728f0f071827af459e1708b660f2b24a632c922d0ba386c1ea01d973ce2f28f"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbcgr90.dll",
+      "length": 189759,
+      "sha256": "87a949253ac40deff83666762e2d90d01aa4189d4fbf24ac5032b84d7fe65407"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbcmp90.dll",
+      "length": 568320,
+      "sha256": "b7065c291d056683bfacea261e915aa13c2033c1e2e160706c76979144c191b0"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbdev90.dll",
+      "length": 543232,
+      "sha256": "da5e90d018a38a457e1d2e9e92fee48e8bbf0f85cd3349fea948cdf254b765eb"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbdpp90.dll",
+      "length": 104448,
+      "sha256": "cf2a7a2e2e9e244865d0b526b696c1c7ce7284660b27aa35d726dca46b627ea4"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbdts90.dll",
+      "length": 686592,
+      "sha256": "66925c37cc669512be503e4d3dfbcff2d615bb11760d95501e3c577a313d5fe2"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbdwe90.dll",
+      "length": 2537472,
+      "sha256": "10d6511751ffce593f9dee511a333a697dc048d1f0489ca656ff038de20b4cc4"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbdwp90.dll",
+      "length": 1608192,
+      "sha256": "fe85c38cbac2672f46548d285ed3d9fbf2165aa952a06ab7227bcddc78d08d11"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbeas90.dll",
+      "length": 174592,
+      "sha256": "9f7aa427bd82e83bbb6674f46ba413b14aa691eb7b94021b183d569f30a0758e"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pblib90.dll",
+      "length": 1184768,
+      "sha256": "6fdf676c85acd027d682fab710a25113c4a283318e8da9b910f52a6b35292e17"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pborc90.dll",
+      "length": 38400,
+      "sha256": "1f4734496d53545a7fd94cf306fd9826d7e0500444b8b48da4a881d739624957"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbscr90.dll",
+      "length": 349184,
+      "sha256": "a9194062e1a686f0a9372a0ec363a429133b3db0bcdf8ad00e126f8b0148cb2c"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbsql90.dll",
+      "length": 377344,
+      "sha256": "02f50c73332de71750acc7b0fbb4077806cf10a16128e9a4632f4d27179a4465"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbsys90.dll",
+      "length": 1823744,
+      "sha256": "d10bb6b0a6028761b87daf9b14844c9fde80c65849e683ab039986125b39907e"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbudo90.dll",
+      "length": 1487360,
+      "sha256": "1f9ec23b221a0d5547ea33f19d37b0ecc3d842a8720319d529ba8bd3084dbe34"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbvm90.dll",
+      "length": 4867072,
+      "sha256": "dad306393862debfe7b0dbcdeb1b392cb12f813dada3604f8965cb510abf7096"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSDK/PB090/pbwed90.dll",
+      "length": 113152,
+      "sha256": "64a0215a526773d343f7cee2a968352f7d7a77c109edb9048fbb313391c3d1aa"
+    },
+    {
+      "path": "runtime/pbspy/win-x86/PBSpy.dll",
+      "length": 3862528,
+      "sha256": "ee84236e01f6172311a0aa8797456e6bca20f00075bfef65ac0268d7d06aa2b4"
+    }
+  ],
+  "productVersion": "7.7.2"
+}

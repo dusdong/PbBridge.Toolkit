@@ -1,13 +1,5 @@
 # IDE 运行时摘要
 
-## 当前运行时
-
-1. 平台：`win-x64`
-2. 主程序：`runtime/ide/win-x64/SharpIDE.exe`
-3. 来源：父仓库 `Reference/SharpIDE/artifacts/publish-godot/win-x64/`
-
-## 说明
-
-1. 该运行时用于宿主浏览与 PBW 工作流
-2. toolkit 当前不分发其他平台 IDE 运行时
-3. toolkit 不改变当前正式 PB9 写回支持矩阵
+平台：win-x64；产品版本：7.7.2。
+入口：runtime/ide/win-x64/SharpIDE.exe。
+来源：通过运行时输入清单核验的 SharpIDE 产品宿主 Windows x64 Godot 导出，带配套 PbBridge 程序集。

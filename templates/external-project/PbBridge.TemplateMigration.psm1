@@ -4,7 +4,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$script:ProductVersion = '7.7.1'
+$script:ProductVersion = '7.7.2'
 $script:NormalizationProfile = 'powershell-text-v1'
 $script:SupportedSourceProductVersions = @(
     '7.6.2'
@@ -31,8 +31,16 @@ $script:SupportedSourceProductVersions = @(
     '7.6.0'
     '7.6.1'
     '7.7.0'
+    '7.7.1'
     $script:ProductVersion
 ) | Select-Object -Unique
+$script:WorkspaceConfigurationValues = @'
+{
+  "sourceLayout": ["beside-pbl-src"],
+  "scanScope": ["workspace-targets", "all-targets", "all-pbl"],
+  "verifyPolicyMode": ["Disabled", "UseExisting", "RequireExisting"]
+}
+'@ | ConvertFrom-Json -AsHashtable
 $script:ApprovedMigrationBootstrapPatchHashes = @{
     'scripts/pbbridge-template-migrate.ps1' = @(
         '3f6915037db1c70fd64cffe9e9cf11c77fed8c54d68d8f3f741512ceb2397b65'
@@ -784,6 +792,116 @@ function Get-PbBridgeWrapperScan {
     return [pscustomobject]@{ mappings = $mappings.ToArray(); manual = $manual.ToArray() }
 }
 
+function Test-PbBridgeCandidateWorkspaceContext {
+    param([string]$CliPath, [string]$StagingRoot, [string]$WorkspaceId, [string]$WorkspaceConfigPath)
+
+    $issue = [ordered]@{
+        code = 'workspace-context-resolver-rejected'
+        fieldPath = 'workspace'
+        path = $WorkspaceConfigPath
+        line = $null
+        column = $null
+        message = 'Core workspace resolver 拒绝候选配置。'
+        cliExitCode = $null
+        cliErrorCode = $null
+    }
+
+    $info = [Diagnostics.ProcessStartInfo]::new($CliPath)
+    # 沿用调用方的文件系统目录。staging 通过参数传入，避免长路径导致进程无法启动。
+    $info.WorkingDirectory = (Get-Location -PSProvider FileSystem).ProviderPath
+    $info.UseShellExecute = $false
+    $info.CreateNoWindow = $true
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $info.StandardOutputEncoding = [Text.Encoding]::UTF8
+    $info.StandardErrorEncoding = [Text.Encoding]::UTF8
+    foreach ($argument in @('workspace', 'context', '--repo-root', $StagingRoot, '--workspace', $WorkspaceId)) {
+        $info.ArgumentList.Add($argument)
+    }
+    try {
+        $process = [Diagnostics.Process]::Start($info)
+    }
+    catch {
+        $issue.message = "无法启动配套 CLI 的 workspace context 查询：$($_.Exception.Message)"
+        return [pscustomobject]$issue
+    }
+    try {
+        $stdout = $process.StandardOutput.ReadToEndAsync()
+        $stderr = $process.StandardError.ReadToEndAsync()
+        $process.WaitForExit()
+        $issue.cliExitCode = $process.ExitCode
+        $output = $stdout.GetAwaiter().GetResult()
+        $diagnostic = $stderr.GetAwaiter().GetResult().Trim()
+        if ($diagnostic) { Write-Verbose $diagnostic }
+    }
+    finally { $process.Dispose() }
+
+    $document = $null
+    try {
+        $document = [System.Text.Json.JsonDocument]::Parse($output)
+    }
+    catch [System.Text.Json.JsonException] {
+        if ($issue.cliExitCode -eq 0) {
+            $issue.code = 'workspace-context-resolver-json-invalid'
+            $issue.message = "Core workspace resolver 未返回有效的 JSON：$($_.Exception.Message)"
+            return [pscustomobject]$issue
+        }
+    }
+
+    try {
+        $hasObject = $null -ne $document -and $document.RootElement.ValueKind -eq [System.Text.Json.JsonValueKind]::Object
+        if ($issue.cliExitCode -ne 0) {
+            if ($hasObject) {
+                $response = $document.RootElement
+                # JSON 的外形可解析时，个别字段仍可能包含无法解码的转义字符。
+                try {
+                    $errorCode = Get-PbBridgePolicyJsonString -Element $response -Name 'errorCode'
+                    if (-not [string]::IsNullOrWhiteSpace($errorCode)) { $issue.cliErrorCode = $errorCode }
+                }
+                catch [InvalidOperationException] { Write-Verbose "无法解码 workspace context 的 errorCode：$($_.Exception.Message)" }
+                try {
+                    $errorText = Get-PbBridgePolicyJsonString -Element $response -Name 'error'
+                    if (-not [string]::IsNullOrWhiteSpace($errorText)) { $diagnostic = $errorText.Trim() }
+                }
+                catch [InvalidOperationException] { Write-Verbose "无法解码 workspace context 的 error：$($_.Exception.Message)" }
+            }
+            if ($diagnostic) {
+                $summary = ($diagnostic -split '\r\n|\n|\r', 2)[0]
+                if ($summary.Length -gt 512) { $summary = $summary.Substring(0, 512) + '…' }
+                $issue.message = "Core workspace resolver 拒绝候选配置：$summary"
+            }
+        }
+        else {
+            if ($hasObject) {
+                $response = $document.RootElement
+                try {
+                    $resolvedWorkspaceId = Get-PbBridgePolicyJsonString -Element $response -Name 'workspaceId'
+                    $manifestPath = Get-PbBridgePolicyJsonString -Element $response -Name 'manifestPath'
+                    $manifestSource = Get-PbBridgePolicyJsonString -Element $response -Name 'manifestSelectionSource'
+                }
+                catch [InvalidOperationException] {
+                    $issue.code = 'workspace-context-resolver-json-invalid'
+                    $issue.message = "Core workspace resolver 返回的工作区证据无法解码：$($_.Exception.Message)"
+                    return [pscustomobject]$issue
+                }
+                if (-not [string]::IsNullOrWhiteSpace($resolvedWorkspaceId) -and
+                    -not [string]::IsNullOrWhiteSpace($manifestPath) -and
+                    -not [string]::IsNullOrWhiteSpace($manifestSource) -and
+                    [string]::Equals($resolvedWorkspaceId, $WorkspaceId, [StringComparison]::OrdinalIgnoreCase)) {
+                    return
+                }
+            }
+            $issue.code = 'workspace-context-resolver-evidence-invalid'
+            $issue.message = 'Core workspace resolver 未返回匹配的工作区身份及完整的 Manifest 选择证据。'
+        }
+    }
+    finally {
+        if ($null -ne $document) { $document.Dispose() }
+    }
+
+    return [pscustomobject]$issue
+}
+
 function Test-PbBridgeCandidateTree {
     param(
         [Parameter(Mandatory = $true)][string]$StagingRoot,
@@ -896,10 +1014,8 @@ function Test-PbBridgeCandidateTree {
             $issues.Add([pscustomobject]@{ code = 'workspace-config-contract-invalid'; fieldPath = 'workspace'; path = $workspaceConfigPath; line = $null; column = $null; message = 'workspace.json 的 V7 schema、id 或 pbwPath 无效。' })
         }
 
-        foreach ($fieldName in @('manifestPath', 'sourceLayout', 'scanScope', 'verifyPolicyMode')) {
-            if ($propertyNames -contains $fieldName -and [string]::IsNullOrWhiteSpace([string]$workspaceConfig.$fieldName)) {
-                $issues.Add([pscustomobject]@{ code = 'workspace-config-semantic-field-empty'; fieldPath = "workspace.$fieldName"; path = $workspaceConfigPath; line = $null; column = $null; message = "workspace.json 字段不能为空白：$fieldName。" })
-            }
+        if ($propertyNames -contains 'manifestPath' -and [string]::IsNullOrWhiteSpace([string]$workspaceConfig.manifestPath)) {
+            $issues.Add([pscustomobject]@{ code = 'workspace-config-semantic-field-empty'; fieldPath = 'workspace.manifestPath'; path = $workspaceConfigPath; line = $null; column = $null; message = 'workspace.json 字段不能为空白：manifestPath。' })
         }
         foreach ($fieldName in @('stateRoot', 'manifestPath', 'artifactRoot', 'resultRoot', 'cacheRoot', 'policyPath', 'lockRoot', 'recoveryRoot')) {
             if ($propertyNames -contains $fieldName) {
@@ -909,14 +1025,21 @@ function Test-PbBridgeCandidateTree {
                 }
             }
         }
-        if ($propertyNames -contains 'sourceLayout' -and [string]$workspaceConfig.sourceLayout -notin @('beside-pbl-src')) {
-            $issues.Add([pscustomobject]@{ code = 'workspace-config-source-layout-invalid'; fieldPath = 'workspace.sourceLayout'; path = $workspaceConfigPath; line = $null; column = $null; message = 'sourceLayout 无效。' })
+        $enumDiagnosticCodes = [ordered]@{
+            sourceLayout = 'workspace-config-source-layout-invalid'
+            scanScope = 'workspace-config-scan-scope-invalid'
+            verifyPolicyMode = 'workspace-config-verify-policy-invalid'
         }
-        if ($propertyNames -contains 'scanScope' -and [string]$workspaceConfig.scanScope -notin @('workspace-targets', 'all-targets', 'all-pbl')) {
-            $issues.Add([pscustomobject]@{ code = 'workspace-config-scan-scope-invalid'; fieldPath = 'workspace.scanScope'; path = $workspaceConfigPath; line = $null; column = $null; message = 'scanScope 无效。' })
-        }
-        if ($propertyNames -contains 'verifyPolicyMode' -and [string]$workspaceConfig.verifyPolicyMode -notin @('Disabled', 'UseExisting', 'RequireExisting')) {
-            $issues.Add([pscustomobject]@{ code = 'workspace-config-verify-policy-invalid'; fieldPath = 'workspace.verifyPolicyMode'; path = $workspaceConfigPath; line = $null; column = $null; message = 'verifyPolicyMode 无效。' })
+        foreach ($fieldName in $enumDiagnosticCodes.Keys) {
+            if ($propertyNames -notcontains $fieldName) { continue }
+            $value = $workspaceConfig.$fieldName
+            if ($null -eq $value -or ($value -is [string] -and [string]::IsNullOrWhiteSpace($value))) {
+                $issues.Add([pscustomobject]@{ code = 'workspace-config-semantic-field-empty'; fieldPath = "workspace.$fieldName"; path = $workspaceConfigPath; line = $null; column = $null; message = "workspace.json 字段不能为空白：$fieldName。" })
+                continue
+            }
+            if ($value -isnot [string] -or -not [System.Linq.Enumerable]::Contains[string]([string[]]$script:WorkspaceConfigurationValues[$fieldName], $value, [StringComparer]::Ordinal)) {
+                $issues.Add([pscustomobject]@{ code = $enumDiagnosticCodes[$fieldName]; fieldPath = "workspace.$fieldName"; path = $workspaceConfigPath; line = $null; column = $null; message = "$fieldName 无效。" })
+            }
         }
         if ($propertyNames -contains 'includeLibraries' -and $null -eq $workspaceConfig.includeLibraries) {
             $issues.Add([pscustomobject]@{ code = 'workspace-config-library-filter-null'; fieldPath = 'workspace.includeLibraries'; path = $workspaceConfigPath; line = $null; column = $null; message = 'includeLibraries 不能为 null。' })
@@ -944,25 +1067,9 @@ function Test-PbBridgeCandidateTree {
 
     $cliPath = Join-Path $ToolkitRoot 'runtime\cli\win-x86\PbBridge.Cli.exe'
     if (Test-Path -LiteralPath $cliPath -PathType Leaf) {
-        $resolverOutput = & $cliPath workspace context --repo-root $StagingRoot --workspace $WorkspaceId 2>&1
-        $resolverExitCode = $LASTEXITCODE
-        $resolverText = (($resolverOutput | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine).Trim()
-        if ($resolverExitCode -ne 0) {
-            $issues.Add([pscustomobject]@{ code = 'workspace-context-resolver-rejected'; fieldPath = 'workspace'; path = $workspaceConfigPath; line = $null; column = $null; message = "Core workspace resolver 拒绝候选配置：$resolverText" })
-        }
-        else {
-            try {
-                $resolved = $resolverText | ConvertFrom-Json
-                if ([string]$resolved.workspaceId -ne $WorkspaceId -or
-                    [string]::IsNullOrWhiteSpace([string]$resolved.manifestPath) -or
-                    [string]::IsNullOrWhiteSpace([string]$resolved.manifestSelectionSource)) {
-                    $issues.Add([pscustomobject]@{ code = 'workspace-context-resolver-evidence-invalid'; fieldPath = 'workspace'; path = $workspaceConfigPath; line = $null; column = $null; message = 'Core workspace resolver 未返回完整身份或 Manifest 选择证据。' })
-                }
-            }
-            catch {
-                $issues.Add([pscustomobject]@{ code = 'workspace-context-resolver-json-invalid'; fieldPath = 'workspace'; path = $workspaceConfigPath; line = $null; column = $null; message = $_.Exception.Message })
-            }
-        }
+        $resolverIssue = Test-PbBridgeCandidateWorkspaceContext -CliPath $cliPath -StagingRoot $StagingRoot `
+            -WorkspaceId $WorkspaceId -WorkspaceConfigPath $workspaceConfigPath
+        if ($null -ne $resolverIssue) { $issues.Add($resolverIssue) }
     }
 
     return $issues.ToArray()
@@ -1282,81 +1389,239 @@ function Test-PbBridgeGovernancePathItemsNormalized {
     return $true
 }
 
-function Read-PbBridgeMigrationPolicy {
-    param([Parameter(Mandatory = $true)][string]$ProjectRoot)
+function New-PbBridgeMigrationPolicyIssue {
+    param([string]$Code, $FieldPath, [string]$Message, [string]$Path = '.pbbridge/migration-policy.json')
 
-    $policyPath = Join-Path $ProjectRoot '.pbbridge\migration-policy.json'
-    $issues = New-Object System.Collections.Generic.List[object]
-    $files = New-Object System.Collections.Generic.List[object]
-    $document = $null
-    if (Test-Path -LiteralPath $policyPath -PathType Leaf) {
+    [pscustomobject]@{ code = $Code; path = $Path; fieldPath = $FieldPath; message = $Message }
+}
+
+function Get-PbBridgePolicyJsonProperty {
+    param([System.Text.Json.JsonElement]$Element, [string]$Name)
+
+    $value = [System.Text.Json.JsonElement]::new()
+    $null = $Element.TryGetProperty($Name, [ref]$value)
+    return $value
+}
+
+function Get-PbBridgePolicyJsonString {
+    param([System.Text.Json.JsonElement]$Element, [string]$Name)
+
+    $value = Get-PbBridgePolicyJsonProperty -Element $Element -Name $Name
+    if ($value.ValueKind -eq [System.Text.Json.JsonValueKind]::String) { return $value.GetString() }
+}
+
+function Find-PbBridgePolicyFieldIssue {
+    param([System.Text.Json.JsonElement]$Element, [string[]]$KnownFields, [string]$Prefix)
+
+    $properties = @($Element.EnumerateObject())
+    foreach ($field in $KnownFields) {
+        $matches = @($properties | Where-Object { $field.Equals($_.Name, [StringComparison]::OrdinalIgnoreCase) })
+        if ($matches.Count -gt 1) {
+            return New-PbBridgeMigrationPolicyIssue 'migration-policy-field-conflict' ($Prefix + $field) "只保留一个名为 $field 的字段。"
+        }
+        if ($matches.Count -eq 1 -and -not $field.Equals($matches[0].Name, [StringComparison]::Ordinal)) {
+            return New-PbBridgeMigrationPolicyIssue 'migration-policy-field-spelling' ($Prefix + $matches[0].Name) "将字段名改为 $field。"
+        }
+    }
+}
+
+function Read-PbBridgeBootstrapPolicyDocument {
+    param([System.Text.Json.JsonElement]$Root, [string]$ProjectRoot, [System.Collections.Generic.List[object]]$Files)
+
+    if ($Root.ValueKind -ne [System.Text.Json.JsonValueKind]::Object) {
+        return New-PbBridgeMigrationPolicyIssue 'migration-policy-contract-invalid' '$' '将策略文档写成 JSON 对象。'
+    }
+    $issue = Find-PbBridgePolicyFieldIssue -Element $Root -KnownFields @('schemaName', 'schemaVersion', 'files', 'productVersion') -Prefix ''
+    if ($null -ne $issue) { return $issue }
+    $schemaName = Get-PbBridgePolicyJsonString -Element $Root -Name 'schemaName'
+    if (-not [string]::Equals($schemaName, 'pbbridge-template-migration-policy', [StringComparison]::Ordinal)) {
+        return New-PbBridgeMigrationPolicyIssue 'migration-policy-contract-invalid' 'schemaName' '将 schemaName 设为 pbbridge-template-migration-policy。'
+    }
+    $version = Get-PbBridgePolicyJsonProperty -Element $Root -Name 'schemaVersion'
+    if ($version.ValueKind -ne [System.Text.Json.JsonValueKind]::Number -or $version.GetRawText() -cne '1') {
+        return New-PbBridgeMigrationPolicyIssue 'migration-policy-contract-invalid' 'schemaVersion' '将 schemaVersion 设为 JSON 整数 1。'
+    }
+    $entries = Get-PbBridgePolicyJsonProperty -Element $Root -Name 'files'
+    if ($entries.ValueKind -ne [System.Text.Json.JsonValueKind]::Array) {
+        return New-PbBridgeMigrationPolicyIssue 'migration-policy-contract-invalid' 'files' '将 files 写成 JSON 数组。'
+    }
+
+    $seen = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($entry in $entries.EnumerateArray()) {
+        $field = "files[$($Files.Count)]"
+        if ($entry.ValueKind -ne [System.Text.Json.JsonValueKind]::Object) {
+            return New-PbBridgeMigrationPolicyIssue 'migration-policy-entry-invalid' $field '将文件条目写成 JSON 对象。'
+        }
+        $issue = Find-PbBridgePolicyFieldIssue -Element $entry -KnownFields @('path', 'ownership', 'action', 'reason') -Prefix "$field."
+        if ($null -ne $issue) { return $issue }
+        $path = Get-PbBridgePolicyJsonString -Element $entry -Name 'path'
+        if ($null -ne $path) { $path = $path.Trim().Replace('\', '/') }
+        if ([string]::IsNullOrEmpty($path) -or [IO.Path]::IsPathRooted($path) -or $path -cmatch '^[a-zA-Z]:' -or
+            $path.IndexOfAny([char[]]@('*', '?', '[', ']', [char]0)) -ge 0 -or
+            @($path.Split('/') | Where-Object {
+                $_.Length -eq 0 -or [string]::Equals($_, '.', [StringComparison]::Ordinal) -or
+                    [string]::Equals($_, '..', [StringComparison]::Ordinal)
+            }).Count -gt 0) {
+            return New-PbBridgeMigrationPolicyIssue 'migration-policy-path-invalid' "$field.path" '填写无 glob、无越界的规范仓库相对文件路径。'
+        }
+        if (-not $seen.Add($path)) {
+            return New-PbBridgeMigrationPolicyIssue 'migration-policy-path-conflict' "$field.path" '每个路径只保留一条声明，路径比较忽略大小写。'
+        }
+        if ([IO.Directory]::Exists([IO.Path]::Combine($ProjectRoot, $path))) {
+            return New-PbBridgeMigrationPolicyIssue 'migration-policy-directory-not-allowed' "$field.path" '声明具体文件，删除目录级声明。'
+        }
+        $ownership = Get-PbBridgePolicyJsonString -Element $entry -Name 'ownership'
+        if (-not [string]::Equals($ownership, 'project-custom', [StringComparison]::OrdinalIgnoreCase)) {
+            return New-PbBridgeMigrationPolicyIssue 'migration-policy-action-invalid' "$field.ownership" '将 ownership 设为 project-custom。'
+        }
+        $action = Get-PbBridgePolicyJsonString -Element $entry -Name 'action'
+        if (-not [string]::Equals($action, 'preserve', [StringComparison]::OrdinalIgnoreCase)) {
+            return New-PbBridgeMigrationPolicyIssue 'migration-policy-action-invalid' "$field.action" '将 action 设为 preserve。'
+        }
+        $reason = Get-PbBridgePolicyJsonString -Element $entry -Name 'reason'
+        if ((Get-PbBridgePolicyJsonProperty -Element $entry -Name 'reason').ValueKind -ne [System.Text.Json.JsonValueKind]::Undefined -and
+            [string]::IsNullOrWhiteSpace($reason)) {
+            return New-PbBridgeMigrationPolicyIssue 'migration-policy-reason-empty' "$field.reason" '省略 reason 或填写非空白字符串。'
+        }
+
+        $Files.Add([ordered]@{ path = $path; ownership = 'project-custom'; action = 'preserve'; reason = $reason })
+    }
+}
+
+function Read-PbBridgeBootstrapMigrationPolicy {
+    param([string]$ProjectRoot, [string]$PolicyPath)
+
+    $result = [pscustomobject]@{ path = $PolicyPath; exists = $true; files = @(); policyHash = $null; issues = @() }
+    $text = $null
+    try {
+        $text = [IO.File]::ReadAllText($PolicyPath, [Text.UTF8Encoding]::new($false, $true))
+    }
+    catch [IO.FileNotFoundException], [IO.DirectoryNotFoundException] {
+        $result.exists = $false
+    }
+    catch [Text.DecoderFallbackException] {
+        $result.issues = @(New-PbBridgeMigrationPolicyIssue 'migration-policy-json-invalid' $null '将策略文件保存为有效的 UTF-8 JSON。')
+    }
+    catch [IO.IOException], [UnauthorizedAccessException] {
+        $result.issues = @(New-PbBridgeMigrationPolicyIssue 'migration-policy-read-failed' $null '确认策略路径指向可读取的文件，再重试。')
+    }
+    if ($result.issues.Count -gt 0) { return $result }
+
+    $files = [System.Collections.Generic.List[object]]::new()
+    if ($result.exists) {
         try {
-            $document = [System.IO.File]::ReadAllText($policyPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+            # 保留原始 JSON 类型和属性，包括重复键以及形似日期的字符串。
+            $document = [System.Text.Json.JsonDocument]::Parse($text)
+            try {
+                $result.issues = @(Read-PbBridgeBootstrapPolicyDocument -Root $document.RootElement -ProjectRoot $ProjectRoot -Files $files)
+            }
+            finally { $document.Dispose() }
         }
-        catch {
-            $issues.Add([pscustomobject]@{ code = 'migration-policy-json-invalid'; path = '.pbbridge/migration-policy.json'; message = $_.Exception.Message })
+        catch [System.Text.Json.JsonException], [InvalidOperationException] {
+            $result.issues = @(New-PbBridgeMigrationPolicyIssue 'migration-policy-json-invalid' $null '修复策略文件中的 JSON 语法或字符串编码。')
         }
     }
+    if ($result.issues.Count -eq 0) {
+        $result.files = @(Sort-PbBridgeGovernancePathItems -Items $files.ToArray() -Context 'migration-policy')
+        $result.policyHash = Get-PbBridgeCanonicalHash -Value ([ordered]@{
+            schemaName = 'pbbridge-template-migration-policy'
+            schemaVersion = 1
+            files = $result.files
+        })
+    }
+    return $result
+}
 
-    if ($null -ne $document) {
-        if ([string]$document.schemaName -ne 'pbbridge-template-migration-policy' -or [int]$document.schemaVersion -ne 1) {
-            $issues.Add([pscustomobject]@{ code = 'migration-policy-contract-invalid'; path = '.pbbridge/migration-policy.json'; message = 'migration policy 必须使用 pbbridge-template-migration-policy schemaVersion=1。' })
+function Read-PbBridgeMigrationPolicy {
+    param([Parameter(Mandatory)][string]$ProjectRoot, [Parameter(Mandatory)][string]$ToolkitRoot)
+
+    $policyPath = Join-Path $ProjectRoot '.pbbridge/migration-policy.json'
+    $cliPath = Join-Path $ToolkitRoot 'runtime/cli/win-x86/PbBridge.Cli.exe'
+    if (-not (Test-Path -LiteralPath $cliPath)) {
+        return Read-PbBridgeBootstrapMigrationPolicy -ProjectRoot $ProjectRoot -PolicyPath $policyPath
+    }
+
+    $result = [pscustomobject]@{ path = $policyPath; exists = [IO.File]::Exists($policyPath); files = @(); policyHash = $null; issues = @() }
+    try {
+        $info = [Diagnostics.ProcessStartInfo]::new($cliPath)
+        $info.WorkingDirectory = $ProjectRoot
+        $info.UseShellExecute = $false
+        $info.CreateNoWindow = $true
+        $info.RedirectStandardOutput = $true
+        $info.RedirectStandardError = $true
+        $info.StandardOutputEncoding = [Text.Encoding]::UTF8
+        $info.StandardErrorEncoding = [Text.Encoding]::UTF8
+        foreach ($argument in @('toolkit', 'migration-policy', 'inspect', '--repo-root', $ProjectRoot)) {
+            $info.ArgumentList.Add($argument)
         }
-        $seen = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
-        foreach ($entry in @($document.files)) {
-            $path = ([string]$entry.path).Trim().Replace('\', '/')
-            $segments = @($path.Split('/') | Where-Object { $_ -ne '' })
-            $canonicalPath = $segments -join '/'
-            $invalidPath = [string]::IsNullOrWhiteSpace($path) -or
-                [System.IO.Path]::IsPathRooted($path) -or
-                $path.IndexOfAny([char[]]'*?[]') -ge 0 -or
-                $segments -contains '..' -or
-                $segments -contains '.' -or
-                $path.EndsWith('/', [System.StringComparison]::Ordinal) -or
-                $path -cne $canonicalPath
-            if ($invalidPath) {
-                $issues.Add([pscustomobject]@{ code = 'migration-policy-path-invalid'; path = $path; message = 'policy path 必须是无 glob、无越界的 canonical 仓库相对文件路径。' })
-                continue
+        Write-Verbose "检查迁移策略时使用 CLI：$cliPath"
+        $process = [Diagnostics.Process]::Start($info)
+        try {
+            $stdout = $process.StandardOutput.ReadToEndAsync()
+            $stderr = $process.StandardError.ReadToEndAsync()
+            if (-not $process.WaitForExit(20000)) {
+                $process.Kill($true)
+                $process.WaitForExit()
+                throw '策略查询超时。'
             }
-            if (-not $seen.Add($path)) {
-                $issues.Add([pscustomobject]@{ code = 'migration-policy-path-conflict'; path = $path; message = 'policy 不得包含重复或大小写冲突路径。' })
-                continue
+            $exitCode = $process.ExitCode
+            $output = $stdout.GetAwaiter().GetResult()
+            $diagnostic = $stderr.GetAwaiter().GetResult()
+            if ($diagnostic) { Write-Verbose $diagnostic.Trim() }
+        }
+        finally { $process.Dispose() }
+
+        $document = [System.Text.Json.JsonDocument]::Parse($output)
+        try {
+            $response = $document.RootElement
+            if ($exitCode -ne 0) {
+                $errorCode = Get-PbBridgePolicyJsonString -Element $response -Name 'errorCode'
+                $command = Get-PbBridgePolicyJsonString -Element $response -Name 'command'
+                if ($errorCode -ceq 'UNSUPPORTED_COMMAND' -and -not [string]::IsNullOrWhiteSpace($command)) {
+                    $result.issues = @(New-PbBridgeMigrationPolicyIssue 'migration-policy-cli-unsupported' $null "CLI 不支持策略查询（退出码 $exitCode），请使用同一份配套 Toolkit 中的迁移模块与 CLI。" $cliPath)
+                    return $result
+                }
+                if ($errorCode -cne 'MIGRATION_POLICY_INVALID' -or $command -cne 'toolkit-migration-policy-inspect') {
+                    throw "策略查询异常退出（退出码 $exitCode，错误码 $errorCode）。"
+                }
             }
-            if ([string]$entry.ownership -ne 'project-custom' -or [string]$entry.action -ne 'preserve') {
-                $issues.Add([pscustomobject]@{ code = 'migration-policy-action-invalid'; path = $path; message = '首版 policy 只允许 project-custom/preserve。' })
-                continue
-            }
-            if ($entry.PSObject.Properties.Name -contains 'reason' -and [string]::IsNullOrWhiteSpace([string]$entry.reason)) {
-                $issues.Add([pscustomobject]@{ code = 'migration-policy-reason-empty'; path = $path; message = '存在 reason 字段时不得为空白。' })
-                continue
-            }
-            $resolved = Resolve-PbBridgePathInsideRoot -Root $ProjectRoot -Path (Join-Path $ProjectRoot $path) -ReasonCode 'migration-policy-path-outside-project'
-            if (Test-Path -LiteralPath $resolved -PathType Container) {
-                $issues.Add([pscustomobject]@{ code = 'migration-policy-directory-not-allowed'; path = $path; message = 'policy 只能声明文件，禁止目录级豁免。' })
-                continue
-            }
-            $files.Add([ordered]@{
-                path = $path
-                ownership = 'project-custom'
-                action = 'preserve'
-                reason = if ($entry.PSObject.Properties.Name -contains 'reason') { [string]$entry.reason } else { $null }
+
+            $issues = @(foreach ($issue in $response.GetProperty('issues').EnumerateArray()) {
+                $code = $issue.GetProperty('code').GetString()
+                $path = $issue.GetProperty('path').GetString()
+                $message = $issue.GetProperty('message').GetString()
+                if (-not $code -or -not $path -or -not $message) { throw '策略查询的诊断缺少必要字段。' }
+                New-PbBridgeMigrationPolicyIssue $code (Get-PbBridgePolicyJsonString -Element $issue -Name 'fieldPath') $message $path
             })
-        }
-    }
+            $exists = $response.GetProperty('exists').GetBoolean()
+            $policyHash = $response.GetProperty('policyHash').GetString()
+            $files = $response.GetProperty('files')
+            if ($exitCode -ne 0) {
+                if ($policyHash -or $files.GetArrayLength() -ne 0 -or $issues.Count -eq 0) { throw '策略查询的拒绝结果无效。' }
+                $result.exists = $exists
+                $result.issues = $issues
+                return $result
+            }
+            if ($policyHash -cnotmatch '^[0-9a-f]{64}$' -or $issues.Count -ne 0) { throw '策略查询缺少有效哈希或包含意外诊断。' }
 
-    $normalizedFiles = @(Sort-PbBridgeGovernancePathItems -Items $files.ToArray() -Context 'migration-policy')
-    $semantic = [ordered]@{
-        schemaName = 'pbbridge-template-migration-policy'
-        schemaVersion = 1
-        files = $normalizedFiles
+            # 直接读取 JSON 字符串，兼容 PowerShell 7.4，避免日期推断。
+            $result.files = @(foreach ($entry in $files.EnumerateArray()) {
+                $path = $entry.GetProperty('path').GetString()
+                $ownership = $entry.GetProperty('ownership').GetString()
+                $action = $entry.GetProperty('action').GetString()
+                if (-not $path -or $ownership -cne 'project-custom' -or $action -cne 'preserve') { throw '策略查询返回无效的规范化条目。' }
+                [ordered]@{ path = $path; ownership = $ownership; action = $action; reason = $entry.GetProperty('reason').GetString() }
+            })
+            $result.exists = $exists
+            $result.policyHash = $policyHash
+        }
+        finally { $document.Dispose() }
     }
-    return [pscustomobject]@{
-        path = $policyPath
-        exists = Test-Path -LiteralPath $policyPath -PathType Leaf
-        files = $semantic.files
-        policyHash = Get-PbBridgeCanonicalHash -Value $semantic
-        issues = $issues.ToArray()
+    catch {
+        $result.files = @()
+        $result.issues = @(New-PbBridgeMigrationPolicyIssue 'migration-policy-cli-failed' $null "配套 CLI 策略查询失败：$($_.Exception.Message) 请核对 Toolkit 的 CLI 后重试。" $cliPath)
     }
+    return $result
 }
 
 function Get-PbBridgeMigrationIndex {
@@ -1604,7 +1869,7 @@ function Import-PbBridgeReusableDecisions {
     $changed = $false
 
     foreach ($request in @($DecisionRequests)) {
-        if (@($decisions | Where-Object { [string]$_.path -eq [string]$request.path }).Count -gt 0) { continue }
+        if (@($decisions | Where-Object { [string]::Equals($_.path, $request.path, [StringComparison]::OrdinalIgnoreCase) }).Count -gt 0) { continue }
         foreach ($entry in @($index.entries | Where-Object { [string]$_.transactionRoot -ne $TransactionRoot } | Sort-Object updatedAt -Descending)) {
             $priorPlanPath = Join-Path ([string]$entry.transactionRoot) 'plan.json'
             $priorDecisionPath = Join-Path ([string]$entry.transactionRoot) 'decisions.json'
@@ -1616,13 +1881,13 @@ function Import-PbBridgeReusableDecisions {
                     [int]$priorPlan.schemaVersion -ne 8 -or
                     [string]$priorPlan.planHash -ne [string]$entry.planHash) { continue }
                 $priorRequest = @($priorPlan.decisionRequests | Where-Object {
-                    [string]$_.path -eq [string]$request.path -and
+                    [string]::Equals($_.path, $request.path, [StringComparison]::OrdinalIgnoreCase) -and
                     [string]$_.decisionIdentityHash -eq [string]$request.decisionIdentityHash
                 }) | Select-Object -First 1
                 if ($null -eq $priorRequest) { continue }
                 $priorSet = Read-PbBridgeDecisionSet -TransactionRoot ([string]$entry.transactionRoot) -PlanHash ([string]$entry.planHash)
                 $priorDecision = @($priorSet.decisions | Where-Object {
-                    [string]$_.path -eq [string]$request.path -and
+                    [string]::Equals($_.path, $request.path, [StringComparison]::OrdinalIgnoreCase) -and
                     [string]$_.action -eq 'preserve-custom-and-continue' -and
                     [string]$_.decisionIdentityHash -eq [string]$request.decisionIdentityHash
                 }) | Select-Object -First 1
@@ -1816,8 +2081,11 @@ function Invoke-PbBridgeMigrationDecision {
         throw "migration-plan-contract-invalid: $planPath"
     }
 
-    $policy = Read-PbBridgeMigrationPolicy -ProjectRoot $projectRootFull
-    if ($policy.issues.Count -gt 0) { throw "migration-policy-invalid: $($policy.issues[0].code)" }
+    $policy = Read-PbBridgeMigrationPolicy -ProjectRoot $projectRootFull -ToolkitRoot $ToolkitRoot
+    if ($policy.issues.Count -gt 0) {
+        $issue = $policy.issues[0]
+        throw "migration-policy-invalid: $($issue.code) $($issue.path) $($issue.fieldPath) $($issue.message)"
+    }
     if ([string]$plan.policy.policyHash -ne [string]$policy.policyHash) {
         throw 'migration-plan-stale: migration-policy-changed'
     }
@@ -1828,17 +2096,18 @@ function Invoke-PbBridgeMigrationDecision {
     foreach ($decision in @($existing.decisions)) { $decisions.Add($decision) }
     foreach ($rawPath in @($DecisionPath)) {
         $path = $rawPath.Trim().Replace('\', '/')
-        if ($requestedPaths -notcontains $path) { throw "migration-decision-path-not-in-plan: $path" }
-        $policyEntry = @($policy.files | Where-Object { [string]$_.path -eq $path }) | Select-Object -First 1
+        $request = $plan.decisionRequests | Where-Object { [string]::Equals($_.path, $path, [StringComparison]::OrdinalIgnoreCase) } | Select-Object -First 1
+        if ($null -eq $request) { throw "migration-decision-path-not-in-plan: $path" }
+        $policyEntry = $policy.files | Where-Object { [string]::Equals($_.path, $path, [StringComparison]::OrdinalIgnoreCase) } | Select-Object -First 1
         if ($null -eq $policyEntry) { throw "migration-policy-entry-required: $path" }
-        $prior = @($decisions | Where-Object { [string]$_.path -eq $path }) | Select-Object -First 1
+        $prior = $decisions | Where-Object { [string]::Equals($_.path, $path, [StringComparison]::OrdinalIgnoreCase) } | Select-Object -First 1
         $candidate = [ordered]@{
             path = $path
             action = 'preserve-custom-and-continue'
             reason = $Reason.Trim()
             actor = if ([string]::IsNullOrWhiteSpace($Actor)) { $null } else { $Actor.Trim() }
-            workspaceIds = @($plan.decisionRequests | Where-Object { [string]$_.path -eq $path } | ForEach-Object { @($_.workspaceIds) } | Sort-Object -Unique)
-            decisionIdentityHash = [string](@($plan.decisionRequests | Where-Object { [string]$_.path -eq $path })[0].decisionIdentityHash)
+            workspaceIds = @($request.workspaceIds | Sort-Object -Unique)
+            decisionIdentityHash = [string]$request.decisionIdentityHash
             derivedFromPlanHash = $null
         }
         if ($null -ne $prior) {
@@ -1863,7 +2132,8 @@ function Invoke-PbBridgeMigrationDecision {
     }
     Write-PbBridgeJsonFile -Path $existing.path -Value $decisionDocument
 
-    $waiting = @($requestedPaths | Where-Object { $_ -notin @($sortedDecisions.path) } | Sort-Object -Unique)
+    $decidedPaths = [System.Collections.Generic.HashSet[string]]::new([string[]]@($sortedDecisions.path), [StringComparer]::OrdinalIgnoreCase)
+    $waiting = @($requestedPaths | Where-Object { -not $decidedPaths.Contains($_) })
     $resultPath = Join-Path $transaction.transactionRoot 'result.json'
     $result = [ordered]@{
         schemaName = 'pbbridge-v7-template-migration'
@@ -2005,9 +2275,9 @@ function Invoke-PbBridgeTemplateMigration {
     $assetClassifications = New-Object System.Collections.Generic.List[object]
     $configValues = [ordered]@{}
     $pbwPathWasExplicit = -not [string]::IsNullOrWhiteSpace($PbwPath)
-    $policy = Read-PbBridgeMigrationPolicy -ProjectRoot $projectRootFull
+    $policy = Read-PbBridgeMigrationPolicy -ProjectRoot $projectRootFull -ToolkitRoot $toolkitRootFull
     foreach ($issue in @($policy.issues)) {
-        $manual.Add([pscustomobject]@{ file = $issue.path; code = $issue.code; message = $issue.message; line = $null; column = $null })
+        $manual.Add([pscustomobject]@{ file = $issue.path; code = $issue.code; fieldPath = $issue.fieldPath; message = $issue.message; line = $null; column = $null })
     }
     $recoveryScope = @($manifest.managedFiles | ForEach-Object { Join-Path $projectRootFull ([string]$_.targetPath) }) +
         @((Join-Path $projectRootFull '.pbbridge/project.json'), (Join-Path $projectRootFull ".pbbridge/workspaces/$WorkspaceId/workspace.json"))
@@ -2059,7 +2329,7 @@ function Invoke-PbBridgeTemplateMigration {
         })
 
         $relativePath = ([string]$file.targetPath).Replace('\', '/')
-        $policyEntry = @($policy.files | Where-Object { [string]$_.path -eq $relativePath }) | Select-Object -First 1
+        $policyEntry = $policy.files | Where-Object { [string]::Equals($_.path, $relativePath, [StringComparison]::OrdinalIgnoreCase) } | Select-Object -First 1
         $policyPreserve = $classification.targetExists -and $null -ne $policyEntry
         $canAutoInstall = -not $classification.targetExists -or
             (-not $policyPreserve -and $classification.classification -in @('managed-known-exact', 'managed-known-format-variant'))
@@ -2349,7 +2619,7 @@ function Invoke-PbBridgeTemplateMigration {
             normalizedTextSha256 = [string]$request.normalizedTextSha256
             templateRawSha256 = [string]$request.templateRawSha256
             normalizationProfile = $script:NormalizationProfile
-            policyHash = [string]$policy.policyHash
+            policyHash = $policy.policyHash
             provenanceRawSha256 = if ($null -ne $provenanceRegistryPath) { Get-PbBridgeSha256 -Path $provenanceRegistryPath } else { $null }
         })
     }
@@ -2376,7 +2646,7 @@ function Invoke-PbBridgeTemplateMigration {
         policy = [ordered]@{
             path = '.pbbridge/migration-policy.json'
             exists = [bool]$policy.exists
-            policyHash = [string]$policy.policyHash
+            policyHash = $policy.policyHash
             files = @($policy.files)
         }
         sourceConfiguration = [ordered]@{
@@ -2454,9 +2724,12 @@ function Invoke-PbBridgeTemplateMigration {
         -TransactionRoot $transactionRoot `
         -PlanHash $computedPlanHash `
         -DecisionRequests $normalizedDecisionRequests
-    $validDecisionPaths = @($decisionSet.decisions | Where-Object { [string]$_.action -eq 'preserve-custom-and-continue' } | ForEach-Object { [string]$_.path })
+    $validDecisionPaths = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($decision in $decisionSet.decisions | Where-Object action -eq 'preserve-custom-and-continue') {
+        [void]$validDecisionPaths.Add([string]$decision.path)
+    }
     $awaitingDecisionCandidates = @($normalizedDecisionRequests | Where-Object {
-        -not $_.policyDeclared -or [string]$_.path -notin $validDecisionPaths
+        -not $_.policyDeclared -or -not $validDecisionPaths.Contains([string]$_.path)
     })
     $awaitingDecisions = $awaitingDecisionCandidates
     $policyMissingPaths = @($awaitingDecisions | Where-Object { -not [bool]$_.policyDeclared } | ForEach-Object { [string]$_.path })
@@ -2491,7 +2764,7 @@ function Invoke-PbBridgeTemplateMigration {
     }
     $publicPreservedFiles = @($preservedFiles.ToArray() | Sort-Object targetPath | ForEach-Object {
         $preserved = $_
-        $decision = @($decisionSet.decisions | Where-Object { [string]$_.path -eq [string]$preserved.targetPath }) | Select-Object -First 1
+        $decision = $decisionSet.decisions | Where-Object { [string]::Equals($_.path, $preserved.targetPath, [StringComparison]::OrdinalIgnoreCase) } | Select-Object -First 1
         [ordered]@{
             targetPath = $preserved.targetPath
             rawSha256 = $preserved.rawSha256
@@ -2715,7 +2988,7 @@ function Invoke-PbBridgeTemplateMigration {
                 throw "candidate-input-missing: $($planEntry.targetPath)"
             }
             $identity = if ([System.IO.Path]::GetExtension($candidatePath) -in @('.ps1', '.psm1')) { Get-PbBridgeTextIdentity -Path $candidatePath } else { $null }
-            $candidateDecision = @($decisionSet.decisions | Where-Object { [string]$_.path -eq [string]$planEntry.targetPath }) | Select-Object -First 1
+            $candidateDecision = $decisionSet.decisions | Where-Object { [string]::Equals($_.path, $planEntry.targetPath, [StringComparison]::OrdinalIgnoreCase) } | Select-Object -First 1
             $candidateInputs.Add([pscustomobject]@{
                 targetPath = [string]$planEntry.targetPath
                 workspaceId = $WorkspaceId
@@ -3081,7 +3354,7 @@ function Get-PbBridgeTemplateUpgradeFact {
     $templateRoot = Join-Path $ToolkitRoot 'templates/external-project'
     $manifest = Get-Content -LiteralPath (Join-Path $templateRoot 'template-manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     $registry = Get-Content -LiteralPath (Join-Path $templateRoot ([string]$manifest.provenanceRegistry)) -Raw -Encoding UTF8 | ConvertFrom-Json
-    $policy = Read-PbBridgeMigrationPolicy -ProjectRoot $ProjectRoot
+    $policy = Read-PbBridgeMigrationPolicy -ProjectRoot $ProjectRoot -ToolkitRoot $ToolkitRoot
     $assets = foreach ($file in @($manifest.managedFiles | Where-Object mergeMode -eq 'overwrite-if-template-managed')) {
         $target = Resolve-PbBridgePathInsideRoot -Root $ProjectRoot -Path (Join-Path $ProjectRoot ([string]$file.targetPath)) -ReasonCode 'managed-target-outside-project'
         # Legacy expert wrappers are checked when installed, never required on new-entry projects.
@@ -3091,7 +3364,7 @@ function Get-PbBridgeTemplateUpgradeFact {
         [pscustomobject]@{ path = [string]$file.targetPath; classification = $fact.classification;
             current = $fact.classification -eq 'managed-current-exact' -or
                 ($fact.classification -eq 'managed-known-format-variant' -and $fact.matchedTemplateVersion -eq $script:ProductVersion);
-            preserved = @($policy.files | Where-Object { [string]$_.path -eq [string]$file.targetPath }).Count -eq 1 }
+            preserved = @($policy.files | Where-Object { [string]::Equals($_.path, $file.targetPath, [StringComparison]::OrdinalIgnoreCase) }).Count -eq 1 }
     }
     $documentFact = Get-PbBridgeDocumentRuleFact -ProjectRoot $ProjectRoot -TemplateRoot $templateRoot -Manifest $manifest
     $paths = @($manifest.managedFiles | ForEach-Object { Join-Path $ProjectRoot ([string]$_.targetPath) }) +

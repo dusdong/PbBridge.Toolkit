@@ -5,7 +5,7 @@
 1. 平台：`win-x86`
 2. 主 DLL：`runtime/pbspy/win-x86/PBSpy.dll`
 3. PB9 运行时：`runtime/pbspy/win-x86/PBSDK/PB090/`
-4. 来源：父仓库 `reference-pbl/PBSpyORCA/PBSpyORCA/`
+4. 来源：分发运行时清单或父仓库 `reference-pbl/PBSpyORCA/PBSpyORCA/`
 
 ## 说明
 

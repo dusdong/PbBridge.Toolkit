@@ -471,6 +471,14 @@ function Get-PbLocalToolkitCandidateIdentity {
     } | ForEach-Object {
         [pscustomobject]@{path=[IO.Path]::GetRelativePath($root,$_.FullName).Replace('\','/');length=$_.Length;sha256=(Get-FileHash -LiteralPath $_.FullName).Hash.ToLowerInvariant()}
     })
+    $requiresProductRuntime = $RequireFormalDistribution -and [version]$ExpectedProductVersion -ge [version]'7.7.2'
+    if ($requiresProductRuntime) {
+        if (-not $contract.PSObject.Properties['runtimeInventory']) { throw 'FORMAL_TOOLKIT_RUNTIME_INVENTORY_REQUIRED' }
+        if (-not ($files | Where-Object path -CEQ 'runtime/pbspy/win-x86/PBSDK/PB090/pborc90.dll') -or
+            ($files | Where-Object { $_.path -clike 'runtime/pbspy/*' -and $_.path -cnotmatch '^runtime/pbspy/win-x86/(PBSpy\.dll$|PBSDK/PB090/)' })) {
+            throw 'FORMAL_TOOLKIT_PB9_RUNTIME_SCOPE_INVALID'
+        }
+    }
     $paths=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
     foreach ($file in $files) { if (-not $paths.Add($file.path)) { throw 'CANDIDATE_FILE_CASE_COLLISION' } }
     # Match PowerShell -CEQ (including Unicode equivalence). A null value marks
@@ -518,6 +526,10 @@ function Get-PbLocalToolkitCandidateIdentity {
         }
     }
     $binaries = @(Get-PbCandidateRuntimeBinaryFact -RuntimeRoot (Join-Path $root 'runtime') -ExpectedProductVersion $ExpectedProductVersion)
+    if ($requiresProductRuntime) {
+        $ide = $binaries | Where-Object path -CEQ 'ide/win-x64/SharpIDE.exe'
+        if ($ide.productVersion -notmatch ('^'+[regex]::Escape($ExpectedProductVersion)+'(?:\.0)?$')) { throw 'CANDIDATE_IDE_PRODUCT_VERSION_MISMATCH' }
+    }
     $cli = Join-Path $root 'runtime/cli/win-x86/PbBridge.Cli.exe'
     if (-not $DeferEntrypoint) {
         $version = & $cli version
