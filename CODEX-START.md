@@ -20,6 +20,7 @@
 ## 启动检查
 
 1. 读取外部项目根目录 `AGENTS.md` 和本文件。
+   涉及 `.sr*` 源码、PowerScript、DataWindow 或 DataStore 时，读取 [PowerBuilder / PowerScript 技能](skills/powerbuilder-powerscript/SKILL.md)，再按需查阅其中的参考资料。
 2. 核对 Toolkit VERSION、manifest、runtime contract 与 template manifest 均为 `7.7.2`。
 3. 运行 `.pbbridge/PbBridge.Toolkit/runtime/cli/win-x86/PbBridge.Cli.exe doctor`。
 4. 显式选择 workspace，运行 `pbbridge toolkit preflight --project-root . --workspace <id>`。

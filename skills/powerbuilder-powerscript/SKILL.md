@@ -12,15 +12,16 @@ description: Use when reading, explaining, writing, reviewing, refactoring, or m
 ## 使用流程
 
 1. 先判断任务类型：
-   - PB9 版本边界、Unicode/DBCS、DataWindow、旧中间件迁移风险：读 `references/powerscript-pb9-兼容边界.md`。
+   - 判断 PB9 版本、Unicode/DBCS 或旧中间件迁移的兼容性时，读 `references/powerscript-pb9-兼容边界.md`。
+   - 涉及 DataWindow/DataStore 的编辑校验、行状态或保存事务时，读 [DataWindow / DataStore 审查速查](references/powerscript-datawindow-速查.md)。
    - 语法、声明、事件、对象生命周期：读 `references/powerscript-速查.md`。
    - 保留字、运算符、声明参数、函数名：读对应 `references/powerscript-*.md`。
    - 本项目工程习惯、编码和迁移注意事项：读 `references/powerbuilder-项目约定.md`。
 2. 外部项目可直接使用本技能附带的 `references/`。只有在维护 `Powerbuilder.IDE` 父仓且需要完整上下文时，才在父仓根目录查阅：
    - `docs/reference/powerscript/manual/手法手册.md`
    - `docs/reference/powerscript/manual/附录-表格全集.md`
-3. 修改 `.sru/.srw` 前，先确认文件编码；PowerBuilder 旧源码常见 ANSI/GBK，避免无意改成 UTF-8 后破坏中文或二进制片段。
-4. 审查或改事务代码时，重点检查 `SQLCA.SQLCode`、`commit`、`rollback`、`f_trap_sqlca()`、错误消息和提前返回路径。
+3. 修改 `.sru`、`.srw` 或 `.srd` 前，先确认并保留源文件编码。PowerBuilder 旧源码常见 ANSI/GBK。
+4. 审查内嵌 SQL 时，检查实际事务对象的 `SQLCode`、`COMMIT`、`ROLLBACK`、错误消息和提前返回路径。按项目约定检查 `f_trap_sqlca()` 等错误处理。
 5. 迁移到 C# / Avalonia 时，先解释源 PowerScript 语义，再设计目标实现；不要逐行机械翻译事件、全局对象和 DataWindow 行为。
 
 ## 资料索引
